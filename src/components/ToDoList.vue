@@ -1,23 +1,33 @@
+
 <template>
     <div id="todo">
-        <h1>Enter ToDo</h1>
-        <input type="text" placeholder="Enter your task" v-model="newTask">
-        <button @click="addTask">Add</button>
+        <button v-b-modal.add-modal>Add New Task</button>
+        <b-modal id="add-modal" title="Add task" @ok="addTask">
+            <input type="text" placeholder="Enter your task" v-model="newTask">
+        </b-modal>
         <h1>Todo List</h1>
         <ul>
-            <li v-for="task in tasks" :key="task.content">
+            <li v-for="(task, index) in tasks" :key="index">
                 <input type="checkbox" v-model="task.done">
-                <router-link :to="{ name: 'taskDetail', params: { name: task.content } }" style="text-decoration: none;">
-                    <span :class="{ done: task.done }">{{ task.content }}</span>
-                </router-link>
-                <button @click="deleteTask(task.content)" style="margin-left: 10px;">Delete</button>
+                <span :class="{ done: task.done }" v-b-modal="'detail-modal-' + index">{{ task.content }}</span>
+                <b-modal :id="'detail-modal-' + index" title="Update" v-on:show="editTask(task.content, index)"
+                    @ok="updateTask(uptask)">
+                    <input type="text" placeholder="Enter your task" v-model="uptask.content">
+                </b-modal>
+
+                <button v-b-modal="'delete-modal-' + index" style="margin-left: 10px;">Delete</button>
+                <b-modal :id="'delete-modal-' + index" title="Xoa" @ok="deleteTask(task.content)">
+                    <h3> Xac nhan xoa {{ task.content }}</h3>
+                </b-modal>
             </li>
         </ul>
+
     </div>
 </template>
   
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex';
+
 export default {
     computed: {
         ...mapState(['tasks'])
@@ -25,20 +35,35 @@ export default {
     data() {
         return {
             newTask: '',
+            uptask: {
+                content: '',
+                index: -1,
+            },
         }
     },
     methods: {
-        ...mapActions(['commitAddTask', 'commitDeleteTask']),
+        ...mapActions(['commitAddTask', 'commitDeleteTask', 'commitUpdateTask']),
         addTask() {
             this.commitAddTask(this.newTask)
-            this.newTaskName = ''
+            this.newTask = ''
+        },
+        editTask(newtask, index) {
+            this.uptask.content = newtask
+            this.uptask.index = index
         },
 
         deleteTask(deTask) {
             this.commitDeleteTask(deTask)
+        },
+
+        updateTask(upTask) {
+            this.commitUpdateTask(upTask)
         }
+
     }
+
 }
+
 </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->

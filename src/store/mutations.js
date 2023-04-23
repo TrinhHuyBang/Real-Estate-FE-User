@@ -9,4 +9,8 @@ export default {
   deleteTask(state, detask) {
     state.tasks = state.tasks.filter((task) => task.content !== detask);
   },
+  updateTask(state, uptask) {
+    console.log(uptask);
+    state.tasks[uptask.index].content = uptask.content;
+  },
 };

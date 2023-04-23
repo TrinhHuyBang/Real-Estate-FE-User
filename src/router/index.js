@@ -20,9 +20,19 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
-    path: "/detail/:name",
+    path: "/detail/:id",
     name: "taskDetail",
     component: () => import("../components/TaskDetail.vue"),
+  },
+  {
+    path: "/demoApi",
+    name: "demoApi",
+    component: () => import("../components/DemoApi.vue"),
+  },
+  {
+    path: "/demoModal",
+    name: "demoModal",
+    component: () => import("../components/DemoModal.vue"),
   },
 ];
 

@@ -5,4 +5,7 @@ export default {
   commitDeleteTask({ commit }, task) {
     commit("deleteTask", task);
   },
+  commitUpdateTask({ commit }, uptask) {
+    commit("updateTask", uptask);
+  },
 };
