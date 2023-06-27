@@ -34,6 +34,11 @@ const routes = [
     name: "demoModal",
     component: () => import("../components/DemoModal.vue"),
   },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("../components/RegisterView.vue"),
+  },
 ];
 
 const router = new VueRouter({
