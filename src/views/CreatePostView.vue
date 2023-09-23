@@ -349,7 +349,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .create-post-view{
   display: flex;
   flex-direction: row;
