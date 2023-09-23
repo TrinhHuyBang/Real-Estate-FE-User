@@ -13,4 +13,8 @@ export default {
     console.log(uptask);
     state.tasks[uptask.index].content = uptask.content;
   },
+
+  setPostType(state, data) {
+    state.postTypes = data;
+  }
 };

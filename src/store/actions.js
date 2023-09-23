@@ -8,4 +8,8 @@ export default {
   commitUpdateTask({ commit }, uptask) {
     commit("updateTask", uptask);
   },
+
+  commitSetPostType({ commit }, data) {
+    commit("setPostType", data);
+  }
 };

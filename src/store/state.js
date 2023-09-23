@@ -5,4 +5,6 @@ export default {
       done: false,
     },
   ],
+
+  postTypes: {},
 };
