@@ -3,26 +3,18 @@
     <div class="register-form">
       <h2 class="text-center" style="margin-bottom: 20px">Đăng ký tài khoản</h2>
       <el-form ref="registerForm" @submit.native.prevent="register">
-        <el-form-item label="Avatar" label-for="avatar">
-          <br />
-          <div>
-            <input
-              type="file"
-              accept="image/*"
-              id="avatar"
-              ref="uploadAvatar"
-              @change="changeAvatar"
-            />
-            <div v-if="imageUrl" class="avatar-display">
-              <img :src="imageUrl" class="avatar" />
-              <span class="delete-avatar" @click="deleteAvatar()"
-                ><i class="el-icon-close"></i
-              ></span>
+        <el-form-item label="Avatar">
+          <br>
+            <div class="custom-file-input">
+                <label for="fileInput" class="upload-icon" v-if="!hasUploadedAvatar">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text avt-text">Tải ảnh</div>
+                    <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
+                </label>
+                <label for="fileInput" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
+                    <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
+                </label>
             </div>
-            <div v-else>
-              <a class="btn btn-upload"><i class="el-icon-upload avatar-uploader-icon" ></i>  </a>
-            </div>
-          </div>
         </el-form-item>
         
         <el-form-item label="Họ và tên" label-for="username">
@@ -73,8 +65,7 @@
         >
         <div style="text-align: center; margin-top: 20px">
           <span>Đã có tài khoản? </span>
-          <a href="/dang-nhap" style="text-decoration: none">Đăng nhập</a> tại
-          đây
+          <a href="/dang-nhap" style="text-decoration: none">Đăng nhập</a> tại đây
         </div>
       </el-form>
     </div>
@@ -84,53 +75,71 @@
 <script>
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase.js";
-import axios from "axios";
+import AuthApi from "@/api/auth"
+import { Notification } from 'element-ui';
 // import { Notification } from "vue-notification";
 
 export default {
   data() {
     return {
-      avatars: [],
+      hasUploadedAvatar: false,
       username: "",
       email: "",
       phone: "",
       password: "",
       confirmPassword: "",
       imageUrl: "",
-      avatar: "",
+      avatar: null,
     };
   },
   methods: {
     async register() {
-      var storageRef = ref(
-        storage,
-        `avatars/` +
-          Math.random().toString(36).slice(2, 8) +
-          `${this.avatar.name}`
-      );
-      await uploadBytes(storageRef, this.avatar);
-      var downloadURL = await getDownloadURL(storageRef);
+      if(this.avatar) {
+        var storageRef = ref(
+          storage,
+          `avatars/` +
+            Math.random().toString(36).slice(2, 8) +
+            `${this.avatar.name}`
+        );
+        await uploadBytes(storageRef, this.avatar);
+        var downloadURL = await getDownloadURL(storageRef);
+      }
 
-      // Perform the registration process and store the download URLs in the database
       var userData = {
-        username: this.username,
-        email: this.email,
-        phone: this.phone,
-        password: this.password,
-        avatar: downloadURL,
+        'username': this.username,
+        'email': this.email,
+        'phone': this.phone,
+        'password': this.password,
+        'avatar': downloadURL,
       };
-      axios.post("/register", userData).then((response) => {
-        console.log(response);
-        this.$router.push({ name: "dang-nhap" });
-      });
+      AuthApi.regiter(
+        userData,
+        () => {
+          Notification.success({
+            title: "Thành công",
+            message: "Đăng ký tài khoản thành công! Xác thực email để tiếp tục!",
+          });
+          this.$router.push('/dang-nhap');
+        },
+        (error) => {
+          Notification.error({
+            title: "Thất bại",
+            message: error.data.error,
+          });
+        }
+      )
     },
 
-    changeAvatar(event) {
-      this.avatar = event.target.files[0];
-      this.imageUrl = URL.createObjectURL(this.avatar);
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.avatar = file;
+        this.hasUploadedAvatar = true; // Đánh dấu rằng đã có ảnh
+      }
+      this.$refs.fileInput.value = '';
     },
-    deleteAvatar() {
-      this.imageUrl = "";
+    imagePreview(file) {
+      return URL.createObjectURL(file);
     },
   },
 };
@@ -150,47 +159,56 @@ export default {
   padding: 50px;
   width: 40%;
   border-radius: 5px;
+  min-width: 450px;
 }
 
-.avatar-uploader {
+.avatar{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.avt-icon{
+  color:gray;
+  font-size:30px;
+  margin-top: 20px;
+}
+
+.avt-text{
+  color: gray;
+  font-size: 14px;
+}
+
+.label{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.custom-file-input {
+  margin-top: 20px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 
-.avatar-uploader .el-upload {
-  border: #090909 solid 1px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-
-.avatar-display {
-  position: relative;
-}
-
-.delete-avatar {
-  position: absolute;
-  top: -25px;
-  right: -10px;
-}
-
-.avatar-uploader-icon {
-  font-size: 45px;
-  color: #8c939d;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-}
-
-.avatar {
-  width: 50px;
-  height: 50px;
-  display: block;
+.upload-icon {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #ccc;
   border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .register-btn {

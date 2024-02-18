@@ -5,8 +5,7 @@
       <el-form
         ref="changPassword"
         :model="changPassword"
-        :rules="rules"
-        @submit.native.prevent="login"
+        @submit.native.prevent="showConfirmationDialog"
       >
         <label class="label" for="password">Mật khẩu hiện tại:</label>
         <el-input
@@ -34,10 +33,24 @@
         >
       </el-form>
     </div>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      title="Xác thực xoá tài khoản"
+      width="25%"
+      @close="dialogVisible = false"
+    >
+      <span>Bạn có chắc chắn muốn xoá tài khoản không?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">Hủy bỏ</el-button>
+        <el-button type="danger" @click="deleteAccount">Đồng ý</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { Notification } from "element-ui";
+import AuthApi from "@/api/auth"
 export default {
   data() {
     return {
@@ -47,6 +60,33 @@ export default {
       },
       showPassword: false,
     };
+  },
+  methods: {
+    showConfirmationDialog() {
+      this.dialogVisible = true
+    },
+    deleteAccount() {
+      AuthApi.deleteAccount(
+        {
+          password: this.changPassword.password,
+        },
+        () => {
+          Notification.success({
+            title: "Thành công",
+            message: "Khoá tài khoản thành công",
+          });
+          localStorage.setItem('token', '')
+          window.location.href = "/"
+        },
+        (error) => {
+          Notification.error({
+            title: "Thất bại",
+            message: error.data.error,
+          });
+        }
+      )
+      this.dialogVisible = false
+    },
   },
 };
 </script>
@@ -70,4 +110,13 @@ a {
 .action-btn {
   margin-bottom: 20px;
 }
+.el-dialog {
+  border-radius: 10px;
+  min-width: 300px;
+}
+
+.el-dialog__body {
+  border-top: 1px solid rgb(225, 216, 216);
+}
+
 </style>

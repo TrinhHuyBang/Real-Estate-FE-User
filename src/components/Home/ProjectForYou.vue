@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="component">
+    <div class="container">
       <h3>Dự án bất động sản nổi bật</h3>
       <div class="row">
         <div class="col-6 col-md-4 col-lg-3 post-card" v-for="project in displayedProjects" :key="project.id">
@@ -32,7 +32,7 @@ export default {
           id: 1,
           name: "Card 1",
           imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
+            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2F20231026090858-7999_wm.jpg?alt=media&token=d64bea7a-1a85-47c3-be74-289086271a11&_gl=1*jwtivj*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcxNjYuMzkuMC4w",
           size: 100,
           city: "Ha Noi",
           status: "Sắp mở bán",
@@ -42,7 +42,7 @@ export default {
           id: 2,
           name: "Card 2",
           imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
+            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2F20231026113735-5218_wm.jpg?alt=media&token=1056c8fd-7a09-41fd-a41e-cbc942ff57bf&_gl=1*1160p0l*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcxOTUuMTAuMC4w",
           size: 100,
           city: "Ha Noi",
           status: "Sắp mở bán",
@@ -52,7 +52,7 @@ export default {
           id: 3,
           name: "Card 3",
           imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
+            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2FDanko_1.jpg?alt=media&token=facb0bd9-69e2-4a5e-be04-f0e4ec55c46d&_gl=1*thij4b*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcyMDkuNTguMC4w",
           size: 100,
           city: "Ha Noi",
           status: "Sắp mở bán",
@@ -63,7 +63,7 @@ export default {
           id: 4,
           name: "Card 4",
           imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
+            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2Fhoalac_1.jpg?alt=media&token=3d4d890a-d2be-4bde-9294-91843840f470&_gl=1*5ws1h*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcyMjQuNDMuMC4w",
           size: 100,
           city: "Ha Noi",
           status: "Sắp mở bán",
@@ -162,6 +162,7 @@ h3 {
 
 .image {
   width: 100%;
+  height: 200px;
   display: block;
 }
 

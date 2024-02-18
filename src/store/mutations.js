@@ -1,20 +1,17 @@
 export default {
-  addTask(state, task) {
-    state.tasks.push({
-      content: task,
-      done: false,
-    });
-  },
-
-  deleteTask(state, detask) {
-    state.tasks = state.tasks.filter((task) => task.content !== detask);
-  },
-  updateTask(state, uptask) {
-    console.log(uptask);
-    state.tasks[uptask.index].content = uptask.content;
-  },
-
   setPostType(state, data) {
     state.postTypes = data;
+  },
+
+  setUserInfo(state, data) {
+    state.user = data;
+  },
+
+  setFilterData(state, data) {
+    state.filter = data;
+  },
+
+  setBookmarkCount(state, data) {
+    state.bookmarkCount = data;
   }
 };

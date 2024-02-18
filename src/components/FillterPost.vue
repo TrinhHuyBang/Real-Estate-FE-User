@@ -28,13 +28,16 @@
       </el-option>
     </div>
     </el-select>
-    <label for="post-area">Khu vực</label>
-    <!-- <el-select
-      class="input-filter"
-      id="post-area"
-      clearable
-      placeholder="Tất cả"
-    ></el-select> -->
+    <label for="province">Khu vực</label>
+      <el-select class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+        <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
+      </el-select>
+      <el-select :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+        <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
+      </el-select>
+      <el-select :disabled="!district" class="input-filter" id="ward" v-model="ward" placeholder="-----  Phường, xã  -----" filterable clearable>
+        <el-option v-for="item in wards" :key="item.ward_id" :label="item.ward_name" :value="item.ward_name + '-' + item.ward_id"></el-option>
+      </el-select>
     <label for="post-price">Mức giá</label>
     <el-select
       class="input-filter"
@@ -115,12 +118,16 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import axios from "axios";
+import routerNameToType from "@/data/routerNameToType";
 
 export default {
   props: ['type'],
   computed: mapState({
-        postTypes: (state) => state.postTypes, 
+    postTypes: (state) => state.postTypes, 
   }),
+  created() {
+    this.getListProvince();
+  },
   mounted() {
     this.setPostType();
     this.disabledPostType();
@@ -143,6 +150,7 @@ export default {
         "Trên 60 tỷ",
         "Thoả thuận",
       ],
+      routerNameToType : routerNameToType,
       priceSelected: "",
       disabledSelectType: false,
       startFilterPrice: null,
@@ -163,6 +171,14 @@ export default {
       startFilterSize: null,
       endFilterSize: null,
       postTypeSelected: "",
+      addressSelected: "",
+      province: "",
+      district: "",
+      ward: "",
+      provinces: [],
+      districts: [],
+      wards: [],
+      submitted: false,
     };
   },
 
@@ -181,15 +197,35 @@ export default {
     },
     priceSelected(){
       this.updatePrice();
-    }
+    },
+    province(val){
+      if(val){
+        var $result = val.split("-");
+        this.getListDistrict($result[1]);
+      } else {
+        this.districts = [];
+        this.wards = [];
+        this.address = "";
+      }
+      this.district = "";
+    },
+    district(val){
+      if(val){
+        var $result = val.split("-");
+        this.getListWard($result[1]);
+      } else {
+        this.wards = [];
+      }
+      this.ward= "";
+    },
   },
 
   methods: {
     disabledPostType(){
       if(this.$route.name !== "rentPost" && this.$route.name !=="sellPost"){
         this.disabledSelectType = true;
+        this.postTypeSelected = routerNameToType[this.$route.name];
       }
-      console.log(this.$route.name);
     },
     updatePriceSelected() {
       // Xử lý logic để cập nhật giá trị của priceSelected dựa trên startFilterPrice và endFilterPrice
@@ -279,7 +315,7 @@ export default {
       }
     },
 
-    ...mapActions(['commitSetPostType']),
+    ...mapActions(['commitSetPostType', 'commitSetFilterData']),
     setPostType(){
       axios.get('/getPostType')
         .then(response => {
@@ -288,6 +324,38 @@ export default {
         .catch(error => {
           console.error(error);
         });
+      
+    },
+
+    async getListProvince() {
+      try {
+        const response = await axios.get("https://vapi.vnappmob.com/api/province");
+        if(response.status == 200) {
+          this.provinces = response.data.results;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getListDistrict( province_id) {
+      try {
+        const response = await axios.get(`https://vapi.vnappmob.com/api/province/district/${province_id}`);
+        if(response.status == 200) {
+          this.districts = response.data.results;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getListWard( district_id) {
+      try {
+        const response = await axios.get(`https://vapi.vnappmob.com/api/province/ward/${district_id}`);
+        if(response.status == 200) {
+          this.wards = response.data.results;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     resetFilter(){
@@ -298,12 +366,21 @@ export default {
       this.endFilterPrice = null;
       this.startFilterSize = null;
       this.endFilterSize = null;
+      this.province = null;
     },
 
     applyFilter(){
-      console.log(this.priceSelected);
-      console.log(this.startFilterPrice);
-      console.log(this.endFilterPrice);
+      var filter = {
+        'startPrice': this.startFilterPrice,
+        'endPrice': this.endFilterPrice,
+        'startSize': this.startFilterSize,
+        'endSize': this.endFilterSize,
+        'province': this.province,
+        'district': this.district,
+        'ward': this.ward,
+      }
+      this.submitted = true;
+      this.commitSetFilterData(filter);
     },
   }
 };

@@ -30,6 +30,11 @@ const routes = [
     component: () => import("../components/RegisterView.vue"),
   },
   {
+    path: "/chi-tiet-nguoi-dung/:id",
+    name: "chi-tiet-nguoi-dung",
+    component: () => import("../views/Infor/UserInfor.vue"),
+  },
+  {
     path: "/dang-nhap",
     name: "dang-nhap",
     component: () => import("../components/LoginForm.vue"),
@@ -54,7 +59,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/CreatePostView.vue"),
+      import(/* webpackChunkName: "about" */ "../views/ManagePost/CreatePostView.vue"),
+  },
+
+  {
+    path: "/sua-tin/:id",
+    name: "sua-tin",
+    component: () =>
+      import("../views/ManagePost/UpdatePostView.vue"),
   },
 
   {
@@ -79,57 +91,75 @@ const routes = [
   {
     path: "/nha-dat-cho-thue",
     name: "rentPost",
-    component: () => import("../views/RentPostView.vue"),
+    component: () => import("../views/SellPostView.vue"),
     children: [
-      { path: 'can-ho-chung-cu', name: 'cho-thue-can-ho-chung-cu', component: () => import("../views/RentPostView.vue") },
-      { path: 'nha-rieng', name: 'cho-thue-nha-rieng', component: () => import("../views/RentPostView.vue") },
-      { path: 'nha-biet-thu-lien-ke', name: 'cho-thue-nha-biet-thu-lien-ke', component: () => import("../views/RentPostView.vue") },
-      { path: 'nha-mat-pho', name: 'cho-thue-nha-mat-pho', component: () => import("../views/RentPostView.vue") },
-      { path: 'nha-thuong-mai', name: 'cho-thue-nha-thuong-mai', component: () => import("../views/RentPostView.vue") },
-      { path: 'nha-tro-phong-tro', name: 'cho-thue-nha-tro-phong-tro', component: () => import("../views/RentPostView.vue") },
-      { path: 'van-phong', name: 'cho-thue-van-phong', component: () => import("../views/RentPostView.vue") },
-      { path: 'sang-nhuong-cua-hang-ki-ot', name: 'cho-thue-sang-nhuong-cua-hang-ki-ot', component: () => import("../views/RentPostView.vue") },
-      { path: 'kho-nha-xuong-dat', name: 'cho-thue-kho-nha-xuong-dat', component: () => import("../views/RentPostView.vue") },
-      { path: 'loai-bat-dong-san-khac', name: 'cho-thue-loai-bat-dong-san-khac', component: () => import("../views/RentPostView.vue") },
+      { path: 'can-ho-chung-cu', name: 'cho-thue-can-ho-chung-cu', component: () => import("../views/SellPostView.vue") },
+      { path: 'nha-rieng', name: 'cho-thue-nha-rieng', component: () => import("../views/SellPostView.vue") },
+      { path: 'nha-biet-thu-lien-ke', name: 'cho-thue-nha-biet-thu-lien-ke', component: () => import("../views/SellPostView.vue") },
+      { path: 'nha-mat-pho', name: 'cho-thue-nha-mat-pho', component: () => import("../views/SellPostView.vue") },
+      { path: 'nha-thuong-mai', name: 'cho-thue-nha-thuong-mai', component: () => import("../views/SellPostView.vue") },
+      { path: 'nha-tro-phong-tro', name: 'cho-thue-nha-tro-phong-tro', component: () => import("../views/SellPostView.vue") },
+      { path: 'van-phong', name: 'cho-thue-van-phong', component: () => import("../views/SellPostView.vue") },
+      { path: 'sang-nhuong-cua-hang-ki-ot', name: 'cho-thue-sang-nhuong-cua-hang-ki-ot', component: () => import("../views/SellPostView.vue") },
+      { path: 'kho-nha-xuong-dat', name: 'cho-thue-kho-nha-xuong-dat', component: () => import("../views/SellPostView.vue") },
+      { path: 'loai-bat-dong-san-khac', name: 'cho-thue-loai-bat-dong-san-khac', component: () => import("../views/SellPostView.vue") },
     ],
   },
 
   {
     path: '/du-an',
     name: 'du-an',
-    component: () => import('../views/ProjectView.vue'),
+    component: () => import('../views/Project/ProjectView.vue'),
     children: [
-      { path: 'can-ho-chung-cu', name: 'can-ho-chung-cu', component: () => import('../views/ProjectView.vue') },
-      { path: 'cao-oc-van-phong', name: 'cao-oc-van-phong', component: () => import('../views/ProjectView.vue') },
-      { path: 'trung-tam-thuong-mai', name: 'trung-tam-thuong-mai', component: () => import('../views/ProjectView.vue') },
-      { path: 'khi-do-thi-moi', name: 'khi-do-thi-moi', component: () => import('../views/ProjectView.vue') },
-      { path: 'khu-phuc-hop', name: 'khu-phuc-hop', component: () => import('../views/ProjectView.vue') },
-      { path: 'nha-o-xa-hoi', name: 'nha-o-xa-hoi', component: () => import('../views/ProjectView.vue') },
-      { path: 'khu-nghi-duong-sinh-thai', name: 'khu-nghi-duong-sinh-thai', component: () => import('../views/ProjectView.vue') },
-      { path: 'khu-cong-nghiep', name: 'khu-cong-nghiep', component: () => import('../views/ProjectView.vue') },
-      { path: 'biet-thu-lien-ke', name: 'biet-thu-lien-ke', component: () => import('../views/ProjectView.vue') },
-      { path: 'shophouse', name: 'shophouse', component: () => import('../views/ProjectView.vue') },
-      { path: 'nha-mat-pho', name: 'nha-mat-pho', component: () => import('../views/ProjectView.vue') },
-      { path: 'du-an-khac', name: 'du-an-khac', component: () => import('../views/ProjectView.vue') },
+      { path: 'can-ho-chung-cu', name: 'can-ho-chung-cu', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'cao-oc-van-phong', name: 'cao-oc-van-phong', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'trung-tam-thuong-mai', name: 'trung-tam-thuong-mai', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'khi-do-thi-moi', name: 'khi-do-thi-moi', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'khu-phuc-hop', name: 'khu-phuc-hop', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'nha-o-xa-hoi', name: 'nha-o-xa-hoi', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'khu-nghi-duong-sinh-thai', name: 'khu-nghi-duong-sinh-thai', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'khu-cong-nghiep', name: 'khu-cong-nghiep', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'biet-thu-lien-ke', name: 'biet-thu-lien-ke', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'shophouse', name: 'shophouse', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'nha-mat-pho', name: 'nha-mat-pho', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'du-an-khac', name: 'du-an-khac', component: () => import('../views/Project/ProjectView.vue') },
     ],
+  },
+
+  {
+    path: '/chi-tiet-du-an/:id',
+    name: 'chi-tiet-du-an',
+    component: () => import('../views/Project/ProjectDetailView.vue'),
   },
 
   {
     path: '/tin-tuc',
     name: 'tin-tuc',
-    component: () => import('../views/NewsView.vue'),
+    component: () => import('../views/News/NewsView.vue'),
+  },
+
+  {
+    path: '/tin-tuc/:id',
+    name: 'chi-tiet-tin-tuc',
+    component: () => import('../views/News/NewsDetailView.vue'),
   },
 
   {
     path: '/doanh-nghiep',
     name: 'doanh-nghiep',
-    component: () => import('../views/PhoneBook/EnterpriseView.vue'),
+    component: () => import('../views/PhoneBook/Enterprise/EnterpriseView.vue'),
+  },
+
+  {
+    path: '/doanh-nghiep/:id',
+    name: 'chi-tiet-doanh-nghiep',
+    component: () => import('../views/PhoneBook/Enterprise/EnterpriseDetailView.vue'),
   },
 
   {
     path: '/nha-moi-gioi',
     name: 'nha-moi-gioi',
-    component: () => import('../views/PhoneBook/BrokerView.vue'),
+    component: () => import('../views/PhoneBook/Broker/BrokerView.vue'),
   },
 
   {
@@ -137,6 +167,36 @@ const routes = [
     name: 'quan-ly-tai-khoan',
     component: () => import('../views/ManageInfor/ProfileView.vue'),
   },
+
+  {
+    path: '/quen-mat-khau',
+    name: 'quen-mat-khau',
+    component: () => import('../views/ForgotPassword/ConfirmMailView.vue'),
+  },
+
+  {
+    path: '/thay-doi-mat-khau/:token',
+    name: 'thay-doi-mat-khau',
+    component: () => import('../views/ForgotPassword/ResetPasswordView.vue'),
+  },
+
+  {
+    path: '/admin',
+    name: 'dashboard',
+    component: () => import('../views/Admin/DashboardView.vue'),
+  },
+
+  {
+    path: '/admin/danh-sach-tin-cho-duyet',
+    name: '/danh-sach-tin-cho-duyet',
+    component: () => import('../views/Admin/Post/ListRequestPostView.vue'),
+  },
+
+  {
+    path: '/admin/chi-tiet-bai-dang/:id',
+    name: '/chi-tiet-bai-dang-admin',
+    component: () => import('../views/Admin/Post/PostDetailView.vue'),
+  }
 ];
 
 const router = new VueRouter({

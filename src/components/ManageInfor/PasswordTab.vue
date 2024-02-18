@@ -2,7 +2,7 @@
   <div >
     <h5>Đổi mật khẩu</h5>
     <div class="password-change-tab">
-      <el-form ref="changPassword" :model="changPassword" :rules="rules" @submit.native.prevent="login">
+      <el-form ref="changPassword" :model="changPassword" @submit.native.prevent="updatePassword">
         
           <label class="label" for="password">Mật khẩu hiện tại:</label>
           <el-input
@@ -14,19 +14,17 @@
           >
             <el-button slot="append" icon="el-icon-view" @click="showPassword = !showPassword"></el-button>
           </el-input>
-          <div style="margin-top:10px;">
-            <a href="#" style="color:red;">Quên mật khẩu?</a>
-            <el-button type="text" @click="dialogVisible = true">click to open the Dialog</el-button>
+          <div>
+            <el-button type="text" style="color:red;" @click="dialogVisible = true">Quên mật khẩu?</el-button>
 
             <el-dialog
               title="Khôi phục mật khẩu"
               :visible.sync="dialogVisible"
-              width="40%"
-              :before-close="handleClose">
-              <el-button @click="dialogVisible = false">Gửi mã xác minh qua email </el-button>
+              width="25%"
+              @close="dialogVisible = false">
+              <el-button style="width: 80%" @click="handleSendMail()">Gửi mã xác minh qua email </el-button>
               <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+                <el-button @click="dialogVisible = false" type="danger">Huỷ bỏ</el-button>
               </span>
             </el-dialog>
           </div>
@@ -67,12 +65,15 @@
 </template>
 
 <script>
+import AuthApi from "@/api/auth"
+import { Notification } from "element-ui";
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
     dialogVisible: false,
       changPassword: {
-        username: "",
         password: "",
         newPassword: "",
         againPassword: "",
@@ -81,11 +82,50 @@ export default {
       showNewPassword:false,
       showAgainPassword:false,
       rememberAccount: false,
-      rules: {
-        username: [{ required: true, message: "Vui lòng nhập tài khoản", trigger: "blur" }],
-        password: [{ required: true, message: "Vui lòng nhập mật khẩu", trigger: "blur" }],
-      },
     };
+  },
+  computed: mapState({
+    user: (state) => state.user, 
+  }),
+  methods: {
+    handleSendMail() {
+      AuthApi.forgotPassword(
+        {
+          email: this.user.email,
+        },
+        () => {
+          Notification.success({
+            title: "Thành công",
+            message: "Bạn hãy kiểm tra email để có thể thay đổi mật khẩu",
+          });
+          this.dialogVisible = false
+        },
+      )
+    },
+    
+    updatePassword() {
+      AuthApi.updatePassword(
+        {
+          password: this.changPassword.password,
+          new_password: this.changPassword.newPassword,
+        },
+        (response) => {
+          const token = response.data.data
+          localStorage.setItem('token', token)
+          Notification.success({
+            title: "Thành công",
+            message: "Thay đổi mật khẩu thành công",
+          });
+
+        },
+        (error) => {
+          Notification.error({
+            title: "Thất bại",
+            message: error.data.error,
+          });
+        }
+      )
+    },
   },
 }
 </script>
@@ -109,5 +149,15 @@ a{
 .action-btn{
   margin-bottom: 20px;
 
+}
+
+.el-dialog {
+  border-radius: 10px;
+  min-width: 300px;
+}
+
+.el-dialog__body {
+  display: flex;
+  justify-content: center;
 }
 </style>

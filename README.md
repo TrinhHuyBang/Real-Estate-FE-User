@@ -1,24 +1,11 @@
-# todolist
+# Real estate
 
-## Project setup
+## Cài đặt môi trường
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Chạy project
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

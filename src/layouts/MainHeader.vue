@@ -3,53 +3,54 @@
     <el-menu
       class="el-menu-demo"
       mode="horizontal"
+      menu-trigger="hover"
       :router="true"
     >
       <el-menu-item index="/" class="logo">
-        <img class="logo" src="https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Logo.png?alt=media&token=9b017c07-2675-4894-b819-7e563e371299"
+        <img class="logo" src="/Logo.png"
         alt="Logo"/>
       </el-menu-item>
-      <el-submenu index="/nha-dat-ban">
+      <el-submenu index="/nha-dat-ban" @click="handleChangPagehange('/nha-dat-ban')">
         <template slot="title">Nhà đất bán</template>
-        <el-menu-item index="/nha-dat-ban/can-ho-chung-cu">Bán căn hộ chung cư</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/nha-rieng">Bán nhà riêng</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/nha-biet-thu-lien-ke">Bán nhà biệt thự liền kề</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/nha-mat-pho">Bán nhà mặt phố</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/nha-pho-thuong-mai">Bán nhà phố thương mại</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/dat-nen-du-an">Bán đất nền dự án</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/dat">Bán đất</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/trang-trai-khu-nghi-duong">Bán trang trại, khu nghỉ dưỡng</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/condotel">Bán condotel</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/kho-nha-xuong">Bán kho, nhà xưởng</el-menu-item>
-        <el-menu-item index="/nha-dat-ban/loai-bat-dong-san-khac">Bán loại bất động sản khác</el-menu-item>
+        <el-menu-item index="1" @click="handleChangPagehange('/nha-dat-ban/can-ho-chung-cu')">Bán căn hộ chung cư</el-menu-item>
+        <el-menu-item index="2" @click="handleChangPagehange('/nha-dat-ban/nha-rieng')">Bán nhà riêng</el-menu-item>
+        <el-menu-item index="3" @click="handleChangPagehange('/nha-dat-ban/nha-biet-thu-lien-ke')">Bán nhà biệt thự liền kề</el-menu-item>
+        <el-menu-item index="4" @click="handleChangPagehange('/nha-dat-ban/nha-mat-pho')">Bán nhà mặt phố</el-menu-item>
+        <el-menu-item index="5" @click="handleChangPagehange('/nha-dat-ban/nha-pho-thuong-mai')">Bán nhà phố thương mại</el-menu-item>
+        <el-menu-item index="6" @click="handleChangPagehange('/nha-dat-ban/dat-nen-du-an')">Bán đất nền dự án</el-menu-item>
+        <el-menu-item index="7" @click="handleChangPagehange('/nha-dat-ban/dat')">Bán đất</el-menu-item>
+        <el-menu-item index="8" @click="handleChangPagehange('/nha-dat-ban/trang-trai-khu-nghi-duong')">Bán trang trại, khu nghỉ dưỡng</el-menu-item>
+        <el-menu-item index="9" @click="handleChangPagehange('/nha-dat-ban/condotel')">Bán condotel</el-menu-item>
+        <el-menu-item index="10" @click="handleChangPagehange('/nha-dat-ban/kho-nha-xuong')">Bán kho, nhà xưởng</el-menu-item>
+        <el-menu-item index="11" @click="handleChangPagehange('/nha-dat-ban/loai-bat-dong-san-khac')">Bán loại bất động sản khác</el-menu-item>
       </el-submenu>
       <el-submenu index="/nha-dat-cho-thue">
         <template slot="title">Cho thuê nhà đất</template>
-        <el-menu-item index="/nha-dat-cho-thue/can-ho-chung-cu">Cho thuê căn hộ chung cư</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/nha-rieng">Cho thuê nhà riêng</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/nha-biet-thu-lien-ke">Cho thuê nhà biệt thự liền kề</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/nha-mat-pho">Cho thuê nhà mặt phố</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/nha-thuong-mai">Cho thuê nhà thương mại</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/nha-tro-phong-tro">Cho thuê nhà trọ, phòng trọ</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/van-phong">Cho thuê văn phòng</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/sang-nhuong-cua-hang-ki-ot">Cho thuê, sang nhượng, cửa hàng, ki ốt</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/kho-nha-xuong-dat">Cho thuê kho, nhà xưởng, đất</el-menu-item>
-        <el-menu-item index="/nha-dat-cho-thue/loai-bat-dong-san-khac">Cho thuê loại bất động sản khác</el-menu-item>
+        <el-menu-item index="12" @click="handleChangPagehange('/nha-dat-cho-thue/can-ho-chung-cu')">Cho thuê căn hộ chung cư</el-menu-item>
+        <el-menu-item index="13" @click="handleChangPagehange('/nha-dat-cho-thue/nha-rieng')">Cho thuê nhà riêng</el-menu-item>
+        <el-menu-item index="14" @click="handleChangPagehange('/nha-dat-cho-thue/nha-biet-thu-lien-ke')">Cho thuê nhà biệt thự liền kề</el-menu-item>
+        <el-menu-item index="15" @click="handleChangPagehange('/nha-dat-cho-thue/nha-mat-pho')">Cho thuê nhà mặt phố</el-menu-item>
+        <el-menu-item index="16" @click="handleChangPagehange('/nha-dat-cho-thue/nha-thuong-mai')">Cho thuê nhà thương mại</el-menu-item>
+        <el-menu-item index="17" @click="handleChangPagehange('/nha-dat-cho-thue/nha-tro-phong-tro')">Cho thuê nhà trọ, phòng trọ</el-menu-item>
+        <el-menu-item index="18" @click="handleChangPagehange('/nha-dat-cho-thue/van-phong')">Cho thuê văn phòng</el-menu-item>
+        <el-menu-item index="19" @click="handleChangPagehange('/nha-dat-cho-thue/sang-nhuong-cua-hang-ki-ot')">Cho thuê, sang nhượng, cửa hàng, ki ốt</el-menu-item>
+        <el-menu-item index="20" @click="handleChangPagehange('/nha-dat-cho-thue/kho-nha-xuong-dat')" >Cho thuê kho, nhà xưởng, đất</el-menu-item>
+        <el-menu-item index="21" @click="handleChangPagehange('/nha-dat-cho-thue/loai-bat-dong-san-khac')">Cho thuê loại bất động sản khác</el-menu-item>
       </el-submenu>
       <el-submenu index="/du-an">
         <template slot="title">Dự án</template>
-        <el-menu-item index="/du-an/can-ho-chung-cu">Căn hộ chung cư</el-menu-item>
-        <el-menu-item index="/du-an/cao-oc-van-phong">Cao ốc văn phòng</el-menu-item>
-        <el-menu-item index="/du-an/trung-tam-thuong-mai">Trung tâm thương mại</el-menu-item>
-        <el-menu-item index="/du-an/khi-do-thi-moi">Khi đô thị mới</el-menu-item>
-        <el-menu-item index="/du-an/khu-phuc-hop">Khu phức hợp</el-menu-item>
-        <el-menu-item index="/du-an/nha-o-xa-hoi">Nhà ở xã hội</el-menu-item>
-        <el-menu-item index="/du-an/khu-nghi-duong-sinh-thai">Khu nghỉ dưỡng, Sinh thái</el-menu-item>
-        <el-menu-item index="/du-an/khu-cong-nghiep">Khu công nghiệp</el-menu-item>
-        <el-menu-item index="/du-an/biet-thu-lien-ke">Biệt thự, liền kề</el-menu-item>
-        <el-menu-item index="/du-an/shophouse">Shophouse</el-menu-item>
-        <el-menu-item index="/du-an/nha-mat-pho">Nhà mặt phố</el-menu-item>
-        <el-menu-item index="/du-an/du-an-khac">Dự án khác</el-menu-item>
+        <el-menu-item index="22"  @click="handleChangPagehange('/du-an/can-ho-chung-cu')">Căn hộ chung cư</el-menu-item>
+        <el-menu-item index="23"  @click="handleChangPagehange('/du-an/cao-oc-van-phong')">Cao ốc văn phòng</el-menu-item>
+        <el-menu-item index="24"  @click="handleChangPagehange('/du-an/trung-tam-thuong-mai')">Trung tâm thương mại</el-menu-item>
+        <el-menu-item index="25"  @click="handleChangPagehange('/du-an/khi-do-thi-moi')">Khi đô thị mới</el-menu-item>
+        <el-menu-item index="26"  @click="handleChangPagehange('/du-an/khu-phuc-hop')">Khu phức hợp</el-menu-item>
+        <el-menu-item index="27"  @click="handleChangPagehange('/du-an/nha-o-xa-hoi')">Nhà ở xã hội</el-menu-item>
+        <el-menu-item index="28"  @click="handleChangPagehange('/du-an/khu-nghi-duong-sinh-thai')">Khu nghỉ dưỡng, Sinh thái</el-menu-item>
+        <el-menu-item index="29"  @click="handleChangPagehange('/du-an/khu-cong-nghiep')">Khu công nghiệp</el-menu-item>
+        <el-menu-item index="30"  @click="handleChangPagehange('/du-an/biet-thu-lien-ke')">Biệt thự, liền kề</el-menu-item>
+        <el-menu-item index="31"  @click="handleChangPagehange('/du-an/shophouse')">Shophouse</el-menu-item>
+        <el-menu-item index="32"  @click="handleChangPagehange('/du-an/nha-mat-pho')">Nhà mặt phố</el-menu-item>
+        <el-menu-item index="33"  @click="handleChangPagehange('/du-an/du-an-khac')">Dự án khác</el-menu-item>
       </el-submenu>
       <el-menu-item index="/tin-tuc" >Tin Tức</el-menu-item>
       <el-submenu index="/danh-ba">
@@ -60,36 +61,16 @@
     </el-menu>
 
     <div class="auth">
-      <template v-if="!user">
-        <div class="item d-flex align-items-center text-muted">
-          <router-link to="/dang-nhap"
-            ><el-button class="btn" type="text">
-              Đăng nhập</el-button
-            ></router-link
-          >
-          <router-link to="/dang-ky"
-            ><el-button class="btn" type="text">
-              Đăng ký
-            </el-button></router-link
-          >
-        </div>
-      </template>
-      <template v-else>
+      <template v-if="user && user.id">
         <div>
-          <div class="bell-icon">
-            <span class="notification-count" v-if="user.bookmark">{{
-              user.bookmark
-            }}</span>
-            <i class="far fa-heart"></i>
-          </div>
-          <div class="bell-icon">
-            <span class="notification-count" v-if="user.notification">{{
-              user.notification
-            }}</span>
+          <el-badge :value="bookmarkCount ? bookmarkCount : null" :max="99" class="item">
+            <router-link style="color: black;" to="/quan-ly-tin-luu"><i class="far fa-heart"></i></router-link>
+          </el-badge>
+          <el-badge :value="user.notice" :max="99" class="item">
             <i class="far fa-bell"></i>
-          </div>
+          </el-badge>
           <el-dropdown class="dropdown" trigger="hover">
-            <a href="/quan-ly-tin-dang" class="dropdown-trigger username-avt">
+            <router-link to="/quan-ly-tin-dang" class="dropdown-trigger username-avt">
               <div>
                 <el-image
                   class="avt"
@@ -97,32 +78,45 @@
                   alt="Avatar"
                   v-if="user.avatar"
                 ></el-image>
+                <div v-else class="avatar-placeholder">
+                  <span class="avatar-letter">{{ showName() }}</span>
+                </div>
               </div>
               <div>
                 <span class="name">{{ user.name }}</span>
               </div>
-            </a>
+            </router-link>
             <el-dropdown-menu>
-              <el-dropdown-item href="/quan-ly-tin-dang">
-                Quản lý tin đăng
-              </el-dropdown-item>
-              <el-dropdown-item href="#">
-                <el-icon></el-icon>
-                Thay đổi thông tin cá nhân
-              </el-dropdown-item>
-              <el-dropdown-item href="#">
-                <el-icon></el-icon>
-                Thay đổi mật khẩu
-              </el-dropdown-item>
-              <el-dropdown-item href="#">
-                <el-icon></el-icon>
-                Đăng xuất
-              </el-dropdown-item>
+              <router-link to="/quan-ly-tin-dang">
+                <el-dropdown-item>
+                  Quản lý tin đăng
+                </el-dropdown-item>
+              </router-link>
+              <router-link to="/quan-ly-tai-khoan">
+                <el-dropdown-item>
+                  Thay đổi thông tin cá nhân
+                </el-dropdown-item>
+              </router-link>
+              <span @click="logout()">
+                <el-dropdown-item>
+                  Đăng xuất
+                </el-dropdown-item>
+              </span>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button class="btn" type="text" href="/dang-tin">
-            Đăng tin
-          </el-button>
+          <router-link to="/dang-tin">
+            <el-button class="btn" type="primary"> Đăng tin </el-button>
+          </router-link>
+        </div>
+      </template>
+      <template v-else>
+        <div class="item d-flex align-items-center text-muted">
+          <router-link to="/dang-nhap">
+            <el-button class="btn" type="primary"> Đăng nhập </el-button>
+          </router-link>
+          <router-link to="/dang-ky">
+            <el-button class="btn" type="primary"> Đăng ký </el-button>
+          </router-link>
         </div>
       </template>
     </div>
@@ -130,17 +124,45 @@
 </template>
 
 <script>
+import AuthApi from "@/api/auth"
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      user: {
-        name: "Trinh Huy Bang",
-        avatar:
-          "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Logo.png?alt=media&token=9b017c07-2675-4894-b819-7e563e371299",
-        bookmark: 2,
-        notification: 4,
-      },
+
     };
+  },
+  computed: mapState({
+    user: (state) => state.user, 
+    bookmarkCount: (state) => state.bookmarkCount,
+  }),
+  mounted() {
+    this.checkGuest()
+  },
+
+  methods: {
+    showName() {
+      return this.user.name ? this.user.name.split(" ")[this.user.name.split(" ").length - 1][0] : ""
+    },
+    handleChangPagehange(path) {
+      this.$router.push(path)
+      window.location.href = this.$router.resolve(path).href
+    },
+    logout() {
+      AuthApi.logout(
+        () => {
+          localStorage.setItem('token', '')
+          window.location.assign('/')
+        }
+      )
+    },
+    checkGuest() {
+      var guest_id = localStorage.getItem('guest_id')
+      if(!guest_id) {
+        guest_id = Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8)
+        localStorage.setItem('guest_id', guest_id)
+      }
+    }
   },
 };
 </script>
@@ -156,6 +178,10 @@ export default {
   left: 0;
   right: 0;
   z-index: 999;
+}
+
+router-link {
+  color: black;
 }
 
 .logo img {
@@ -237,22 +263,17 @@ export default {
   display: flex;
 }
 
-.auth .btn {
-  color: black;
+.btn {
   font-weight: bold;
-  text-decoration: none;
   margin-right: 30px;
   vertical-align: middle;
-  background: #b3acac;
-  white-space: nowrap;
-  border: 1px solid black;
-  width: 100px;
+  width: 120px;
 }
 
 .avt {
   width: 40px;
   height: 40px;
-  border-radius: 100%;
+  border-radius: 50%;
   margin-right: 10px;
 }
 
@@ -267,7 +288,7 @@ export default {
   margin-right: 20px;
 }
 
-.dropdown a {
+a {
   text-decoration: none;
 }
 
@@ -300,5 +321,18 @@ export default {
 
 .dropdown .el-dropdown-menu a:hover {
   background-color: #f0f0f0;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

@@ -1,9 +1,12 @@
 <template>
   <div class="manage-nav">
     <div class="user-infor">
-        <img :src="user.avatar" alt="avatar" class="user-avatar">
+        <img v-if="user.avatar" :src="user.avatar" alt="avatar" class="user-avatar">
+        <div v-else class="avatar-placeholder">
+            <span class="avatar-letter">{{ showName() }}</span>
+        </div>
         <div class="name-email">
-            <h5>{{ user.name }}</h5>
+            <h6>{{ user.name }}</h6>
             {{ user.email }}
         </div>
     </div>
@@ -38,7 +41,7 @@
             <el-menu-item index="2" @click="enterpriseRegisterTab">Đăng ký doanh nghiệp</el-menu-item>
             <el-menu-item index="3" @click="deleteAccountTab">Xoá tài khoản</el-menu-item>
         </el-submenu> -->
-        <el-menu-item index="4">
+        <el-menu-item index="4" @click="logout()">
             <i class="el-icon fa fa-sign-out"></i>
             <span slot="title">Đăng xuất</span>
         </el-menu-item>
@@ -47,17 +50,15 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
+import AuthApi from "@/api/auth"
 export default {
     data() {
-        return {
-            user : {
-                avatar: "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Logo.png?alt=media&token=9b017c07-2675-4894-b819-7e563e371299",
-                name: "Trinh Huy Bang",
-                email: "huybang@gmail.com",
-            },
-        };
+        return {};
     },
-
+    computed: mapState({
+        user: (state) => state.user, 
+    }),
     methods: {
         changePasswordTab(){
             this.$router.push({ name: 'quan-ly-tai-khoan', params: { tabName: 'password' } });
@@ -71,6 +72,17 @@ export default {
         deleteAccountTab(){
             this.$router.push({ name: 'quan-ly-tai-khoan', params: { tabName: 'deleteAccount' } });
         },
+        showName() {
+            return this.user.name ? this.user.name.split(" ")[this.user.name.split(" ").length - 1][0] : ""
+        },
+        logout() {
+            AuthApi.logout(
+                () => {
+                    localStorage.setItem('token', '')
+                    window.location.assign('/')
+                }
+            )
+        }
     },
 }
 </script>
@@ -100,7 +112,7 @@ export default {
 .user-avatar{
     width: 50px;
     height: 50px;
-    border-radius: 100%;
+    border-radius: 50%;
 }
 
 .menu-item{
@@ -122,6 +134,17 @@ export default {
     margin-right: 10px;
 }
 
-
+.avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  background-color: #3498db;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+}
 
 </style>

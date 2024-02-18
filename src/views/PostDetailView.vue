@@ -1,17 +1,20 @@
 <template>
   <div>
-    <PostDetail />
-    <RealEstateForYou />
+    <post-detail />
+    <real-estate-for-you />
+    <post-view-history />
   </div>
 </template>
 
 <script>
-import RealEstateForYou from "@/components/RealEstateForYou.vue";
+import RealEstateForYou from "@/components/Home/RealEstateForYou.vue";
 import PostDetail from "@/components/PostDetail.vue";
+import PostViewHistory from '@/components/PostViewHistory.vue';
 export default {
   components: {
-    RealEstateForYou,
-    PostDetail
+    'real-estate-for-you' : RealEstateForYou,
+    'post-detail': PostDetail,
+    'post-view-history' : PostViewHistory,
   },
 };
 </script>

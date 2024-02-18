@@ -1,15 +1,17 @@
 export default {
-  commitAddTask({ commit }, task) {
-    commit("addTask", task);
-  },
-  commitDeleteTask({ commit }, task) {
-    commit("deleteTask", task);
-  },
-  commitUpdateTask({ commit }, uptask) {
-    commit("updateTask", uptask);
-  },
-
   commitSetPostType({ commit }, data) {
     commit("setPostType", data);
-  }
+  },
+
+  commitSetUserInfo({ commit }, data) {
+    commit("setUserInfo", data);
+  },
+
+  commitSetFilterData({ commit }, data) {
+    commit("setFilterData", data);
+  },
+
+  commitSetBookmarkCount({ commit }, data) {
+    commit("setBookmarkCount", data);
+  },
 };

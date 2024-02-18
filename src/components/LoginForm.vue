@@ -8,7 +8,6 @@
           <el-input
             v-model="loginForm.username"
             placeholder="SĐT chính hoặc email"
-            required
           ></el-input>
         </el-form-item>
         <el-form-item >
@@ -17,15 +16,13 @@
             v-model="loginForm.password"
             :type="showPassword ? 'text' : 'password'"
             placeholder="Mật khẩu"
-            required
             class="password-input"
           >
             <el-button slot="append" icon="el-icon-view" @click="showPassword = !showPassword"></el-button>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox style="margin-right: 30px" v-model="rememberAccount"> Nhớ tài khoản </el-checkbox>
-          <a href="#">Quên mật khẩu?</a>
+          <router-link to="/quen-mat-khau">Quên mật khẩu?</router-link>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="login-btn" native-type="submit">Đăng nhập</el-button>
@@ -41,8 +38,7 @@
 
 <script>
 import { Notification } from "element-ui";
-import axios from "axios";
-
+import AuthApi from "@/api/auth"
 export default {
   data() {
     return {
@@ -59,26 +55,32 @@ export default {
     };
   },
   methods: {
-    async login() {
-      this.$refs.loginForm.validate(async (valid) => {
+    login() {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           const userData = {
             username: this.loginForm.username,
             password: this.loginForm.password,
           };
 
-          try {
-            const response = await axios.post("/login", userData);
-            console.log(response);
-            // Handle successful login response
-            // this.$router.push({ name: "dang-tin" });
-          } catch (error) {
-            Notification.error({
-              title: "Đăng nhập thất bại",
-              message: "Vui lòng kiểm tra tài khoản và mật khẩu của bạn",
-            });
-            console.error(error);
-          }
+          AuthApi.login(
+            userData,
+            (response) => {
+              const token = response.access_token
+              localStorage.setItem('token', token)
+              Notification.success({
+                title: "Thành công",
+                message: "Đăng nhập thành công",
+              });
+              window.location.href = "/"
+            },
+            (error) => {
+              Notification.error({
+                title: "Thất bại",
+                message: error.data.error,
+              });
+            }
+          )
         } else {
           return false;
         }
@@ -93,15 +95,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  min-height: 95vh;
   /* background-color: #f1f1f1; */
 }
 
 .login-form {
+  margin: 20px;
   background-color: #f1f1f1;
   padding: 50px;
   width: 40%;
   border-radius: 5px;
+  min-width: 450px;
 }
 
 .login-btn {

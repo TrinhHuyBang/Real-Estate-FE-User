@@ -1,10 +1,6 @@
 export default {
-  tasks: [
-    {
-      content: "an com",
-      done: false,
-    },
-  ],
-
   postTypes: {},
+  user: {},
+  filter: {},
+  bookmarkCount: null,
 };

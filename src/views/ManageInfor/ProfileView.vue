@@ -18,6 +18,9 @@
         <el-tab-pane label="Xoá tài khoản" name="deleteAccount">
           <delete-account-tab />
         </el-tab-pane>
+        <el-tab-pane label="Đăng ký tài khoản môi giới" name="brokerRegister">
+          <broker-register-tab />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -29,6 +32,7 @@ import ProfileTab from '@/components/ManageInfor/ProfileTab.vue';
 import PasswordTab from '@/components/ManageInfor/PasswordTab.vue';
 import EnterpriseRegisterTab from '@/components/ManageInfor/EnterpriseRegisterTab.vue';
 import DeleteAccountTab from '@/components/ManageInfor/DeleteAccountTab.vue';
+import BrokerRegisterTab from '@/components/ManageInfor/BrokerRegisterTab.vue';
 export default {
     
     components: {
@@ -37,6 +41,7 @@ export default {
         "password-tab": PasswordTab,
         "enterprise-register-tab": EnterpriseRegisterTab,
         "delete-account-tab": DeleteAccountTab,
+        "broker-register-tab": BrokerRegisterTab,
     },
 
     data(){
@@ -51,7 +56,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .manage-list-bookmark-post {
   display: flex;
   flex-direction: row;
