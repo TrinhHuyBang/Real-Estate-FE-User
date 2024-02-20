@@ -63,12 +63,22 @@
                 placeholder="Đến"
               ></el-input-number>
             </div>
-            <el-option
-              v-for="(price, index) in optionPrice"
-              :key="index"
-              :value="price"
-              >{{ price }}</el-option
-            >
+            <div v-if="type == 'rent'">
+              <el-option
+                v-for="(price, index) in optionRentPrice"
+                :key="index"
+                :value="price"
+                >{{ price }}</el-option
+              >
+            </div>
+            <div v-else>
+              <el-option
+                v-for="(price, index) in optionSellPrice"
+                :key="index"
+                :value="price"
+                >{{ price }}</el-option
+              >
+            </div>
           </el-select>
           <label for="post-size">Diện tích</label>
           <el-select
@@ -133,44 +143,47 @@
               <el-option value="Diện tích bé đến lớn">Diện tích bé đến lớn</el-option>
             </el-select>
           </div>
-          <div class="single-rent-sell-post" v-for="post in posts" :key="post.id">
-            <div>
-              <router-link :to="`/chi-tiet-bai-dang/${post.id}`">
-                <div class="show-post-image">
-                  <img class="image-rent-sell-post" :src="post.image" alt="" />
-                  <div class="number-image"><i class="el-icon-picture-outline"> {{ post.number_image }}</i> </div>
-                </div>
-              </router-link>
-            </div>
-            <div class="content-rent-sell-post">
-              <router-link
-                class="link-to-detail"
-                :to="`/chi-tiet-bai-dang/${post.id}`"
-              >
-                <span class="rent-sell-post-title">{{ post.title }}</span>
-              </router-link>
-              <span style="color: red; font-weight: 600">
-                {{ showPrice(post) + " ・ " + post.size + " m&sup2;" }}
-              </span>
-              <span v-if="post.bedroom">
-                {{ " ・ " + post.bedroom }} <i class="el-icon fa fa-bed"></i>
-              </span>
-              <span v-if="post.toilet">
-                {{ " ・ " + post.toilet }} <i class="el-icon fa fa-bath"></i>
-              </span>
-              <div class="post-location">
-                <i class="el-icon-location-outline"></i> {{ showAddress({province: post.province, district: post.district}) }}
+          <div v-if="total" style="width:85%;">
+            <div class="single-rent-sell-post" v-for="post in posts" :key="post.id">
+              <div>
+                <router-link :to="`/chi-tiet-bai-dang/${post.id}`">
+                  <div class="show-post-image">
+                    <img class="image-rent-sell-post" :src="post.image" alt="" />
+                    <div class="number-image"><i class="el-icon-picture-outline"> {{ post.number_image }}</i> </div>
+                  </div>
+                </router-link>
               </div>
-              <div class="published_at">{{ showTime(post.published_at) }}</div>
-              <el-button class="ren-selt-post-bookmark" @click="bookmark(post)">
-                <i
-                  v-if="post.bookmark == 1"
-                  class="el-icon bookmarked fas fa-heart"
-                ></i>
-                <i v-else class="el-icon far fa-heart"></i>
-              </el-button>
+              <div class="content-rent-sell-post">
+                <router-link
+                  class="link-to-detail"
+                  :to="`/chi-tiet-bai-dang/${post.id}`"
+                >
+                  <span class="rent-sell-post-title">{{ post.title }}</span>
+                </router-link>
+                <span style="color: red; font-weight: 600">
+                  {{ showPrice(post) + " ・ " + post.size + " m&sup2;" }}
+                </span>
+                <span v-if="post.bedroom">
+                  {{ " ・ " + post.bedroom }} <i class="el-icon fa fa-bed"></i>
+                </span>
+                <span v-if="post.toilet">
+                  {{ " ・ " + post.toilet }} <i class="el-icon fa fa-bath"></i>
+                </span>
+                <div class="post-location">
+                  <i class="el-icon-location-outline"></i> {{ showAddress({province: post.province, district: post.district}) }}
+                </div>
+                <div class="published_at">{{ showTime(post.published_at) }}</div>
+                <el-button v-if="user && user.email" class="ren-selt-post-bookmark" @click="bookmark(post)">
+                  <i
+                    v-if="post.bookmark == 1"
+                    class="el-icon bookmarked fas fa-heart"
+                  ></i>
+                  <i v-else class="el-icon far fa-heart"></i>
+                </el-button>
+              </div>
             </div>
           </div>
+          <list-post-error v-else />
           <div v-if="posts.length" class="paginate-page">
             <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
           </div>
@@ -188,8 +201,10 @@ import axios from "axios"
 import BookmarkApi from '@/api/bookmark'
 import PostApi from "@/api/post"
 import { mapActions, mapState } from 'vuex'
+import ListPostError from '@/components/NoneToDisplay/ListPostError.vue'
 export default {
   computed: mapState({
+    user: (state) => state.user,
     bookmarkCount: (state) => state.bookmarkCount,
   }),
   mounted() {
@@ -206,7 +221,18 @@ export default {
     return {
       numberBookmark: null,
       title: "",
-      optionPrice: [
+      optionRentPrice: [
+        "Dưới 1triệu",
+        "1 - 3 triệu",
+        "3 - 5 triệu",
+        "5 - 10 triệu",
+        "10 - 40 triệu",
+        "40 - 70 triệu",
+        "70 - 100 triệu",
+        "Trên 100 triệu",
+        "Thoả thuận",
+      ],
+      optionSellPrice: [
         "Dưới 500 triệu",
         "500 - 800 triệu",
         "800 triệu - 1 tỷ",
@@ -273,6 +299,7 @@ export default {
   },
   components: {
     // "search-nav": SearchNav,
+    ListPostError
   },
   methods: {
     setTitle() {
@@ -393,7 +420,7 @@ export default {
       }
     },
 
-    updatePrice() {
+    updateSellPrice() {
       if(this.priceSelected === "Dưới 500 triệu"){
         this.startFilterPrice = 0
         this.endFilterPrice = 500
@@ -432,6 +459,40 @@ export default {
         this.endFilterPrice = 60000
       } else if(this.priceSelected === "Trên 60 tỷ"){
         this.startFilterPrice = 60000
+        this.endFilterPrice = 9999999999
+      } else if(this.priceSelected === "Thoả thuận"){
+        this.startFilterPrice = 0
+        this.endFilterPrice = 0
+      } else if(this.priceSelected === ""){
+        this.startFilterPrice = 0
+        this.endFilterPrice = 0
+      }
+    },
+
+    updateRentPrice() {
+      if(this.priceSelected === "Dưới 1 triệu"){
+        this.startFilterPrice = 0
+        this.endFilterPrice = 1
+      } else if(this.priceSelected === "1 - 3 triệu"){
+        this.startFilterPrice = 1
+        this.endFilterPrice = 3
+      } else if(this.priceSelected === "3 - 5 triệu"){
+        this.startFilterPrice = 3
+        this.endFilterPrice = 5
+      } else if(this.priceSelected === "5 - 10 triệu"){
+        this.startFilterPrice = 5
+        this.endFilterPrice = 10
+      } else if(this.priceSelected === "10 - 40 triệu"){
+        this.startFilterPrice = 10
+        this.endFilterPrice = 40
+      } else if(this.priceSelected === "40 - 70 triệu"){
+        this.startFilterPrice = 40
+        this.endFilterPrice = 70
+      } else if(this.priceSelected === "70 - 100 triệu"){
+        this.startFilterPrice = 70
+        this.endFilterPrice = 100
+      } else if(this.priceSelected === "Trên 100 triệu"){
+        this.startFilterPrice = 100
         this.endFilterPrice = 9999999999
       } else if(this.priceSelected === "Thoả thuận"){
         this.startFilterPrice = 0
@@ -553,7 +614,11 @@ export default {
       this.updateSizeSelected()
     },
     priceSelected() {
-      this.updatePrice()
+      if(this.type == "sell") {
+        this.updateSellPrice()
+      } else {
+        this.updateRentPrice()
+      }
     },
     sizeSelected() {
       this.updateSize()
@@ -642,11 +707,6 @@ export default {
   margin: 10px 3px 0 3px
 }
 
-.published_at {
-  margin-top: 10px;
-  color: grey;
-}
-
 .ren-selt-post-bookmark {
   position: absolute;
   bottom: 20px;
@@ -675,6 +735,7 @@ export default {
 }
 
 .paginate-page{
+  width: 85%;
   margin-top: 30px;
   margin-bottom: 30px;
   display: flex;

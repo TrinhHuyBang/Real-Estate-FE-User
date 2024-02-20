@@ -260,13 +260,18 @@
   margin: 20px 0px;
 }
 
-.project-contact button, .investor-information button {
+.project-contact button, .btn-investor-contact {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
 
 .investor-information img {
   width: 50%;
   margin-bottom: 10px;
   border-radius: 5px;
+}
+
+.published_at {
+  margin-top: 10px;
+  color: grey;
 }

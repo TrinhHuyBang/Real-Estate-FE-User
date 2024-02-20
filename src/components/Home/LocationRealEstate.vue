@@ -70,4 +70,8 @@ export default {
     padding-top: 20px;
     padding-left: 20px;
 }
+
+h3 {
+  margin: 30px 0 10px 0;
+}
 </style>

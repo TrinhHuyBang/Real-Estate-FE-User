@@ -19,42 +19,45 @@
         <el-button :class="{ active_selected: type === 'rent' }" @click="type = 'rent'">Cho thuê</el-button>
       </div>
     </div>
-    <div class="single-rent-sell-post" v-for="post in posts" :key="post.id">
-      <div>
-        <router-link :to="`/chi-tiet-bai-dang/${post.id}`">
-          <img class="image-rent-sell-post" :src="post.image" alt="" />
-          <div class="number-image"><i class="el-icon-picture-outline"> {{ post.number_image }}</i> </div>
-        </router-link>
-      </div>
-      <div class="content-rent-sell-post">
-        <router-link
-          class="link-to-detail"
-          :to="`/chi-tiet-bai-dang/${post.id}`"
-        >
-          <span class="rent-sell-post-title">{{ post.title }}</span>
-        </router-link>
-        <span style="color: red; font-weight: 600">
-          {{ showPrice(post) + " ・ " + post.size + " m&sup2;" }}
-        </span>
-        <span v-if="post.bedroom">
-          {{ " ・ " + post.bedroom }} <i class="el-icon fa fa-bed"></i>
-        </span>
-        <span v-if="post.toilet">
-          {{ " ・ " + post.toilet }} <i class="el-icon fa fa-bath"></i>
-        </span>
-        <div class="post-location">
-          <i class="el-icon-location-outline"></i> {{ showAddress(post) }}
+    <div v-if="total" style="width: 80%;">
+      <div class="single-rent-sell-post" v-for="post in posts" :key="post.id">
+        <div>
+          <router-link :to="`/chi-tiet-bai-dang/${post.id}`">
+            <img class="image-rent-sell-post" :src="post.image" alt="" />
+            <div class="number-image"><i class="el-icon-picture-outline"> {{ post.number_image }}</i> </div>
+          </router-link>
         </div>
-        <div class="published_at">{{ showTime(post.published_at) }}</div>
-        <el-button class="ren-selt-post-bookmark" @click="bookmark(post)">
-          <i
-            v-if="post.bookmark == 1"
-            class="el-icon bookmarked fas fa-heart"
-          ></i>
-          <i v-else class="el-icon far fa-heart"></i>
-        </el-button>
+        <div class="content-rent-sell-post">
+          <router-link
+            class="link-to-detail"
+            :to="`/chi-tiet-bai-dang/${post.id}`"
+          >
+            <span class="rent-sell-post-title">{{ post.title }}</span>
+          </router-link>
+          <span style="color: red; font-weight: 600">
+            {{ showPrice(post) + " ・ " + post.size + " m&sup2;" }}
+          </span>
+          <span v-if="post.bedroom">
+            {{ " ・ " + post.bedroom }} <i class="el-icon fa fa-bed"></i>
+          </span>
+          <span v-if="post.toilet">
+            {{ " ・ " + post.toilet }} <i class="el-icon fa fa-bath"></i>
+          </span>
+          <div class="post-location">
+            <i class="el-icon-location-outline"></i> {{ showAddress(post) }}
+          </div>
+          <div class="published_at">{{ showTime(post.published_at) }}</div>
+          <el-button :v-if="user && user.email" class="ren-selt-post-bookmark" @click="bookmark(post)">
+            <i
+              v-if="post.bookmark == 1"
+              class="el-icon bookmarked fas fa-heart"
+            ></i>
+            <i v-else class="el-icon far fa-heart"></i>
+          </el-button>
+        </div>
       </div>
     </div>
+    <list-post-error v-else />
     <div v-if="posts.length" class="paginate-page">
       <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
     </div>
@@ -64,11 +67,16 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import BookmarkApi from '@/api/bookmark'
+import ListPostError from '../NoneToDisplay/ListPostError.vue'
 export default {
   props: {
     title: String,
   },
+  components: {
+    ListPostError
+  },
   computed: mapState({
+    user: (state) => state.user,
     postTypes: (state) => state.postTypes,
     bookmarkCount: (state) => state.bookmarkCount
   }),
@@ -153,11 +161,6 @@ export default {
   color: white !important;
 }
 
-.published_at {
-  margin-top: 10px;
-  color: grey;
-}
-
 .ren-selt-post-bookmark {
   position: absolute;
   bottom: 20px;
@@ -186,6 +189,7 @@ export default {
 }
 
 .paginate-page{
+  width: 80%;
   margin-top: 30px;
   margin-bottom: 30px;
   display: flex;

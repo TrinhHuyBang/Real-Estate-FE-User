@@ -25,7 +25,7 @@
                 </router-link>
                 <div class="post-published-bookmark">
                   <div>{{ showTime(post.published_at) }}</div>
-                  <el-button class="post-heart" @click="bookmark(post)">
+                  <el-button v-if="user && user.email" class="post-heart" @click="bookmark(post)">
                     <i v-if="post.bookmark == 1" class="fa-solid fa-heart fa-lg" style="color: red;"></i>
                     <i v-else class="fa-regular fa-heart fa-lg"></i>
                   </el-button>
@@ -58,6 +58,7 @@ export default {
     
   },
   computed: mapState({
+    user: (state) => state.user,
     bookmarkCount: (state) => state.bookmarkCount,
   }),
   mounted() {

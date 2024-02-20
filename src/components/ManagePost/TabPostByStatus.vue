@@ -1,5 +1,6 @@
 <template>
     <div>
+      <div v-if="posts && posts.length">
         <div class="single-rent-sell-post" v-for="post in posts" :key="post.id">
             <div>
               <router-link :to="`/chi-tiet-bai-dang/${post.id}`">
@@ -25,25 +26,31 @@
               <div class="post-location">
                 <i class="el-icon-location-outline"></i> {{ showAddress(post) }}
               </div>
-              <div class="published_at rent-sell-post-published"> {{ showTime(post.published_at) }} </div>
-              <div v-if="post.status == 0" class="state-post">Chờ duyệt</div>
+              <div v-if="post.status == 0" class="published_at rent-sell-post-published"> Đã đăng vào {{ showTime(post.created_at) }} <span class="state-post">Chờ duyệt</span> </div>
+              <div v-else class="published_at rent-sell-post-published"> {{ showTime(post.published_at) }} </div>
               <div class="action-post">
                 <el-button v-if="post.status == 0 || post.status == 1" icon="el-icon fa fa-pencil" @click="gotoUpdate(post.id)"> Sửa tin</el-button>
                 <el-button v-if="post.status != 3" type="danger" icon="el-icon fa fa-trash-alt" @click="handleDelete(post.id)"> Xoá tin </el-button>
               </div>
             </div>
         </div>
+      </div>
+      <list-post-error v-else />
     </div>
 </template>
 
 <script>
 import PostApi from "@/api/post"
 import { Notification } from "element-ui"
+import ListPostError from '../NoneToDisplay/ListPostError.vue'
 export default {
     props: {
         posts: {
           type: Array,
         }
+    },
+    components: {
+      ListPostError
     },
     methods: {
       gotoUpdate(id) {
@@ -77,9 +84,11 @@ export default {
 }
 
 .state-post {
+  margin-left: 15px;
   background-color: rgb(130, 130, 7);
-  width: 100px;
+  padding: 5px 10px;
   text-align: center;
+  color: #000000;
 }
 .action-post {
   position: absolute;

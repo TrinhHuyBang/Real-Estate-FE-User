@@ -87,5 +87,9 @@ export default {
                 return this.formatDate(time)
             }
         },
+
+        coppyClipboard(data) {
+            navigator.clipboard.writeText(data)
+        }
     }
 }

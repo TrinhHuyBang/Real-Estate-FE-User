@@ -86,11 +86,6 @@ export default {
 </script>
 
 <style scoped>
-.published_at {
-  margin-top: 10px;
-  color: grey;
-}
-
 .rent-sell-post-published {
   position: absolute;
   bottom: 5px;

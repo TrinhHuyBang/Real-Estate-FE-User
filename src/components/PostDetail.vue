@@ -23,15 +23,19 @@
             }}
           </p>
         </td>
-        <!-- <td style="width: 10%">
-          <b-icon class="icon-show" icon="share"></b-icon>
+        <td style="width: 10%">
+          <el-button>
+            <i class="fa-solid fa-share fa-lg"></i>
+          </el-button>
         </td>
         <td style="width: 10%">
-          <b-icon class="icon-show" icon="exclamation-triangle"></b-icon>
-        </td> -->
+          <el-button>
+            <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+          </el-button>
+        </td>
         <td style="width: 10%">
-          <el-button @click="bookmark(post)">
-            <i v-if="post.bookmark == 1" class="fa-solid fa-heart fa-lg" style="color: red;"></i>
+          <el-button v-if="user && user.email" @click="bookmark(post)">
+            <i v-if="bookmarked" class="fa-solid fa-heart fa-lg" style="color: red;"></i>
             <i v-else class="fa-regular fa-heart fa-lg"></i>
           </el-button>
         </td>
@@ -183,8 +187,9 @@
 
 <script>
 import PostApi from "@/api/post"
-import postType from '@/data/postType';
-import { mapState } from "vuex"
+import postType from '@/data/postType'
+import BookmarkApi from '@/api/bookmark'
+import { mapActions, mapState } from "vuex"
 export default {
   data() {
     return {
@@ -193,6 +198,7 @@ export default {
         province: "",
         district: ""
       },
+      bookmarked: false,
       history: null,
       PostType: postType,
       ownerInfo: {
@@ -205,7 +211,8 @@ export default {
     };
   },
   computed: mapState({
-    user: (state) => state.user, 
+    user: (state) => state.user,
+    bookmarkCount: (state) => state.bookmarkCount,
   }),
   mounted() {
     this.getDetail(this.$route.params.id);
@@ -218,9 +225,29 @@ export default {
         (response) => {
           this.post = response.data
           this.ownerInfo = response.data.user
+          this.bookmarked = this.post.bookmark
         },
       )
     },
+
+    ...mapActions(['commitSetBookmarkCount']),
+    bookmark(post) {
+      this.bookmarked = !this.bookmarked
+      this.numberBookmark = this.bookmarkCount ? this.bookmarkCount : 0
+      post.bookmark = !post.bookmark
+      if(post.bookmark == 1) {
+        this.numberBookmark += 1
+      } else {
+        this.numberBookmark -= 1
+      }
+      this.commitSetBookmarkCount(this.numberBookmark)
+      BookmarkApi.bookmark(
+        {
+          post_id: post.id,
+        }
+      )
+    },
+
     createViewHistory() {
       PostApi.createHistory(
         {
