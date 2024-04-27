@@ -3,4 +3,5 @@ export default {
   user: {},
   filter: {},
   bookmarkCount: null,
+  notificationCount: null,
 };

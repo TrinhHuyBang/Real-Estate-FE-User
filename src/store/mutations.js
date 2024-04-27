@@ -13,5 +13,9 @@ export default {
 
   setBookmarkCount(state, data) {
     state.bookmarkCount = data;
+  },
+
+  setNotificationCount(state, data) {
+    state.notificationCount = data;
   }
 };

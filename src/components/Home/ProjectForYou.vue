@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <h3>Dự án bất động sản nổi bật</h3>
+      <h4>Dự án bất động sản nổi bật</h4>
       <div class="row">
         <div class="col-6 col-md-4 col-lg-3" v-for="project in displayedProjects" :key="project.id">
           <router-link :to="`/chi-tiet-du-an/${project.id}`" class="link-to-detail">
@@ -161,7 +161,7 @@ export default {
 </script>
 
 <style scoped>
-h3 {
+h4 {
   margin: 30px 0 10px 0;
 }
 

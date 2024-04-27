@@ -9,7 +9,7 @@
       <div class="row user-logo-name">
         <div class="col-4 user-logo">
           <img v-if="user && user.avatar" :src="user.avatar" alt="">
-          <img v-else :src="`/avatarDefault.png`">
+          <el-avatar v-else shape="square" :size="170" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
         </div>
         <div class="col-6 user-name-post"> 
           <h2 class="user-name">{{ user.name }}</h2>

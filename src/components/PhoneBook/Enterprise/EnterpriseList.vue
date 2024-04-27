@@ -2,7 +2,7 @@
     <div>
         <h4>Các doanh nghiệp, công ty bất động sản hàng đầu tại Việt Nam</h4>
         <div v-for="(item, index) in Object.keys(topEnterprises)" :key="index">
-            <h5 class="col-6 field-name"> {{ item }}</h5>
+            <h5 @click="search(item)" class="col-6 field-name"> {{ item }}</h5>
             <div class="row enterprise-list">
                 <div class="col-2 single-enterprise" v-for="enterprise in topEnterprises[item]" :key="enterprise.id">
                     <router-link class="link-to-detail" :to="`/doanh-nghiep/${enterprise.id}`">
@@ -200,6 +200,13 @@ export default {
                 ],
             }
         }
+    },
+    methods: {
+        search(field) {
+            this.$router.push({ path: '/tim-kiem-doanh-nghiep', query: {
+                f : field,
+            }});
+        }
     }
 
 }
@@ -213,6 +220,7 @@ export default {
 
 .field-name {
     margin-top: 30px;
+    cursor: pointer;
 }
 
 .single-enterprise {

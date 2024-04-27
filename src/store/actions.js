@@ -14,4 +14,8 @@ export default {
   commitSetBookmarkCount({ commit }, data) {
     commit("setBookmarkCount", data);
   },
+
+  commitSetNotificationCount({ commit }, data) {
+    commit("setNotificationCount", data);
+  },
 };

@@ -4,21 +4,23 @@
       <manage-nav></manage-nav>
     </div>
     <div class="container">
-        <h3>Quản lý tài khoản</h3>
+        <h4>Quản lý tài khoản</h4>
         <el-tabs v-model="activeName" >
         <el-tab-pane label="Chỉnh sửa thông tin cá nhân" name="profile">
-          <profile-tab/>
+          <profile-tab v-if="user.role == role.user"/>
+          <broker-profile-tab v-if="user.role == role.broker" />
+          <enterprise-profile-tab v-if="user.role == role.enterprise" />
         </el-tab-pane>
         <el-tab-pane label="Cài đặt tài khoản" name="password">
           <password-tab/>
         </el-tab-pane>
-        <el-tab-pane label="Đăng ký tài khoản doanh nghiệp" name="enterpriseRegister">
+        <el-tab-pane v-if="user.role == role.user" label="Đăng ký tài khoản doanh nghiệp" name="enterpriseRegister">
           <enterprise-register-tab/>
         </el-tab-pane>
         <el-tab-pane label="Xoá tài khoản" name="deleteAccount">
           <delete-account-tab />
         </el-tab-pane>
-        <el-tab-pane label="Đăng ký tài khoản môi giới" name="brokerRegister">
+        <el-tab-pane v-if="user.role == role.user" label="Đăng ký tài khoản môi giới" name="brokerRegister">
           <broker-register-tab />
         </el-tab-pane>
       </el-tabs>
@@ -33,20 +35,29 @@ import PasswordTab from '@/components/ManageInfor/PasswordTab.vue';
 import EnterpriseRegisterTab from '@/components/ManageInfor/EnterpriseRegisterTab.vue';
 import DeleteAccountTab from '@/components/ManageInfor/DeleteAccountTab.vue';
 import BrokerRegisterTab from '@/components/ManageInfor/BrokerRegisterTab.vue';
+import role from '@/data/role'
+import { mapState } from "vuex"
+import BrokerProfileTab from '@/components/Broker/ManageProfile/BrokerProfileTab.vue';
+import EnterpriseProfileTab from '@/components/Enterprise/MangeProfile/EnterpriseProfileTab.vue';
 export default {
     
     components: {
-        "manage-nav": ManageNav,
-        "profile-tab": ProfileTab,
-        "password-tab": PasswordTab,
-        "enterprise-register-tab": EnterpriseRegisterTab,
-        "delete-account-tab": DeleteAccountTab,
-        "broker-register-tab": BrokerRegisterTab,
+        ManageNav,
+        ProfileTab,
+        PasswordTab,
+        EnterpriseRegisterTab,
+        DeleteAccountTab,
+        BrokerRegisterTab,
+        BrokerProfileTab,
+        EnterpriseProfileTab,
     },
-
+    computed: mapState({
+        user: (state) => state.user, 
+    }),
     data(){
         return {
           activeName: "profile",
+          role: role,
         }
     },
 

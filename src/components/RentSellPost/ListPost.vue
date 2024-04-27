@@ -1,6 +1,6 @@
 <template>
   <div class="list-sell-rent-post">
-    <h3>{{ title }}</h3>
+    <h4>{{ title }}</h4>
     <p>Hiện có {{ total }} bất động sản</p>
     <div class="select-post-type">
       <el-select

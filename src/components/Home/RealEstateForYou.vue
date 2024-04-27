@@ -1,7 +1,7 @@
 <template>
   <div v-if="total">
     <div class="container">
-      <h3>Bất động sản dành cho bạn</h3>
+      <h4>Bất động sản dành cho bạn</h4>
       <div class="row">
         <div
           class="col-6 col-md-4 col-lg-3 post-card"
@@ -44,7 +44,7 @@
 <script>
 import BookmarkApi from "@/api/bookmark"
 import PostApi from "@/api/post"
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -54,8 +54,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
-    };
-    
+    }
   },
   computed: mapState({
     user: (state) => state.user,

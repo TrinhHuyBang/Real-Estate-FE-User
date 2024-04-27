@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <h3>Bất động sản theo địa điểm</h3>
+      <h4>Bất động sản theo địa điểm</h4>
       <div class="row">
         <div class="col-6 col-md-4 col-lg-3" v-for="(item,index) in locationRealEstate" :key="index">
             <router-link :to="{ name: 'sellPost', params: { province: locationImage[item.province].code } }" style="text-decoration: none;">
@@ -71,7 +71,7 @@ export default {
     padding-left: 20px;
 }
 
-h3 {
+h4 {
   margin: 30px 0 10px 0;
 }
 </style>

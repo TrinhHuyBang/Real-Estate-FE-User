@@ -4,7 +4,7 @@
       <admin-nav> </admin-nav>
     </div>
     <div class="container">
-        <h3>Dashboard</h3>
+        <h4>Dashboard</h4>
     </div>
   </div>
 </template>

@@ -4,22 +4,25 @@
       <h2 style="margin-left: 32%">Đăng nhập</h2>
       <el-form ref="loginForm" :model="loginForm" @submit.native.prevent="login">
         <el-form-item >
-          <label for="username">Tài khoản:</label>
+          <label for="username">Tài khoản<span class="required-field"> *</span></label>
           <el-input
-            v-model="loginForm.username"
+            v-model="$v.loginForm.username.$model"
             placeholder="SĐT chính hoặc email"
           ></el-input>
+          <span v-if="submitted && !$v.loginForm.username.required" class="p-error">Không để trống tài khoản!</span>
+          <span v-if="submitted && !$v.loginForm.username.isEmailOrPhoneNumber" class="p-error">Tài khoản phải là email hoặc số điện thoại!</span>
         </el-form-item>
         <el-form-item >
-          <label for="password">Mật khẩu:</label>
+          <label for="password">Mật khẩu<span class="required-field"> *</span></label>
           <el-input
-            v-model="loginForm.password"
+            v-model="$v.loginForm.password.$model"
             :type="showPassword ? 'text' : 'password'"
             placeholder="Mật khẩu"
             class="password-input"
           >
             <el-button slot="append" icon="el-icon-view" @click="showPassword = !showPassword"></el-button>
           </el-input>
+          <span v-if="submitted && !$v.loginForm.password.required" class="p-error">Không để trống mật khẩu!</span>
         </el-form-item>
         <el-form-item>
           <router-link to="/quen-mat-khau">Quên mật khẩu?</router-link>
@@ -37,8 +40,9 @@
 </template>
 
 <script>
-import { Notification } from "element-ui";
+import { Notification } from "element-ui"
 import AuthApi from "@/api/auth"
+import { required, email } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
@@ -48,43 +52,51 @@ export default {
       },
       showPassword: false,
       rememberAccount: false,
-      rules: {
-        username: [{ required: true, message: "Vui lòng nhập tài khoản", trigger: "blur" }],
-        password: [{ required: true, message: "Vui lòng nhập mật khẩu", trigger: "blur" }],
-      },
+      submitted: false,
     };
+  },
+  validations: {
+    loginForm: {
+      username: {
+        required,
+        isEmailOrPhoneNumber(value) {
+          return email(value) || this.isPhoneNumber(value)
+        }
+      },
+      password: {
+        required
+      }
+    }
   },
   methods: {
     login() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          const userData = {
-            username: this.loginForm.username,
-            password: this.loginForm.password,
-          };
-
-          AuthApi.login(
-            userData,
-            (response) => {
-              const token = response.access_token
-              localStorage.setItem('token', token)
-              Notification.success({
-                title: "Thành công",
-                message: "Đăng nhập thành công",
-              });
-              window.location.href = "/"
-            },
-            (error) => {
-              Notification.error({
-                title: "Thất bại",
-                message: error.data.error,
-              });
-            }
-          )
-        } else {
-          return false;
+      this.submitted = true
+      if(this.$v.$invalid) {
+        return false
+      }
+      const userData = {
+        username: this.loginForm.username,
+        password: this.loginForm.password,
+      };
+      AuthApi.login(
+        userData,
+        (response) => {
+          const token = response.access_token
+          localStorage.setItem('token', token)
+          Notification.success({
+            title: "Thành công",
+            message: "Đăng nhập thành công",
+          });
+          this.submitted = false
+          window.location.href = "/"
+        },
+        (error) => {
+          Notification.error({
+            title: "Thất bại",
+            message: error.data.error,
+          });
         }
-      });
+      )
     },
   },
 };

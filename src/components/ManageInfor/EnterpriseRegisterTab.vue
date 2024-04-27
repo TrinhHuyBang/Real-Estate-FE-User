@@ -14,7 +14,8 @@
                     <input type="file" id="fileInput1" @change="handleLogoChange" accept="image/*" ref="fileInput1" style="display: none"/>
                 </label>
             </div>
-            <label class="label">Logo công ty</label>
+            <label class="label">Logo công ty<span class="required-field"> *</span></label>
+            <span v-if="submitted && !$v.logo.required" class="p-error">Logo không được để trống!</span>
             <div class="custom-file-input">
                 <label for="fileInput2" class="upload-icon" v-if="!hasUploadedCertificate">
                     <i class="el-icon-upload"></i>
@@ -26,45 +27,57 @@
                     <input type="file" id="fileInput2" @change="handleCertificateChange" accept="image/*" ref="fileInput2" style="display: none"/>
                 </label>
             </div>
-            <label class="label">Giấy đăng kí kinh doanh</label>
+            <label class="label">Giấy đăng kí kinh doanh<span class="required-field"> *</span></label>
+            <span v-if="submitted && !$v.certificate.required" class="p-error">Giấy đăng ký kinh doanh không được để trống!</span>
         </div>
         <div class="infor">
-            <label class="label">Tên công ty</label>
+            <label class="label">Tên công ty <span class="required-field"> *</span></label>
             <el-input v-model="enterprise.name" placeholder="Tên công ty"></el-input>
+            <p v-if="submitted && !$v.enterprise.name.required" class="p-error">Tên công ty không được để trống!</p>
 
-            <label class="label">Tên viết tắt</label>
+            <label class="label">Tên viết tắt <span class="required-field"> *</span></label>
             <el-input v-model="enterprise.abbreviation" placeholder="Tên viết tắt"></el-input>
+            <p v-if="submitted && !$v.enterprise.abbreviation.required" class="p-error">Tên viết tắt không được để trống!</p>
 
             <label class="label">Mô tả</label>
             <el-input type="textarea" v-model="enterprise.description" :autosize="{ minRows: 5}" placeholder="Mô tả về công ty"></el-input>
 
-            <label class="label">Số điện thoại</label>
+            <label class="label">Số điện thoại <span class="required-field"> *</span></label>
             <el-input v-model="enterprise.phone_number" placeholder="SĐT liên hệ"></el-input>
+            <p v-if="submitted && !$v.enterprise.phone_number.required" class="p-error">Số điện thoại không được để trống!</p>
+            <p v-if="submitted && !$v.enterprise.phone_number.isPhoneNumber" class="p-error">Số điện thoại không hợp lệ!</p>
 
-            <label class="label">Email</label>
+            <label class="label">Email <span class="required-field"> *</span></label>
             <el-input v-model="enterprise.email" placeholder="Email"></el-input>
+            <p v-if="submitted && !$v.enterprise.email.required" class="p-error">Email không được để trống!</p>
+            <p v-if="submitted && !$v.enterprise.email.email" class="p-error">Email không hợp lệ!</p>
 
             <label class="label">Địa chỉ</label>
             <el-input v-model="enterprise.address" placeholder="Địa chỉ"></el-input>
+            <p v-if="submitted && !$v.enterprise.address.required" class="p-error">Địa chỉ không được để trống!</p>
 
-            <label class="label">Website</label>
+            <label class="label">Website <span class="required-field"> *</span></label>
             <el-input v-model="enterprise.website" placeholder="Website"></el-input>
+            <p v-if="submitted && !$v.enterprise.website.required" class="p-error">Website không được để trống!</p>
+            <p v-if="submitted && !$v.enterprise.website.url" class="p-error">Website không hợp lệ!</p>
 
-            <label class="label">Số đăng ký kinh doanh</label>
+            <label class="label">Số đăng ký kinh doanh <span class="required-field"> *</span></label>
             <el-input v-model="enterprise.business_number" placeholder="Số đăng ký kinh doanh"></el-input>
+            <p v-if="submitted && !$v.enterprise.business_number.required" class="p-error">Số đăng ký kinh doanh không được để trống!</p>
 
-            <label class="label">Lĩnh vực chính</label>
+            <label class="label">Lĩnh vực chính <span class="required-field"> *</span></label>
             <el-select class="select" v-model="enterprise.main_field" placeholder="Lĩnh vực chính" clearable filterable>
-              <el-option v-for="item in field" :key="item" :label="item" :value="item"></el-option>
+              <el-option v-for="item in fields" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
+            <p v-if="submitted && !$v.enterprise.main_field.required" class="p-error">Lĩnh vực chính không được để trống!</p>
 
             <label class="label">Lĩnh vực phụ</label>
-            <el-select class="select" v-model="enterprise.sub_field" placeholder="Lĩnh vực phụ" clearable filterable>
-              <el-option v-for="item in field" :key="item" :label="item" :value="item"></el-option>
+            <el-select class="select sub-fields" v-model="enterprise.sub_field" multiple placeholder="Lĩnh vực phụ" clearable filterable>
+              <el-option v-for="item in fields" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
 
             <div class="btn-action">
-              <el-button type="primary" class="btn" icon="el-icon-check">Lưu</el-button>
+              <el-button type="primary" class="btn" icon="el-icon-check" @click="handleSubmit()">Lưu</el-button>
               <el-button type="danger" class="btn" icon="el-icon-close">Huỷ bỏ</el-button>
             </div>
         </div>
@@ -73,69 +86,145 @@
 </template>
 
 <script>
+import AuthApi from "@/api/auth"
+import { Notification } from 'element-ui'
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { storage } from "../../firebase.js"
+import fields from "@/data/fieldList"
+import { required, email, url } from 'vuelidate/lib/validators'
 export default {
     data() {
-        return {
+      return {
+        logo: null,
+        hasUploadedLogo: false,
+        certificate: null,
+        hasUploadedCertificate: false,
+        enterprise: {
+          name: "",
+          abbreviation : "",
+          description : "",
+          phone_number : "",
+          email: "",
+          address: "",
+          website: "",
+          business_number: "",
+          main_field: "",
+          sub_field: [],
           logo: null,
-          hasUploadedLogo: false,
-          certificate: null,
-          hasUploadedCertificate: false,
-          enterprise: {
-            name: "",
-            abbreviation : "",
-            description : "",
-            phone_number : "",
-            email: "",
-            address: "",
-            website: "",
-            business_number: "",
-            certificate_url: "",
-            main_field: "",
-            sub_field: "",
-          },
-
-          field : [
-            "Chủ đầu tư", 
-            "Thi công xây dựng", 
-            "Tư vấn thiết kế", 
-            "Sàn giao dịch bất động sản", 
-            "Trang trí nột thất",
-            "Vật liệu xậy dựng",
-            "Tài chính pháp lý",
-            "Các lĩnh vực khác"
-          ],
-        };
+          certificate_url: null,
+        },
+        fields: fields,
+        submitted: false,
+      };
+    },
+    validations: {
+      enterprise: {
+        name: {
+          required
+        },
+        abbreviation: {
+          required
+        },
+        phone_number: {
+          required,
+          isPhoneNumber(value) {
+            return this.isPhoneNumber(value)
+          }
+        },
+        email: {
+          required,
+          email
+        },
+        address: {
+          required
+        },
+        website: {
+          required,
+          url
+        },
+        business_number: {
+          required
+        },
+        main_field: {
+          required
+        },
+      },
+      logo: {
+        required
+      },
+      certificate: {
+        required
+      },
     },
     methods: {
-        handleCertificateChange(event) {
-            const certificate = event.target.files[0];
-                if (certificate) {
-                    this.certificate = certificate;
-                    this.hasUploadedCertificate = true; // Đánh dấu rằng đã có ảnh
-                }
-            // Đặt lại input để cho phép chọn lại cùng một tệp
-            this.$refs.fileInput2.value = '';
-        },
-        handleLogoChange(event) {
-            const logo = event.target.files[0];
-                if (logo) {
-                    this.logo = logo;
-                    this.hasUploadedLogo = true; // Đánh dấu rằng đã có ảnh
-                }
-            // Đặt lại input để cho phép chọn lại cùng một tệp
-            this.$refs.fileInput1.value = '';
-        },
-        handleDeleteLogo() {
-          this.logo = null
-          this.hasUploadedLogo = false
-        },
-        handleDeleteCertificate() {
-          this.hasUploadedCertificate = false
-          this.certificate = null
-        },
-        imagePreview(file) {
-            return URL.createObjectURL(file);
-        },
+      async handleSubmit() {
+        this.submitted = true
+        if(this.$v.$invalid) {
+          return false
+        }
+        var storageRef = null
+        storageRef = ref(
+          storage,
+          `enterprise/logo/` +
+            Math.random().toString(36).slice(2, 8) +
+            `${this.logo.name}`
+        );
+        await uploadBytes(storageRef, this.logo)
+        this.enterprise.logo = await getDownloadURL(storageRef)
+
+        storageRef = ref(
+          storage,
+          `enterprise/certificate/` +
+            Math.random().toString(36).slice(2, 8) +
+            `${this.certificate.name}`
+        );
+        await uploadBytes(storageRef, this.certificate)
+        this.enterprise.certificate_url = await getDownloadURL(storageRef)
+
+        AuthApi.enterpriseRegister(
+          this.enterprise,
+          () => {
+            Notification.success({
+              title: "Thành công",
+              message: "Bạn đã gửi yêu cầu đăng kí tài khoản doanh nghiệp thành công! Yêu cầu sẽ được kiểm duyệt sau!",
+            });
+          },
+          () => {
+            Notification.error({
+              title: "Thất bại",
+              message: "Gửi yêu cầu đăng ký thất bại",
+            });
+          }
+        )
+      },
+
+      handleCertificateChange(event) {
+        const certificate = event.target.files[0];
+          if (certificate) {
+          this.certificate = certificate;
+          this.hasUploadedCertificate = true;
+          }
+        this.$refs.fileInput2.value = '';
+      },
+      handleLogoChange(event) {
+        const logo = event.target.files[0];
+          if (logo) {
+            this.logo = logo;
+            this.hasUploadedLogo = true
+          }
+        this.$refs.fileInput1.value = '';
+      },
+      handleDeleteLogo() {
+        this.logo = null
+        this.hasUploadedLogo = false
+      },
+      handleDeleteCertificate() {
+        this.hasUploadedCertificate = false
+        this.certificate = null
+      },
+      imagePreview(file) {
+          return URL.createObjectURL(file);
+      },
     },
 }
 </script>
@@ -193,6 +282,10 @@ export default {
   border-radius: 5px;
   margin-top: 4px;
   margin-bottom: 10px;
+}
+
+.sub-fields {
+  height: auto !important;
 }
 
 .custom-file-input {

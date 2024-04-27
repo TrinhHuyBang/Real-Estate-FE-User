@@ -42,7 +42,7 @@
         <el-menu-item index="22"  @click="handleChangPagehange('/du-an/can-ho-chung-cu')">Căn hộ chung cư</el-menu-item>
         <el-menu-item index="23"  @click="handleChangPagehange('/du-an/cao-oc-van-phong')">Cao ốc văn phòng</el-menu-item>
         <el-menu-item index="24"  @click="handleChangPagehange('/du-an/trung-tam-thuong-mai')">Trung tâm thương mại</el-menu-item>
-        <el-menu-item index="25"  @click="handleChangPagehange('/du-an/khi-do-thi-moi')">Khi đô thị mới</el-menu-item>
+        <el-menu-item index="25"  @click="handleChangPagehange('/du-an/khu-do-thi-moi')">Khu đô thị mới</el-menu-item>
         <el-menu-item index="26"  @click="handleChangPagehange('/du-an/khu-phuc-hop')">Khu phức hợp</el-menu-item>
         <el-menu-item index="27"  @click="handleChangPagehange('/du-an/nha-o-xa-hoi')">Nhà ở xã hội</el-menu-item>
         <el-menu-item index="28"  @click="handleChangPagehange('/du-an/khu-nghi-duong-sinh-thai')">Khu nghỉ dưỡng, Sinh thái</el-menu-item>
@@ -53,7 +53,8 @@
         <el-menu-item index="33"  @click="handleChangPagehange('/du-an/du-an-khac')">Dự án khác</el-menu-item>
       </el-submenu>
       <el-menu-item index="/tin-tuc" >Tin Tức</el-menu-item>
-      <el-submenu index="/danh-ba">
+      <el-menu-item v-if="user.role == role.broker" index="/danh-sach-yeu-cau-tu-van" >Yêu cầu tư vấn</el-menu-item>
+      <el-submenu v-if="user.role != role.enterprise && user.role != role.broker" index="/danh-ba">
         <template slot="title">Danh bạ</template>
         <el-menu-item index="/doanh-nghiep">Doanh nghiệp</el-menu-item>
         <el-menu-item index="/nha-moi-gioi">Nhà môi giới</el-menu-item>
@@ -71,7 +72,7 @@
           </el-badge>
           <el-dropdown class="dropdown" trigger="hover">
             <router-link to="/quan-ly-tin-dang" class="dropdown-trigger username-avt">
-              <div>
+              <div style="margin-right: 10px;">
                 <el-image
                   class="avt"
                   :src="user.avatar"
@@ -87,9 +88,24 @@
               </div>
             </router-link>
             <el-dropdown-menu>
-              <router-link to="/quan-ly-tin-dang">
+              <router-link v-if="user.role == role.user || user.role == role.broker" to="/quan-ly-tin-dang">
                 <el-dropdown-item>
                   Quản lý tin đăng
+                </el-dropdown-item>
+              </router-link>
+              <router-link v-if="user.role == role.enterprise" to="/quan-ly-du-an">
+                <el-dropdown-item>
+                  Quản lý dự án
+                </el-dropdown-item>
+              </router-link>
+              <router-link v-if="user.role == role.broker" to="/danh-sach-yeu-cau-dang-ky">
+                <el-dropdown-item>
+                  Danh sách yêu cầu đã đăng ký
+                </el-dropdown-item>
+              </router-link>
+              <router-link v-if="user.role == role.user" to="/quan-ly-yeu-cau">
+                <el-dropdown-item>
+                  Quản lý yêu cầu tư vấn
                 </el-dropdown-item>
               </router-link>
               <router-link to="/quan-ly-tai-khoan">
@@ -104,8 +120,14 @@
               </span>
             </el-dropdown-menu>
           </el-dropdown>
-          <router-link to="/dang-tin">
-            <el-button class="btn" type="primary"> Đăng tin </el-button>
+          <router-link v-if="user.role == role.user || user.role == role.user" to="/dang-tin">
+            <el-button type="primary"> Đăng tin </el-button>
+          </router-link>
+          <router-link v-if="user.role == role.user" to="/tim-kiem-tu-van">
+            <el-button type="primary"> Tìm tư vấn </el-button>
+          </router-link>
+          <router-link v-if="user.role == role.enterprise" to="/dang-du-an-moi">
+            <el-button type="primary"> Đăng dự án </el-button>
           </router-link>
         </div>
       </template>
@@ -126,10 +148,11 @@
 <script>
 import AuthApi from "@/api/auth"
 import { mapState } from 'vuex';
+import role from '@/data/role'
 export default {
   data() {
     return {
-
+      role: role,
     };
   },
   computed: mapState({
@@ -245,6 +268,7 @@ router-link {
 .auth {
   display: flex;
   align-items: center;
+  margin-right: 30px;
 }
 
 .auth > div {
@@ -261,11 +285,12 @@ router-link {
 
 .username-avt {
   display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .btn {
   font-weight: bold;
-  margin-right: 30px;
   vertical-align: middle;
   width: 120px;
 }
@@ -274,11 +299,11 @@ router-link {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
 }
 
 .name {
   justify-content: center;
+  font-weight: 700;
 }
 
 .dropdown {

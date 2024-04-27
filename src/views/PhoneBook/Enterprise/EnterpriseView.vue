@@ -3,7 +3,7 @@
     <div class="post-filter-container">
       <div class="filter-post">
         <h4>Tìm kiếm doanh nghiệp</h4>
-        <el-input class="input-filter" placeholder="Nhập từ khoá tìm kiếm" v-model="search"> <i class="el-icon-search el-input__icon" slot="suffix"></i> </el-input>
+        <el-input class="input-filter" placeholder="Nhập từ khoá tìm kiếm" v-model="search" clearable> <i class="el-icon-search el-input__icon" slot="suffix"></i> </el-input>
         <label for="field">Lĩnh vực</label>
         <el-select
           class="input-filter"
@@ -45,7 +45,7 @@ export default {
   },
 
   components: {
-    'enterprise-list': EnterpriseList,
+    EnterpriseList,
   },
 
   data() {
@@ -83,7 +83,20 @@ export default {
     },
 
     applyFilter() {
-
+      var queryParams = {}
+      if(this.search) {
+        queryParams.k = this.search
+      }
+      if(this.field) {
+        queryParams.f = this.fields[this.field].name
+      }
+      if(this.province) {
+        queryParams.p = this.province
+      }
+      if(this.district) {
+        queryParams.d = this.district
+      }
+      this.$router.push({ path: '/tim-kiem-doanh-nghiep', query: queryParams });
     },
     resetFilter() {
 
@@ -97,8 +110,6 @@ export default {
         this.getListDistrict($result[1])
       } else {
         this.districts = []
-        this.wards = []
-        this.address = ""
       }
       this.district = ""
     },

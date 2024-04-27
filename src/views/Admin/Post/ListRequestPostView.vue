@@ -4,7 +4,7 @@
       <admin-nav></admin-nav>
     </div>
     <div class="container">
-      <h3>Danh sách tin chờ duyệt</h3>
+      <h4>Danh sách tin chờ duyệt</h4>
       <p>Hiện có {{ total }} bất động sản</p>
       <div class="select-post-type">
         <el-select

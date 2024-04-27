@@ -4,16 +4,16 @@
     <div class="profile">
         <div class="avatar">
             <div class="custom-file-input">
-                <label for="fileInput" class="upload-icon" v-if="!hasUploadedAvatar && !user.avatar">
+                <label for="fileInput3" class="upload-icon" v-if="!hasUploadedAvatar && !user.avatar">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text avt-text">Tải ảnh</div>
-                    <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
+                    <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
                 </label>
-                <label for="fileInput" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
-                    <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
+                <label for="fileInput3" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
+                    <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
                 </label>
-                <label for="fileInput" class="upload-icon" v-if="user.avatar && !hasUploadedAvatar" :style="{ 'background-image': `url('${user.avatar}')` }">
-                    <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
+                <label for="fileInput3" class="upload-icon" v-if="user.avatar && !hasUploadedAvatar" :style="{ 'background-image': `url('${user.avatar}')` }">
+                    <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedAvatar || user.avatar" @click="deleteAvatar"></span>
             </div>
@@ -22,10 +22,6 @@
         <div class="infor">
             <label class="label" for="username">Họ và tên</label>
             <el-input placeholder="Họ và tên" v-model="user.name"></el-input>
-
-            <label class="label" for="tax">Mã số thuế cá nhân</label>
-            <el-input placeholder="Ví dụ: 1234567890 hoặc 1234567890-123"></el-input>
-            <div><span style="font-size: 12px;">MST gồm 10 hoặc 13 chữ số</span></div>
 
             <label class="label" for="username">Số điện thoại chính</label>
             <el-input placeholder="SĐT chính" v-model="user.phone" disabled></el-input>
@@ -63,14 +59,6 @@ export default {
         this.getInfor()
     },
     methods: {
-        // getInfor() {
-        //     AuthApi.profile(
-        //         (response) => {
-        //             this.user = response.data.data
-        //             this.avatar = this.user.avatar ? this.user.avatar : null
-        //         },
-        //     );
-        // },
         getInfor() {
             this.user = {
                 ...this.userInfor
@@ -98,7 +86,6 @@ export default {
                 {
                     avatar: downloadURL,
                     name: this.user.name,
-                    tax_code: this.user.tax_code,
                 },
                 () => {
                     Notification.success({
@@ -125,7 +112,7 @@ export default {
                     this.hasUploadedAvatar = true; // Đánh dấu rằng đã có ảnh
                 }
             // Đặt lại input để cho phép chọn lại cùng một tệp
-            this.$refs.fileInput.value = '';
+            this.$refs.fileInput3.value = '';
         },
         imagePreview(file) {
             if(file instanceof File) {

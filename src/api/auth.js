@@ -115,5 +115,31 @@ export default {
                     error(err.response)
                 }
             })
+    },
+
+    enterpriseRegister(data, completion, error) {
+        axios
+            .post(`${root_uri}/enterprise-register`, data)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err.response)
+                }
+            })
+    },
+
+    brokerRegister(data, completion, error) {
+        axios
+            .post(`${root_uri}/broker-register`, data)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err.response)
+                }
+            })
     }
 }

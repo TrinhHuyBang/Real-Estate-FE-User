@@ -551,9 +551,6 @@ export default {
         }
       );
     },
-    filterImages(newImages) {
-      this.uploadedImages = newImages;
-    },
     addLegal() {
       this.legalDocuments.push(this.newLegal);
       this.newLegal = "";
@@ -760,8 +757,8 @@ export default {
 }
 
 .active_selected {
-  background-color: grey !important;
-  color: black !important;
+  background-color: #409EFF !important;
+  color: #ffffff !important;
 }
 
 .button-select {

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-      <h3 class="title" v-if="total"> {{ showTitle() + '(' + total + ')' }} </h3>
-      <h3 class="title" v-else> {{ showTitle() }} </h3>
+      <h4 class="list_titles" v-if="total"> {{ showTitle() + '(' + total + ')' }} </h4>
+      <h4 class="list_titles" v-else> {{ showTitle() }} </h4>
       <div v-if="total" class="row">
         <div
           class="col-6 col-md-4 col-lg-3 post-card"
@@ -76,7 +76,14 @@ import BookmarkApi from "@/api/bookmark"
 import { mapActions, mapState } from 'vuex';
 export default {
   props: {
-    type: String,
+    type: {
+      type: String,
+      default: '',
+    },
+    user_id: {
+      type: Number,
+      default: null,
+    }
   },
   components: {
     ListPostError
@@ -104,7 +111,7 @@ export default {
         page,
         {
           type: this.type,
-          user_id: this.$route.params.id,
+          user_id: this.user_id ? this.user_id : this.$route.params.id,
         },
         (response) => {
           this.posts = response.data.data;
@@ -142,14 +149,15 @@ export default {
       )
     },
   },
+  watch: {
+    user_id() {
+      this.listPost(1);
+    }
+  }
 };
 </script>
 
 <style scoped>
-.title {
-  margin-top: 30px;
-}
-
 .post-location {
   display: -webkit-box;
   -webkit-box-orient: vertical;

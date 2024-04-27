@@ -41,6 +41,12 @@
             <el-select :disabled="!district" class="input-filter" id="ward" v-model="ward" placeholder="-----  Phường, xã  -----" filterable clearable>
               <el-option v-for="item in wards" :key="item.ward_id" :label="item.ward_name" :value="item.ward_name + '-' + item.ward_id"></el-option>
             </el-select>
+
+          <label for="province">Dự án</label>
+          <el-select class="input-filter" id="province" v-model="project" placeholder="Dự án" filterable clearable>
+            <el-option v-for="item in projects" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+
           <label for="post-price">Mức giá</label>
           <el-select
             class="input-filter"
@@ -148,7 +154,7 @@
               <div>
                 <router-link :to="`/chi-tiet-bai-dang/${post.id}`">
                   <div class="show-post-image">
-                    <img class="image-rent-sell-post" :src="post.image" alt="" />
+                    <img class="image-rent-sell-post" :src="post.image" loading="lazy" alt="" />
                     <div class="number-image"><i class="el-icon-picture-outline"> {{ post.number_image }}</i> </div>
                   </div>
                 </router-link>
@@ -200,6 +206,7 @@ import postType from "@/data/postType"
 import axios from "axios"
 import BookmarkApi from '@/api/bookmark'
 import PostApi from "@/api/post"
+import ProjectApi from '@/api/project'
 import { mapActions, mapState } from 'vuex'
 import ListPostError from '@/components/NoneToDisplay/ListPostError.vue'
 export default {
@@ -277,6 +284,8 @@ export default {
       provinces: [],
       districts: [],
       wards: [],
+      projects: [],
+      project: '',
       selectedOrderBy: "Tin mới nhất",
       posts: [],
       currentPage: 1,
@@ -288,6 +297,7 @@ export default {
         'type_id': "",
         'startPrice': 0,
         'endPrice': 0,
+        'project_id': "",
         'startSize': 0,
         'endSize': 0,
         'province': "",
@@ -543,6 +553,7 @@ export default {
       this.startFilterSize = null
       this.endFilterSize = null
       this.province = null
+      this.project = null
     },
 
     applyFilter() {
@@ -555,10 +566,23 @@ export default {
         'province': this.province ? this.province : "",
         'district': this.district ? this.district : "",
         'ward': this.ward  ? this.ward : "",
+        'project_id' : this.project,
         'priceSelected': this.priceSelected ? this.priceSelected : "",
       }
       this.setTitle()
       this.listPost(1)
+    },
+
+    listProjectOptions() {
+      ProjectApi.listProjectOptions(
+        {
+          province : this.province,
+          district : this.district,
+        },
+        (response) => {
+          this.projects = response.data
+        }
+      )
     },
     
     listPost(page) {
@@ -632,6 +656,7 @@ export default {
         this.wards = []
         this.address = ""
       }
+      this.listProjectOptions()
       this.district = ""
     },
     district(val) {
@@ -641,6 +666,7 @@ export default {
       } else {
         this.wards = []
       }
+      this.listProjectOptions()
       this.ward= ""
     },
     selectedOrderBy() {

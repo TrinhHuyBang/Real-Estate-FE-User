@@ -22,4 +22,19 @@ export default {
     'cho-thue-sang-nhuong-cua-hang-ki-ot' : 19,
     'cho-thue-kho-nha-xuong-dat' : 20,
     'cho-thue-loai-bat-dong-san-khac' : 21,
+
+    'project' : {
+        'can-ho-chung-cu' : 1,
+        'cao-oc-van-phong' : 2,
+        'trung-tam-thuong-mai' : 3,
+        'khu-do-thi-moi' : 4,
+        'khu-phuc-hop' : 5,
+        'nha-o-xa-hoi' : 6,
+        'khu-nghi-duong-sinh-thai' : 7,
+        'khu-cong-nghiep' : 8,
+        'biet-thu-lien-ke' : 9,
+        'shophouse' : 10,
+        'nha-mat-pho' : 11,
+        'du-an-khac' : 12,
+    }
 }

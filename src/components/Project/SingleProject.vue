@@ -1,13 +1,14 @@
 <template>
     <div class="single-project">
         <div>
-            <img class="image-project" :src="project.image" alt="" />
+            <img class="image-project" :src="project.image" loading="lazy" alt="" />
             <!-- <div class="number-image"><i class="el-icon-picture-outline"> {{ project.number_image }}</i> </div> -->
         </div>
         <div class="content-project">
             <span class="project-name">{{ project.name }}</span>
             <div class="project-status">
-                <span :class="getStatusClass(project)">{{ project.status }}</span>
+                <span v-if="project.project_status" :class="getStatusClass(project)">{{ projectStatus[project.project_status] }} {{ project.note ? " - " + project.note : "" }}</span>
+                <span v-else :class="getStatusClass(project)">Đang cập nhật {{ project.note ? " - " + project.note : "" }}</span>
             </div>
             <div class="project-size">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="25px" height="25px" viewBox="0 0 111.000000 93.000000" preserveAspectRatio="xMidYMid meet">
@@ -22,12 +23,15 @@
             <div class="project-location">
                 <i class="el-icon-location-outline"></i> {{ project.address }}
             </div>
-            <p class="project-description"> {{ project.description }}</p>
+            <div class="project-description">
+                <p style="width: 100%"> {{ project.description }} </p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import projectStatus from '@/data/projectStatus';
 export default {
     props: {
         project: {
@@ -36,13 +40,19 @@ export default {
         },
     },
 
+    data() {
+        return {
+            projectStatus : projectStatus,
+        }
+    },
+
     methods: {
         getStatusClass(project) {
             return {
-                'status-pending': project.status === 'Sắp mở bán',
-                'status-completed': project.status === 'Đang mở bán',
-                'status-handed': project.status === 'Đã bàn giao',
-                'status-in-progress': project.status == ''
+                'status-pending': project.project_status == 1,
+                'status-completed': project.project_status == 2,
+                'status-handed': project.project_status == 3,
+                'status-in-progress': !project.project_status
             };
         }
     }

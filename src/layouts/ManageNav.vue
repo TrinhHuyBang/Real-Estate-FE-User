@@ -10,8 +10,8 @@
             {{ user.email }}
         </div>
     </div>
-    <el-menu default-active="/quan-ly-tin-dang" class="el-menu-vertical-demo" :collapse="isCollapse" :router="true">
-        <el-submenu index="quan-ly-tin-dang">
+    <el-menu default-active="/quan-ly-tin-dang" class="el-menu-vertical-demo" :router="true">
+        <el-submenu v-if="user.role == role.broker || user.role == role.user" index="quan-ly-tin-dang">
             <template slot="title">
                 <i class="el-icon fa fa-bars"></i>
                 <span slot="title">Quản lý tin đăng</span>
@@ -19,11 +19,31 @@
             <el-menu-item index="/dang-tin">Đăng mới</el-menu-item>
             <el-menu-item index="/quan-ly-tin-dang">Danh sách tin</el-menu-item>
         </el-submenu>
-        <el-menu-item index="quan-ly-tin-luu">
+        <el-submenu v-if="user.role == role.enterprise" index="quan-ly-du-an">
+            <template slot="title">
+                <i class="el-icon fa fa-bars"></i>
+                <span slot="title">Quản lý dự án</span>
+            </template>
+            <el-menu-item index="/dang-du-an-moi">Đăng dự án mới</el-menu-item>
+            <el-menu-item index="/quan-ly-du-an">Danh sách dự án</el-menu-item>
+        </el-submenu>
+        <el-submenu v-if="user.role == role.user" index="/quan-ly-yeu-cau">
+            <template slot="title">
+                <i class="el-icon fa fa-bars"></i>
+                <span slot="title">Quản lý yêu cầu</span>
+            </template>
+            <el-menu-item index="/tim-kiem-tu-van">Tìm kiếm tư vấn</el-menu-item>
+            <el-menu-item index="/quan-ly-yeu-cau">Danh yêu cầu</el-menu-item>
+        </el-submenu>
+        <el-menu-item v-if="user.role == role.broker"  index="/danh-sach-yeu-cau-dang-ky">
+            <i class="el-icon fas fa-heart"></i>
+            <span slot="title">Danh sách yêu cầu đã đăng ký</span>
+        </el-menu-item>
+        <el-menu-item v-if="user.role == role.broker || user.role == role.user" index="quan-ly-tin-luu">
             <i class="el-icon fas fa-heart"></i>
             <span slot="title">Tin lưu</span>
         </el-menu-item>
-        <el-menu-item index="quan-ly-tin-luu">
+        <el-menu-item index="quan-ly-thong-bao">
             <i class="el-icon fas fa-bell"></i>
             <span slot="title">Thông báo</span>
         </el-menu-item>
@@ -52,9 +72,12 @@
 <script>
 import { mapState } from "vuex"
 import AuthApi from "@/api/auth"
+import role from '@/data/role'
 export default {
     data() {
-        return {};
+        return {
+            role : role,
+        }
     },
     computed: mapState({
         user: (state) => state.user, 
@@ -95,6 +118,7 @@ export default {
     border: 1px solid #ccc;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     height: 100%;
+    min-height: 600px;
 }
 
 .user-infor{

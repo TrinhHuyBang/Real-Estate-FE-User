@@ -1,7 +1,7 @@
 <template>
   <div v-if="total">
     <div class="container">
-      <h3>Tin đăng đã xem</h3>
+      <h4>Tin đăng đã xem</h4>
       <div class="row">
         <div
           class="col-6 col-md-4 col-lg-3 post-card"

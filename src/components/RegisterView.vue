@@ -17,48 +17,56 @@
             </div>
         </el-form-item>
         
-        <el-form-item label="Họ và tên" label-for="username">
+        <el-form-item>
+          <label for="username">Họ và tên<span class="required-field"> *</span></label>
           <el-input
             id="username"
             v-model="username"
             placeholder="Họ và tên"
-            required
           ></el-input>
+          <span v-if="submitted && !$v.username.required" class="p-error">Không để trống họ và tên!</span>
         </el-form-item>
-        <el-form-item label="Email" label-for="email">
+        <el-form-item>
+          <label for="email">Email<span class="required-field"> *</span></label>
           <el-input
             id="email"
             v-model="email"
             placeholder="Email"
             type="email"
-            required
           ></el-input>
+          <span v-if="submitted && !$v.email.required" class="p-error">Không để trống email!</span>
+          <span v-if="submitted && !$v.email.email" class="p-error">Email không hợp lệ!</span>
         </el-form-item>
-        <el-form-item label="Số điện thoại" label-for="phone">
+        <el-form-item>
+          <label for="phone">Số điện thoại<span class="required-field"> *</span></label>
           <el-input
             id="phone"
             v-model="phone"
             placeholder="Số điện thoại chính"
-            required
           ></el-input>
+          <span v-if="submitted && !$v.phone.required" class="p-error">Không để trống số điện thoại!</span>
+          <span v-if="submitted && !$v.phone.isPhoneNumber" class="p-error">Số điện thoại không hợp lệ!</span>
         </el-form-item>
-        <el-form-item label="Mật khẩu" label-for="password">
+        <el-form-item>
+          <label for="password">Mật khẩu<span class="required-field"> *</span></label>
           <el-input
             id="password"
             v-model="password"
             placeholder="Mật khẩu"
             type="password"
-            required
           ></el-input>
+          <span v-if="submitted && !$v.password.required" class="p-error">Không để trống mật khẩu!</span>
         </el-form-item>
-        <el-form-item label="Xác nhận mật khẩu" label-for="confirmPassword">
+        <el-form-item>
+          <label for="confirmPassword">Xác nhận mật khẩu<span class="required-field"> *</span></label>
           <el-input
             id="confirmPassword"
             v-model="confirmPassword"
             placeholder="Xác nhận mật khẩu"
             type="password"
-            required
           ></el-input>
+          <span v-if="submitted && !$v.confirmPassword.required" class="p-error">Cần xác thực lại mật khẩu!</span>
+          <span v-if="submitted && confirmPassword && !$v.confirmPassword.isEqPassword" class="p-error">Không trùng khớp với mật khẩu!</span>
         </el-form-item>
         <el-button class="register-btn" type="primary" native-type="submit"
           >Đăng ký</el-button
@@ -73,11 +81,11 @@
 </template>
 
 <script>
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { storage } from "../firebase.js"
 import AuthApi from "@/api/auth"
-import { Notification } from 'element-ui';
-// import { Notification } from "vue-notification";
+import { Notification } from 'element-ui'
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   data() {
@@ -90,10 +98,39 @@ export default {
       confirmPassword: "",
       imageUrl: "",
       avatar: null,
+      submitted: false,
     };
+  },
+  validations: {
+    username: {
+      required,
+    },
+    email: {
+      required,
+      email,
+    },
+    phone: {
+      required,
+      isPhoneNumber(value) {
+        return this.isPhoneNumber(value)
+      }
+    },
+    password: {
+      required
+    },
+    confirmPassword: {
+      required,
+      isEqPassword(value) {
+        return value === this.password
+      }
+    }
   },
   methods: {
     async register() {
+      this.submitted = true;
+      if(this.$v.$invalid) {
+        return false
+      }
       if(this.avatar) {
         var storageRef = ref(
           storage,

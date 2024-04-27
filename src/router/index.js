@@ -55,9 +55,6 @@ const routes = [
   {
     path: "/dang-tin",
     name: "dang-tin",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/ManagePost/CreatePostView.vue"),
   },
@@ -108,13 +105,13 @@ const routes = [
 
   {
     path: '/du-an',
-    name: 'du-an',
+    name: 'project',
     component: () => import('../views/Project/ProjectView.vue'),
     children: [
       { path: 'can-ho-chung-cu', name: 'can-ho-chung-cu', component: () => import('../views/Project/ProjectView.vue') },
       { path: 'cao-oc-van-phong', name: 'cao-oc-van-phong', component: () => import('../views/Project/ProjectView.vue') },
       { path: 'trung-tam-thuong-mai', name: 'trung-tam-thuong-mai', component: () => import('../views/Project/ProjectView.vue') },
-      { path: 'khi-do-thi-moi', name: 'khi-do-thi-moi', component: () => import('../views/Project/ProjectView.vue') },
+      { path: 'khu-do-thi-moi', name: 'khu-do-thi-moi', component: () => import('../views/Project/ProjectView.vue') },
       { path: 'khu-phuc-hop', name: 'khu-phuc-hop', component: () => import('../views/Project/ProjectView.vue') },
       { path: 'nha-o-xa-hoi', name: 'nha-o-xa-hoi', component: () => import('../views/Project/ProjectView.vue') },
       { path: 'khu-nghi-duong-sinh-thai', name: 'khu-nghi-duong-sinh-thai', component: () => import('../views/Project/ProjectView.vue') },
@@ -151,6 +148,12 @@ const routes = [
   },
 
   {
+    path: '/tim-kiem-doanh-nghiep',
+    name: 'tim-kiem-doanh-nghiep',
+    component: () => import('../views/PhoneBook/Enterprise/EnterpriseSearchView.vue'),
+  },
+
+  {
     path: '/doanh-nghiep/:id',
     name: 'chi-tiet-doanh-nghiep',
     component: () => import('../views/PhoneBook/Enterprise/EnterpriseDetailView.vue'),
@@ -160,6 +163,46 @@ const routes = [
     path: '/nha-moi-gioi',
     name: 'nha-moi-gioi',
     component: () => import('../views/PhoneBook/Broker/BrokerView.vue'),
+  },
+
+  {
+    path: '/nha-moi-gioi/:id',
+    component: () => import('../views/PhoneBook/Broker/BrokerDetailView.vue'),
+  },
+
+  {
+    path: '/tim-kiem-tu-van',
+    component: () => import('../views/ManageAdviceRequest/CreateAdviceRequestView.vue'),
+  },
+
+  {
+    path: '/quan-ly-yeu-cau',
+    component: () => import('../views/ManageAdviceRequest/ListRequestView.vue'),
+  },
+
+  {
+    path: '/thong-tin-chi-tiet-yeu-cau/:id',
+    component: () => import('../views/ManageAdviceRequest/RequestDetailView.vue'),
+  },
+
+  {
+    path: '/danh-sach-yeu-cau-tu-van',
+    component: () => import('../views/Broker/AdviceRequest/ListAdviceRequestView.vue'),
+  },
+
+  {
+    path: '/danh-sach-yeu-cau-dang-ky',
+    component: () => import('../views/Broker/AdviceRequest/AppliedAdviceRequestView.vue'),
+  },
+
+  {
+    path: '/dang-du-an-moi',
+    component: () => import('../views/Enterprise/ManageProject/CreateProjectView.vue'),
+  },
+
+  {
+    path: '/quan-ly-du-an',
+    component: () => import('../views/Enterprise/ManageProject/ListProjectView.vue'),
   },
 
   {
