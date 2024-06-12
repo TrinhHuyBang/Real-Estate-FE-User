@@ -1,8 +1,4 @@
 <template>
-<div class="create-post-view">
-  <div class="manage-nav">
-    <manage-nav></manage-nav>
-  </div>
   <div class="create-post">
       <div class="container">
         <el-card class="basic-infor card">
@@ -70,7 +66,7 @@
           <p v-if="submitted && !$v.name.required" class="p-error">Tên dự án không được để trống!</p>
 
           <label class="label" style="margin-bottom: 10px;" for="name">Mô tả về dự án<span class="required-field"> *</span></label>
-          <ckeditor-custom v-model="description"/>
+          <ckeditor-custom v-model="description" type="project"/>
           
           <label class="label" style="margin-top: 20px; margin-bottom: 15px;" for="image">Hình ảnh<span class="required-field"> *</span></label>
           <div class="imageLayout">
@@ -186,12 +182,10 @@
         </el-card>
       </div>
   </div>
-</div>
   
 </template>
 
 <script>
-import ManageNav from "@/layouts/ManageNav.vue"
 import ProjectType from '@/data/projectType'
 import axios from "axios"
 import ProjectApi from '@/api/project'
@@ -204,7 +198,6 @@ import CkeditorCustom from '../../../components/CkeditorCustom.vue'
 
 export default {
   components: {
-    ManageNav,
     CkeditorCustom,
   },
   data() {
@@ -286,7 +279,6 @@ export default {
       this.images.forEach(image => {
         this.images_urls.push(image.url)
       });
-      console.log(this.images_urls) 
       
       var data = {
         name : this.name,
@@ -383,7 +375,6 @@ export default {
       });
       // Cập nhật giao diện người dùng với danh sách các ảnh
       this.images = tempImages
-      console.log(this.images)
     },
 
     async uploadImageToFirebase(image, imageName) {
@@ -408,7 +399,6 @@ export default {
       });
       // Cập nhật mảng ảnh với URL mới
       this.images = updatedImages;
-      console.log(this.images)
     },
 
     deleteImage(index) {
@@ -465,19 +455,14 @@ export default {
 </script>
 
 <style scoped>
-.create-post-view{
-  display: flex;
-  flex-direction: row;
-}
-
 .card {
-  width: 60%;
-  margin: 10px;
+  width: 65%;
+  margin: 25px 10px 10px 10px;
   padding: 20px;
 }
 
 .create-post {
-  width: 80%;
+  width: 100%;
 }
 
 .container {

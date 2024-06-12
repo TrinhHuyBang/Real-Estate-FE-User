@@ -8,7 +8,7 @@
           v-for="post in posts"
           :key="post.id"
         >
-          <el-card :body-style="{ padding: '0px' }">
+          <el-card :body-style="{ padding: '0px', height: '370px' }">
             <router-link style="text-decoration: none" :to="`/chi-tiet-bai-dang/${post.id}`">
               <div class="show-post-image">
                 <img :src="post.image" alt="Post image" class="el-card-cover" style="height: 200px;">
@@ -79,6 +79,9 @@ export default {
         }
       )
     },
+    loadPostData() {
+      this.getPosts(1)
+    },
     handleChangPage(val) {
       this.getPosts(val)
     },
@@ -99,6 +102,9 @@ export default {
       )
     },
   },
+  watch: {
+    '$route.params.id': 'loadPostData'
+  }
 };
 </script>
 

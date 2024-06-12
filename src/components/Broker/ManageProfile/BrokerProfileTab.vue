@@ -4,20 +4,20 @@
     <div class="profile">
         <div class="avatar">
             <div class="custom-file-input">
-                <label for="fileInput3" class="upload-icon" v-if="!hasUploadedAvatar && !user.avatar">
+                <label for="fileInput4" class="upload-icon" v-if="!hasUploadedAvatar && !user.avatar">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text avt-text">Tải ảnh</div>
-                    <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
+                    <input type="file" id="fileInput4" @change="handleFileChange" accept="image/*" ref="fileInput4" style="display: none"/>
                 </label>
-                <label for="fileInput3" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
-                    <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
+                <label for="fileInput4" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
+                    <input type="file" id="fileInput4" @change="handleFileChange" accept="image/*" ref="fileInput4" style="display: none"/>
                 </label>
-                <label for="fileInput3" class="upload-icon" v-if="user.avatar && !hasUploadedAvatar" :style="{ 'background-image': `url('${user.avatar}')` }">
-                    <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
+                <label for="fileInput4" class="upload-icon" v-if="user.avatar && !hasUploadedAvatar" :style="{ 'background-image': `url('${user.avatar}')` }">
+                    <input type="file" id="fileInput4" @change="handleFileChange" accept="image/*" ref="fileInput4" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedAvatar || user.avatar" @click="deleteAvatar"></span>
             </div>
-            <span>{{ user.name }}</span>
+            <span style="margin-bottom: 20px">{{ user.name }}</span>
 
             <div class="custom-file-input">
               <el-image
@@ -77,6 +77,15 @@
                     </td>
                 </tr>
             </table>
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 50%">
+                        <el-select class="select" v-model="project" placeholder="Dự án" clearable filterable>
+                        <el-option v-for="item in projects" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </td>
+                </tr>
+            </table>
             <span v-if="submitted && !$v.brokerageAreas.required" class="p-error">Phải có ít nhất một khu vực và loại hình môi giới</span>
             <div style="display: flex; justify-content: center;">
                 <el-button @click="addBrokerageArea()" icon="el-icon-plus" size="small" circle></el-button>
@@ -99,6 +108,7 @@ import { Notification } from 'element-ui'
 import { mapActions, mapState } from 'vuex'
 import axios from "axios"
 import postType from '@/data/postType.js'
+import ProjectApi from '@/api/project'
 export default {
     data() {
         return {
@@ -132,6 +142,9 @@ export default {
             submitted: false,
             address: "",
             description: "",
+            project: null,
+            projects: [],
+            selectedProject: {},
         };
     },
     computed: mapState({
@@ -151,6 +164,8 @@ export default {
             this.brokerInfor = this.user.broker_infor
             this.brokerageAreas = [...this.user.broker_infor.areas]
             this.hasUploadedAvatar = false
+            this.project = null
+            this.selectedProject = {}
         },
         ...mapActions(['commitSetUserInfo']),
         async update() {
@@ -201,7 +216,7 @@ export default {
                     this.hasUploadedAvatar = true; // Đánh dấu rằng đã có ảnh
                 }
             // Đặt lại input để cho phép chọn lại cùng một tệp
-            this.$refs.fileInput3.value = '';
+            this.$refs.fileInput4.value = '';
         },
         imagePreview(file) {
             if(file instanceof File) {
@@ -240,14 +255,29 @@ export default {
                 type_id: this.type_id,
                 province: this.province,
                 district: this.district,
+                project_id: this.project,
+                project_name: this.selectedProject.name,
             })
             this.type_id = null
             this.province = null
             this.district = null
+            this.project = null
+            this.selectedProject = {}
         },
         deleteItem(index) {
             this.brokerageAreas.splice(index, 1);
-        }
+        },
+        listProjectOptions() {
+            ProjectApi.listProjectOptions(
+                {
+                    province : this.province,
+                    district : this.district,
+                },
+                (response) => {
+                    this.projects = response.data
+                }
+            )
+        },
     },
     watch: {
         avatar(val) {
@@ -263,9 +293,14 @@ export default {
             } else {
                 this.districts = [];
                 this.wards = [];
-                this.address = "";
+                this.address = ""
+                this.project = "" 
             }
+            this.listProjectOptions()
             this.district = "";
+        },
+        district() {
+            this.listProjectOptions()
         },
         typeSelected(val) {
             if(val == 'rent') {
@@ -275,6 +310,17 @@ export default {
             } else {
                 this.listPostType = {
                     ...this.postType.sell
+                }
+            }
+        },
+        project(val) {
+            if(val) {
+                this.selectedProject = this.projects.find(function(project) {
+                    return project.id === val;
+                })
+
+                if(!this.district) {
+                    this.district = this.selectedProject.district
                 }
             }
         }

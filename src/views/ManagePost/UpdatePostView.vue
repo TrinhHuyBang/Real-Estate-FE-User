@@ -1,8 +1,4 @@
 <template>
-  <div class="create-post-view">
-    <div class="manage-nav">
-      <manage-nav></manage-nav>
-    </div>
     <div class="create-post">
       <div class="container">
         <el-card class="basic-infor card">
@@ -391,11 +387,9 @@
         </el-card>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
-import ManageNav from "@/layouts/ManageNav.vue";
 import postType from "@/data/postType";
 import axios from "axios";
 import { mapState } from "vuex";
@@ -406,9 +400,6 @@ import { storage } from "@/firebase"
 import { Notification } from "element-ui";
 
 export default {
-  components: {
-    "manage-nav": ManageNav,
-  },
   data() {
     return {
       PostType: postType,
@@ -692,19 +683,10 @@ export default {
 </script>
 
 <style scoped>
-.create-post-view {
-  display: flex;
-  flex-direction: row;
-}
-
 .card {
   width: 60%;
   margin: 10px;
   padding: 20px;
-}
-
-.create-post {
-  width: 80%;
 }
 
 .container {

@@ -148,45 +148,4 @@ export default {
                 }
             })
     },
-
-    listRequestPost(page, query, completion, error) {
-        axios
-            .get(`/list-request/?page=${page}`, {
-                params: query
-            })
-            .then((response) => {
-                completion(response.data)
-            })
-            .catch((err) => {
-                if (error) {
-                    error(err)
-                }
-            })
-    },
-
-    rejectRequest(id, completion, error) {
-        axios
-            .put(`/reject-request/${id}`)
-            .then((response) => {
-                completion(response.data)
-            })
-            .catch((err) => {
-                if (error) {
-                    error(err)
-                }
-            })
-    },
-
-    acceptRequest(id, completion, error) {
-        axios
-            .put(`/accept-request/${id}`)
-            .then((response) => {
-                completion(response.data)
-            })
-            .catch((err) => {
-                if (error) {
-                    error(err)
-                }
-            })
-    }
 }

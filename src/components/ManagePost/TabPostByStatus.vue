@@ -26,8 +26,18 @@
               <div class="post-location">
                 <i class="el-icon-location-outline"></i> {{ showAddress(post) }}
               </div>
-              <div v-if="post.status == 0" class="published_at rent-sell-post-published"> Đã đăng vào {{ showTime(post.created_at) }} <span class="state-post">Chờ duyệt</span> </div>
-              <div v-else class="published_at rent-sell-post-published"> {{ showTime(post.published_at) }} </div>
+              <div v-if="post.status == 0 || post.status == 4 || post.status == 3" class="published_at rent-sell-post-published">
+                Đã đăng vào {{ showTime(post.created_at) }}
+                <el-tag class="state-post" v-if="post.status == 0" type="warning">Chờ duyệt</el-tag>
+                <el-tag class="state-post" v-else-if="post.status == 4" type="danger">Không được duyệt</el-tag>
+                <el-tag class="state-post" v-if="post.status == 3" type="danger">Đã xoá</el-tag>
+
+              </div>
+              <div v-else class="published_at rent-sell-post-published">
+                {{ showTime(post.published_at) }}
+                <el-tag class="state-post" v-if="post.status == 1" type="success">Đang hiển thị</el-tag>
+                <el-tag class="state-post" v-else-if="post.status == 2" type="info">Hết hạn</el-tag>
+              </div>
               <div class="action-post">
                 <el-button v-if="post.status == 0 || post.status == 1" icon="el-icon fa fa-pencil" @click="gotoUpdate(post.id)"> Sửa tin</el-button>
                 <el-button v-if="post.status != 3" type="danger" icon="el-icon fa fa-trash-alt" @click="handleDelete(post.id)"> Xoá tin </el-button>
@@ -85,10 +95,6 @@ export default {
 
 .state-post {
   margin-left: 15px;
-  background-color: rgb(130, 130, 7);
-  padding: 5px 10px;
-  text-align: center;
-  color: #000000;
 }
 .action-post {
   position: absolute;

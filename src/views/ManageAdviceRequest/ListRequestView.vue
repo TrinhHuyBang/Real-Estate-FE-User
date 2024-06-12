@@ -1,8 +1,4 @@
 <template>
-  <div class="manage-list-post">
-    <div class="manage-post-nav">
-      <manage-nav></manage-nav>
-    </div>
     <div class="container">
       <div class="nav">
         <h4>Danh sách tin đăng</h4>
@@ -36,16 +32,13 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-  </div>
 </template>
 
 <script>
-import ManageNav from "@/layouts/ManageNav.vue"
 import AdviceRequestApi from "@/api/adviceRequest"
 import TabRequestByStatus from '@/components/ManageAdviceRequest/TabRequestByStatus.vue';
 export default {
   components: {
-    ManageNav,
     TabRequestByStatus,
   },
   mounted() {
@@ -113,15 +106,6 @@ export default {
 </script>
 
 <style scoped>
-.manage-list-post {
-  display: flex;
-  flex-direction: row;
-}
-
-.container {
-  margin: 10px 0 0 30px;
-}
-
 .nav {
   display: flex;
   flex-direction: column;

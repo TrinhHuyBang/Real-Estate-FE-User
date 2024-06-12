@@ -104,6 +104,14 @@ export default {
             }
         },
 
+        isArray(value) {
+            if(Array.isArray(value)) {
+                return value.length
+            } else {
+                return false
+            }
+        },
+
         showBrokerageArea(item) {
 
             if(item.project_name) {
@@ -148,14 +156,14 @@ export default {
             }
         },
 
-        getStatusClass(project) {
-            return {
-                'status-pending': project.status === 'Sắp mở bán',
-                'status-completed': project.status === 'Đang mở bán',
-                'status-handed': project.status === 'Đã bàn giao',
-                'status-in-progress': project.status == ''
-            };
-        },
+        // getStatusClass(project) {
+        //     return {
+        //         'status-pending': project.status === 'Sắp mở bán',
+        //         'status-completed': project.status === 'Đang mở bán',
+        //         'status-handed': project.status === 'Đã bàn giao',
+        //         'status-in-progress': project.status == ''
+        //     };
+        // },
 
         changeFieldNameToId(name) {
             for (const key in fieldList) {
@@ -171,6 +179,90 @@ export default {
             const randomString = Math.random().toString(36).substring(2, 8);
             const fileExtension = originalName.split('.').pop();
             return `${timestamp}_${randomString}.${fileExtension}`;
+        },
+
+        scrollTo(target) {
+            if (document.querySelector(target)) {
+                document.querySelector(target).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                })
+            }
+        },
+
+        showEnterpriseName(enterprise) {
+            if(enterprise.abbreviation) {
+                return enterprise.name + ' (' + enterprise.abbreviation + ') '
+            } else {
+                return enterprise.name
+            }
+        },
+
+        showProjectPrice(project) {
+            if(project.start_price) {
+                if(project.end_price) {
+                    return project.start_price + " - " + project.end_price + " triệu/m²"
+                } else {
+                    return project.start_price + " triệu/m²"
+                }
+            } else {
+                return "N/A"
+            }
+        },
+
+        showProjectSize(project) {
+            return project.size + " " + project.size_unit
+        },
+
+        goBack() {
+            this.$router.go(-1);
+        },
+
+        gotoPage(page) {
+            this.$router.push({ name: page }).catch((err) => {
+                if (err.name !== "NavigationDuplicated") {
+                  throw err;
+                }
+            })
+        },
+
+        getStatusClass(project) {
+            return {
+                'status-pending': project.project_status == 1,
+                'status-completed': project.project_status == 2,
+                'status-handed': project.project_status == 3,
+                'status-in-progress': !project.project_status
+            };
+        },
+
+        getFromObject(object, key, def = null) {
+            if (object && typeof object == 'object') {
+                if (key.includes('.')) {
+                    const keys = key.split('.')
+                    let temp = object
+                    let error = false
+                    keys.forEach((e) => {
+                        try {
+                            temp = temp[e]
+                        } catch (err) {
+                            error = true
+                        }
+                    })
+                    if (error) {
+                        return def
+                    } else {
+                        return temp
+                    }
+                } else {
+                    if (key in object) {
+                        return object[key]
+                    } else {
+                        return def
+                    }
+                }
+            } else {
+                return def
+            }
         },
     }
 }

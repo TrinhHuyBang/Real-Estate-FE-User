@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row show-row">
+    <div v-if="showNews.id" class="row show-row">
       <div class="col-xl-6 col-lg-6 col-md-12 col-12">
         <router-link class="link-to-detail" :to="`/tin-tuc/${showNews.id}`">
           <div class="news-item">
@@ -53,13 +53,11 @@ export default {
   data() {
     return {
       showNews: {
+        id: "",
         title: "",
         image: "",
       },
     };
-  },
-  mounted() {
-    this.showNews = this.newsList[0];
   },
   methods: {
     showDetail(newsId) {
@@ -70,6 +68,11 @@ export default {
       this.showNews = news;
     },
   },
+  watch: {
+    newsList(val) {
+      this.showNews = val[0];
+    }
+  }
 };
 </script>
 

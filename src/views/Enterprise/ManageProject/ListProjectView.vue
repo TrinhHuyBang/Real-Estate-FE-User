@@ -1,8 +1,4 @@
 <template>
-  <div class="manage-list-post">
-    <div class="manage-post-nav">
-      <manage-nav></manage-nav>
-    </div>
     <div class="container">
       <div class="nav">
         <h4>Danh sách dự án</h4>
@@ -35,17 +31,14 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-  </div>
 </template>
 
 <script>
-import ManageNav from "@/layouts/ManageNav.vue"
 import TabProjectByStatus from '@/components/Enterprise/ManageProject/TabProjectByStatus.vue';
 import ProjectApi from "@/api/project"
 import projectStatus from '@/data/projectStatus';
 export default {
   components: {
-    "manage-nav": ManageNav,
     TabProjectByStatus,
   },
   mounted() {
@@ -121,17 +114,8 @@ export default {
 </script>
 
 <style scoped>
-.manage-list-post {
-  display: flex;
-  flex-direction: row;
-}
-
 .content-tab {
   width: 80%;
-}
-
-.container {
-  margin: 10px 0 0 30px;
 }
 
 .nav {

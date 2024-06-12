@@ -47,14 +47,7 @@ export default {
     },
 
     methods: {
-        getStatusClass(project) {
-            return {
-                'status-pending': project.project_status == 1,
-                'status-completed': project.project_status == 2,
-                'status-handed': project.project_status == 3,
-                'status-in-progress': !project.project_status
-            };
-        }
+        
     }
 
 }

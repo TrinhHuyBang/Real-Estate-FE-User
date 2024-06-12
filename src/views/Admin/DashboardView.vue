@@ -1,35 +1,29 @@
 <template>
-  <div class="manage-list-bookmark-post">
-    <div class="manage-post-nav">
-      <admin-nav> </admin-nav>
-    </div>
-    <div class="container">
-        <h4>Dashboard</h4>
-    </div>
+  <div>
+    <h3>Dashboard</h3>
+    <data-oveview/>
+    <review-display/>
   </div>
 </template>
 
 <script>
-import AdminNav from "@/layouts/Admin/AdminNav.vue";
+import DataOveview from '@/components/Admin/Dashboard/DataOverview.vue'
+import ReviewDisplay from '@/components/Admin/Dashboard/ReviewDisplay.vue'
 export default {
-    
-    components: {
-        "admin-nav": AdminNav,
-    },
-
-    methods: {
+  components: {
+    DataOveview,
+    ReviewDisplay,
+  },
+  data() {
+    return {
+    }
+  },
+  methods: {
         
-    },
+  },
 }
 </script>
 
 <style scoped>
-.manage-list-bookmark-post {
-  display: flex;
-  flex-direction: row;
-}
 
-.container {
-  margin: 30px 0 0 30px;
-}
 </style>

@@ -9,7 +9,7 @@
                     <div class="el-upload__text avt-text">Tải ảnh</div>
                     <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
                 </label>
-                <label for="fileInput3" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
+                <label for="fileInput3" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${avatar}')` }">
                     <input type="file" id="fileInput3" @change="handleFileChange" accept="image/*" ref="fileInput3" style="display: none"/>
                 </label>
                 <label for="fileInput3" class="upload-icon" v-if="user.avatar && !hasUploadedAvatar" :style="{ 'background-image': `url('${user.avatar}')` }">
@@ -30,7 +30,7 @@
             <el-input placeholder="Email" v-model="user.email" disabled></el-input>
 
             <div class="btn-action">
-                <el-button type="primary" class="btn" icon="el-icon-check" @click="update()">Lưu</el-button>
+                <el-button type="primary" class="btn" icon="el-icon-check" :loading="loading" @click="update()">Lưu</el-button>
                 <el-button type="danger" class="btn" icon="el-icon-close" @click="getInfor()">Huỷ bỏ</el-button>
             </div>
         </div>
@@ -47,6 +47,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
     data() {
         return {
+            loading : false,
             avatar: null,
             hasUploadedAvatar: false,
             user: {},
@@ -63,40 +64,33 @@ export default {
             this.user = {
                 ...this.userInfor
             }
-            this.hasUploadedAvatar = false
+            if(this.user.avatar) {
+                this.avatar = this.user.avatar;
+                this.hasUploadedAvatar = true;
+            } else {
+                this.hasUploadedAvatar = false;
+            }
         },
         ...mapActions(['commitSetUserInfo']),
-        async update() {
-            if(this.avatar) {
-                var downloadURL = ''
-                if(this.avatar instanceof File) {
-                    var storageRef = ref(
-                    storage,
-                    `avatars/` +
-                        Math.random().toString(36).slice(2, 8) +
-                        `${this.avatar.name}`
-                    );
-                    await uploadBytes(storageRef, this.avatar);
-                    downloadURL = await getDownloadURL(storageRef);
-                } else {
-                    downloadURL = this.avatar
-                }
-            }
+        update() {
+            this.loading = true
             AuthApi.updateProfile(
                 {
-                    avatar: downloadURL,
+                    avatar: this.avatar,
                     name: this.user.name,
                 },
                 () => {
+                    this.loading = false
                     Notification.success({
                         title: "Thành công",
                         message: "Đã cập nhật thông tin cá nhân thành công!",
                     });
-                    this.user.avatar = downloadURL
+                    this.user.avatar = this.avatar
                     this.commitSetUserInfo(this.user)
                     this.getInfor()
                 },
                 (error) => {
+                    this.loading = false
                     Notification.error({
                         title: "Thất bại",
                         message: error.data.error,
@@ -104,37 +98,28 @@ export default {
                 }
             )
         },
-        
-        handleFileChange(event) {
+        async handleFileChange(event) {
             const file = event.target.files[0];
-                if (file) {
-                    this.avatar = file;
-                    this.hasUploadedAvatar = true; // Đánh dấu rằng đã có ảnh
-                }
-            // Đặt lại input để cho phép chọn lại cùng một tệp
-            this.$refs.fileInput3.value = '';
-        },
-        imagePreview(file) {
-            if(file instanceof File) {
-                return URL.createObjectURL(file)
+            if (file) {
+                this.avatar = URL.createObjectURL(file)
+                this.hasUploadedAvatar = true; // Đánh dấu rằng đã có ảnh
+                const newImageName = this.generateUniqueName(file.name) // Tạo tên mới cho ảnh
+                const storageRef = ref(storage, `avatars/` + newImageName); // Sử dụng tên mới
+                await uploadBytes(storageRef, file);
+                this.avatar = await getDownloadURL(storageRef);
             }
+            this.$refs.fileInput3.value = '';
         },
         deleteAvatar() {
             this.avatar = null
             this.user.avatar = null
+            this.hasUploadedAvatar = false
         }
     },
-    watch: {
-        avatar(val) {
-            if(!val) {
-                this.hasUploadedAvatar = false;
-            }
-        }
-    }
 }
 </script>
 
-<style scoped>
+<style>
 .profile {
     display: flex;
     flex-direction: row;
@@ -146,6 +131,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-top: 30px;
+    align-items: center;
 }
 
 .infor{
@@ -207,6 +193,7 @@ export default {
 }
 
 .delete-avatar-icon{
+    cursor: pointer;
     position: absolute;
     right: -7px;
     top: -7px;

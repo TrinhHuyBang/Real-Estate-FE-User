@@ -1,9 +1,13 @@
 <template>
   <div class="post-detail">
     <div class="block-image">
-      <el-carousel trigger="click" class="show-image">
+      <el-carousel trigger="click">
         <el-carousel-item v-for="item in post.images" :key="item">
-          <img class="image-detail" :src="item" alt="Anh" />
+          <el-image
+            style="height: 400px"
+            :src="item"
+            fit='contain'>
+          </el-image>
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -177,24 +181,12 @@
           </svg>
           <span class="owner-contact">Yêu cầu liên hệ lại</span>
         </el-button>
-        <el-dialog class="dialog-contact" title="Yêu cầu liên hệ lại" width="400px" :visible.sync="dialogContact">
-          <el-form >
-            <span>Chúng tôi sẽ kết nối bạn với chủ bài đăng</span>
-            <el-form-item >
-              <el-input class="input-contact" v-model="nameContact" autocomplete="off" placeholder="Họ tên*"></el-input>
-              <el-input class="input-contact" v-model="phoneContact" autocomplete="off" placeholder="Số điện thoại*"></el-input>
-              <el-input class="input-contact" type="textarea" :autosize="{ minRows: 4}" v-model="mailContent" autocomplete="off" placeholder="Lời nhắn"></el-input>
-            </el-form-item>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button class="btn-investor-contact" type="primary">Gửi thông tin</el-button>
-          </span>
-        </el-dialog>
+        <ContactModal :isActive="dialogContact" :email="ownerInfo?.email" :type="'user'" @closeContactModal="dialogContact = !dialogContact" />
       </div>
     </div>
     
     <h5 class="sub-title">Xem trên bản đồ</h5>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.773614641663!2d105.77094637508127!3d21.041742380610884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313455463beecfb9%3A0xfbe932c60551b2fa!2zxJDhuqFpIGjhu41jIGtpbmggdOG6vyBxdeG7kWMgZMOibiAtIENoxrDGoW5nIHRyw6xuaCDEkcOgbyB04bqhbyB04burIHhh!5e0!3m2!1svi!2s!4v1704121420401!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <MapBox :address="post.address" />
   </div>
 </template>
 
@@ -202,6 +194,8 @@
 import PostApi from "@/api/post"
 import postType from '@/data/postType'
 import BookmarkApi from '@/api/bookmark'
+import ContactModal from '@/components/Global/ContactModal.vue'
+import MapBox from '@/components/Global/MapBox.vue'
 import { mapActions, mapState } from "vuex"
 export default {
   data() {
@@ -227,6 +221,10 @@ export default {
         id: ""
       },
     };
+  },
+  components: {
+    ContactModal,
+    MapBox,
   },
   computed: mapState({
     user: (state) => state.user,
@@ -278,7 +276,8 @@ export default {
       )
     },
     loadPostData() {
-      window.location.href = this.$route.fullPath
+      this.getDetail(this.$route.params.id);
+      this.createViewHistory();
     },
     showDate() {},
     showFloor() {
@@ -335,8 +334,6 @@ export default {
     },
 
     handleOpenDialogContact() {
-      this.nameContact = this.user && this.user.name ? this.user.name : null
-      this.phoneContact = this.user && this.user.phone ? this.user.phone : null
       this.dialogContact = true
     }
   },
@@ -351,7 +348,7 @@ export default {
   margin-bottom: 10px;
 }
 .post-detail {
-  padding: 0 25% 0 25%;
+  padding: 2% 25% 0 25%;
 }
 
 .user-infor{
@@ -416,9 +413,10 @@ export default {
   margin: 20px 0px 20px 0px;
 }
 
-.show-image {
-  height: fit-content;
-  align-content: center;
+.el-carousel__item {
+  background-color: #686666;
+  display: flex;
+  justify-content: center;
 }
 
 .block-image {

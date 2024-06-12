@@ -10,7 +10,7 @@
                     <input type="file" id="fileInput" @change="handleBrokerCertificateChange" accept="image/*" ref="fileInput" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedBrokerCertificate" @click="handleDeleteCertificate"></span>
-                <label for="fileInput" class="upload-icon" v-if="hasUploadedBrokerCertificate" :style="{ 'background-image': `url('${imagePreview(brokerCertificate)}')` }">
+                <label for="fileInput" class="upload-icon" v-if="hasUploadedBrokerCertificate" :style="{ 'background-image': `url('${brokerCertificate}')` }">
                     <input type="file" id="fileInput" @change="handleBrokerCertificateChange" accept="image/*" ref="fileInput" style="display: none"/>
                 </label>
             </div>
@@ -154,15 +154,7 @@ export default {
             if(this.$v.$invalid) {
                 return false
             }
-            var storageRef = null
-            storageRef = ref(
-                storage,
-                `broker/certificate/` +
-                    Math.random().toString(36).slice(2, 8) +
-                    `${this.brokerCertificate.name}`
-            );
-            await uploadBytes(storageRef, this.brokerCertificate)
-            this.broker.certificate_url = await getDownloadURL(storageRef)
+            this.broker.certificate_url = this.brokerCertificate
 
             AuthApi.brokerRegister(
                 {
@@ -211,21 +203,21 @@ export default {
             this.selectedProject = {}
         },
 
-        handleBrokerCertificateChange(event) {
-            const certificate = event.target.files[0]
-            if (certificate) {
-                this.brokerCertificate = certificate
-                this.hasUploadedBrokerCertificate = true
+        async handleBrokerCertificateChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.brokerCertificate = URL.createObjectURL(file)
+                this.hasUploadedBrokerCertificate = true; // Đánh dấu rằng đã có ảnh
+                const newImageName = this.generateUniqueName(file.name) // Tạo tên mới cho ảnh
+                const storageRef = ref(storage, `broker/certificat/` + newImageName); // Sử dụng tên mới
+                await uploadBytes(storageRef, file);
+                this.brokerCertificate = await getDownloadURL(storageRef);
             }
-            console.log(this.brokerCertificate)
-            this.$refs.fileInput.value = ''
+            this.$refs.fileInput.value = '';
         },
         handleDeleteCertificate() {
             this.hasUploadedBrokerCertificate = false
             this.brokerCertificate = null
-        },
-        imagePreview(file) {
-            return URL.createObjectURL(file)
         },
         async getListProvince() {
             try {
@@ -312,7 +304,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .profile {
     display: flex;
     flex-direction: row;
@@ -384,6 +376,7 @@ export default {
   position: absolute;
   right: -15px;
   top: -10px;
+  cursor: pointer;
 }
 
 .upload-icon {

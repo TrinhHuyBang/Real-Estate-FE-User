@@ -51,13 +51,9 @@
             <el-button slot="append" icon="el-icon-view" @click="showAgainPassword = !showAgainPassword"></el-button>
           </el-input>
           
-          <ul class="help-text">
-            <li>Mật khẩu tối thiểu 8 kí tự</li>
-            <li>Chứa ít nhất một ký tự số</li>
-            <li>Chứa ít nhất một ký tự viết hoa</li>
-          </ul>
-          <el-button type="primary" class="action-btn" native-type="submit">Lưu thay đổi</el-button>
-          
+          <div class="action-btn">
+           <el-button :disabled="!(changPassword.password && changPassword.newPassword && changPassword.againPassword)" type="primary" native-type="submit">Lưu thay đổi</el-button>
+          </div>          
     </el-form>
     </div>
     
@@ -115,8 +111,10 @@ export default {
           Notification.success({
             title: "Thành công",
             message: "Thay đổi mật khẩu thành công",
-          });
-
+          })
+          this.changPassword.password = ""
+          this.changPassword.newPassword = ""
+          this.changPassword.againPassword = ""
         },
         (error) => {
           Notification.error({
@@ -130,7 +128,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .password-change-tab{
   width: 40%;
   margin-left: 20%;
@@ -147,8 +145,9 @@ a{
 }
 
 .action-btn{
-  margin-bottom: 20px;
-
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 35px;
 }
 
 .el-dialog {

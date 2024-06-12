@@ -7,7 +7,7 @@
       :router="true"
     >
       <el-menu-item index="/" class="logo">
-        <img class="logo" src="/Logo.png"
+        <img class="logo" src="/web_logo.jpg"
         alt="Logo"/>
       </el-menu-item>
       <el-submenu index="/nha-dat-ban" @click="handleChangPagehange('/nha-dat-ban')">
@@ -54,7 +54,7 @@
       </el-submenu>
       <el-menu-item index="/tin-tuc" >Tin Tức</el-menu-item>
       <el-menu-item v-if="user.role == role.broker" index="/danh-sach-yeu-cau-tu-van" >Yêu cầu tư vấn</el-menu-item>
-      <el-submenu v-if="user.role != role.enterprise && user.role != role.broker" index="/danh-ba">
+      <el-submenu index="/danh-ba">
         <template slot="title">Danh bạ</template>
         <el-menu-item index="/doanh-nghiep">Doanh nghiệp</el-menu-item>
         <el-menu-item index="/nha-moi-gioi">Nhà môi giới</el-menu-item>
@@ -67,9 +67,19 @@
           <el-badge :value="bookmarkCount ? bookmarkCount : null" :max="99" class="item">
             <router-link style="color: black;" to="/quan-ly-tin-luu"><i class="far fa-heart"></i></router-link>
           </el-badge>
-          <el-badge :value="user.notice" :max="99" class="item">
-            <i class="far fa-bell"></i>
-          </el-badge>
+          <el-popover
+            ref="notificationPopover"
+            placement="bottom"
+            width="500"
+            height="100"
+            trigger="click"
+            @show="handlePopoverShow"
+          >
+            <NotificationPopup ref="notificationPopup"/>
+            <el-badge slot="reference" :value="notificationCount ? notificationCount : null" :max="99" class="item" style="cursor: pointer;">
+              <i class="far fa-bell"></i>
+            </el-badge>
+          </el-popover>
           <el-dropdown class="dropdown" trigger="hover">
             <router-link to="/quan-ly-tin-dang" class="dropdown-trigger username-avt">
               <div style="margin-right: 10px;">
@@ -149,6 +159,7 @@
 import AuthApi from "@/api/auth"
 import { mapState } from 'vuex';
 import role from '@/data/role'
+import NotificationPopup from '@/components/ManageNotification/NotificationPopup.vue';
 export default {
   data() {
     return {
@@ -158,11 +169,14 @@ export default {
   computed: mapState({
     user: (state) => state.user, 
     bookmarkCount: (state) => state.bookmarkCount,
+    notificationCount: (state) => state.notificationCount,
   }),
   mounted() {
     this.checkGuest()
   },
-
+  components: {
+    NotificationPopup,
+  },
   methods: {
     showName() {
       return this.user.name ? this.user.name.split(" ")[this.user.name.split(" ").length - 1][0] : ""
@@ -170,6 +184,10 @@ export default {
     handleChangPagehange(path) {
       this.$router.push(path)
       window.location.href = this.$router.resolve(path).href
+    },
+    handlePopoverShow() {
+      // Call the method in NotificationPopup component to fetch notifications
+      this.$refs.notificationPopup.fetchNotifications();
     },
     logout() {
       AuthApi.logout(
@@ -195,7 +213,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
+  background-color: #f7f7f8;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
   position: fixed;
   top: 0;
   left: 0;
@@ -203,13 +222,22 @@ export default {
   z-index: 999;
 }
 
+.el-menu-demo {
+  background-color: #f7f7f8;
+}
+
 router-link {
   color: black;
 }
 
 .logo img {
-  width: 100%;
-  height: 70px;
+  width: auto;
+  height: 100%;
+  margin-bottom: 10px;
+}
+
+.el-menu-demo > :first-child {
+  padding: 0 !important;
 }
 
 .bell-icon {

@@ -39,7 +39,7 @@
             <i class="el-icon fas fa-heart"></i>
             <span slot="title">Danh sách yêu cầu đã đăng ký</span>
         </el-menu-item>
-        <el-menu-item v-if="user.role == role.broker || user.role == role.user" index="quan-ly-tin-luu">
+        <el-menu-item v-if="user.role == role.broker || user.role == role.user" index="/quan-ly-tin-luu">
             <i class="el-icon fas fa-heart"></i>
             <span slot="title">Tin lưu</span>
         </el-menu-item>
@@ -51,16 +51,6 @@
             <i class="el-icon fa fa-gear"></i>
             <span slot="title">Quản lý tài khoản</span>
         </el-menu-item>
-        <!-- <el-submenu index="quan-ly-tai-khoan">
-            <template slot="title">
-                <i class="el-icon fa fa-gear"></i>
-                <span slot="title">Quản lý tài khoản</span>
-            </template>
-            <el-menu-item index="0" @click="changeProfileTab">Thông tin cá nhân</el-menu-item>
-            <el-menu-item index="1" @click="changePasswordTab">Thay đổi mật khẩu</el-menu-item>
-            <el-menu-item index="2" @click="enterpriseRegisterTab">Đăng ký doanh nghiệp</el-menu-item>
-            <el-menu-item index="3" @click="deleteAccountTab">Xoá tài khoản</el-menu-item>
-        </el-submenu> -->
         <el-menu-item index="4" @click="logout()">
             <i class="el-icon fa fa-sign-out"></i>
             <span slot="title">Đăng xuất</span>
@@ -114,23 +104,28 @@ export default {
 .manage-nav{
     display: flex;
     flex-direction: column;
-    padding: 15px 0px 20px 0px;
+    padding: 40px 0px 20px 0px;
     border: 1px solid #ccc;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     height: 100%;
     min-height: 600px;
 }
 
-.user-infor{
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 30px;
-    padding-right: 15px;
-    padding-left: 15px;
+.user-infor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0px;
+  height: auto !important;
 }
 
-.name-email{
-    margin-left: 10px;
+.name-email {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
 }
 
 .user-avatar{

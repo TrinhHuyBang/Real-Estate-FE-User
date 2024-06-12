@@ -28,7 +28,7 @@
           <router-link to="/quen-mat-khau">Quên mật khẩu?</router-link>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn" native-type="submit">Đăng nhập</el-button>
+          <el-button type="primary" class="login-btn" :loading="loading" native-type="submit">Đăng nhập</el-button>
         </el-form-item>
       </el-form>
       <div style="text-align: center">
@@ -46,6 +46,7 @@ import { required, email } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
+      loading: false,
       loginForm: {
         username: "",
         password: "",
@@ -74,6 +75,7 @@ export default {
       if(this.$v.$invalid) {
         return false
       }
+      this.loading = true
       const userData = {
         username: this.loginForm.username,
         password: this.loginForm.password,
@@ -86,7 +88,8 @@ export default {
           Notification.success({
             title: "Thành công",
             message: "Đăng nhập thành công",
-          });
+          })
+          this.loading = false
           this.submitted = false
           window.location.href = "/"
         },
@@ -94,7 +97,8 @@ export default {
           Notification.error({
             title: "Thất bại",
             message: error.data.error,
-          });
+          })
+          this.loading = false
         }
       )
     },

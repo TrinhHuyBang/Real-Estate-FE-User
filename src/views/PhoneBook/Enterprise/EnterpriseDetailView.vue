@@ -10,7 +10,7 @@
                     <img :src="enterprise.logo" alt="">
                 </div>
                 <div class="col-8 enterprise-name-project"> 
-                    <h2 class="enterprise-name">{{ showEnterpriseName() }}</h2>
+                    <h2 class="enterprise-name">{{ showEnterpriseName(enterprise) }}</h2>
                     <div v-if="enterprise.main_field === 'Chủ đầu tư'">
                         <div class="number-project">
                             <h6>Dự án sắp mở</h6>
@@ -59,7 +59,7 @@
                     </div>
                     <h6>{{ enterprise.name }}</h6>
                     <p>{{ enterprise.description }}</p>
-                    <project-list v-if="enterprise.projects && enterprise.projects.length" :enterprise_name="showEnterpriseName()" :projects="enterprise.projects"/>
+                    <project-list v-if="enterprise.projects && enterprise.projects.length" :enterprise_name="showEnterpriseName(enterprise)" :projects="enterprise.projects"/>
                 </div>
                 <div class="col-4">
                     <div class="project-contact">
@@ -74,19 +74,7 @@
                             Yêu cầu liên hệ lại
                         </el-button> 
                     </div>
-                    <!-- <el-dialog class="dialog-contact" title="Yêu cầu liên hệ lại" width="400px" :visible.sync="dialogContact">
-                        <el-form >
-                            <span>Chúng tôi sẽ kết nối bạn với những môi giới/ chủ đầu tư của dự án</span>
-                            <el-form-item >
-                            <el-input class="input-contact" v-model="nameContact" autocomplete="off" placeholder="Họ tên*"></el-input>
-                            <el-input class="input-contact" v-model="phoneContact" autocomplete="off" placeholder="Số điện thoại*"></el-input>
-                            <el-input class="input-contact" type="textarea" :autosize="{ minRows: 4}" v-model="mailContent" autocomplete="off" placeholder="Lời nhắn"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <span slot="footer" class="dialog-footer">
-                            <el-button class="btn-investor-contact" type="primary">Gửi thông tin</el-button>
-                        </span>
-                    </el-dialog> -->
+                    <ContactModal :isActive="dialogContact" :email="enterprise?.email" :type="'enterprise'" @closeContactModal="dialogContact = !dialogContact" />
                 </div>
             </div>
             <similar-enterprise/>
@@ -95,6 +83,7 @@
 </template>
 
 <script>
+import ContactModal from '@/components/Global/ContactModal.vue'
 import SimilarEnterprise from '@/components/PhoneBook/Enterprise/SimilarEnterprise.vue'
 import ProjectList from '@/components/PhoneBook/Enterprise/ProjectList.vue'
 import EnterpriseApi from '@/api/enterprise'
@@ -111,6 +100,7 @@ export default {
     components: {
         'similar-enterprise': SimilarEnterprise,
         'project-list': ProjectList,
+        ContactModal,
     },
     methods: {
         getDetail() {
@@ -122,17 +112,7 @@ export default {
             )
         },
 
-        showEnterpriseName() {
-            if(this.enterprise.abbreviation) {
-                return this.enterprise.name + ' ( ' + this.enterprise.abbreviation + ' ) '
-            } else {
-                return this.enterprise.name
-            }
-        },
-
         handleOpenDialogContact() {
-            this.nameContact = this.user && this.user.name ? this.user.name : null
-            this.phoneContact = this.user && this.user.phone ? this.user.phone : null
             this.dialogContact = true
         }
     }

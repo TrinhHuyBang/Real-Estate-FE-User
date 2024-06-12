@@ -33,6 +33,7 @@
     </div>
 
     <div class="broker-list">
+      <h4>Danh sách nhà môi giới</h4>
       <broker-list :brokers="brokers"/>
       <div class="paginate-page" v-if="brokers.length">
         <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>

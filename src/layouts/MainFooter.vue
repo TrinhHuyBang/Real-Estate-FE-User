@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <div class="footer">
     <div class="container">
       <div class="row">
         <div class="col-md-6">
@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-  </footer>
+  </div>
 </template>
 
 <script>
@@ -35,10 +35,11 @@ export default {
 
 <style>
 .footer {
-  background-color: #8d9292;
+  background-color: #f2f2f2;
   padding: 20px 0;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   text-align: center;
+  /* width: 100%; */
 }
 
 .footer h5 {    

@@ -9,7 +9,7 @@
           :key="post?.id"
         >
           <router-link style="text-decoration: none" :to="`/chi-tiet-bai-dang/${post.id}`">
-            <el-card :body-style="{ padding: '0px' }">
+            <el-card :body-style="{ padding: '0px', height: '370px' }">
               <div class="show-post-image">
                 <img :src="post.image" alt="Post image" class="el-card-cover" style="height: 200px;">
                 <div class="number-image"><i class="el-icon-picture-outline"> {{ post.number_image }}</i> </div>
@@ -20,10 +20,9 @@
                 <div class="post-location">
                   <i class="el-icon-location"></i> {{ showAddress(post) }}
                 </div>
-                <!-- <el-button class="post-heart" @click="bookmark(post.id)">
-                  <i v-if="post.bookmark == 1" class="el-icon-heart" style="color: red;"></i>
-                  <i v-else class="el-icon-heart-outline"></i>
-                </el-button> -->
+                <div class="post-published-bookmark">
+                  <div>{{ showTime(post.published_at) }}</div>
+                </div>
               </div>
             </el-card>
           </router-link>
@@ -81,5 +80,14 @@ export default {
   margin-top: 30px;
   display: flex;
   justify-content: center;
+}
+
+.post-published-bookmark{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin: 15px 0px 5px 5px;
+  color: grey;
 }
 </style>

@@ -63,7 +63,7 @@ export default {
 <style scoped>
 
 .project-list-single {
-    width: 80%;
+    width: 90%;
 }
 
 .paginate-page{

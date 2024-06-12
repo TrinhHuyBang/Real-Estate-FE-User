@@ -22,7 +22,7 @@ const routes = [
   {
     path: "/chi-tiet-bai-dang/:id",
     name: "postDetail",
-    component: () => import("../views/PostDetailView.vue"),
+    component: () => import("../views/ManagePost/PostDetailView.vue"),
   },
   {
     path: "/dang-ky",
@@ -32,7 +32,7 @@ const routes = [
   {
     path: "/chi-tiet-nguoi-dung/:id",
     name: "chi-tiet-nguoi-dung",
-    component: () => import("../views/Infor/UserInfor.vue"),
+    component: () => import("../views/ManageInfor/UserInfor.vue"),
   },
   {
     path: "/dang-nhap",
@@ -43,13 +43,22 @@ const routes = [
   {
     path: "/quan-ly-tin-dang",
     name: "managePost",
-    component: () => import("../views/ManagePost/ListPost.vue"),
+    component: () => import("../views/ManagePost/ListPostView.vue"),
+    meta: { showNavbar: true }
   },
 
   {
     path: "/quan-ly-tin-luu",
     name: "manageBookmark",
     component: () => import("../views/ManagePost/BookmarkView.vue"),
+    meta: { showNavbar: true }
+  },
+
+  {
+    path: "/quan-ly-thong-bao",
+    name: "quan-ly-thong-bao",
+    component: () => import("../views/ManageNotification/ManageNotificationView.vue"),
+    meta: { showNavbar: true }
   },
 
   {
@@ -57,6 +66,7 @@ const routes = [
     name: "dang-tin",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/ManagePost/CreatePostView.vue"),
+    meta: { showNavbar: true }
   },
 
   {
@@ -64,42 +74,43 @@ const routes = [
     name: "sua-tin",
     component: () =>
       import("../views/ManagePost/UpdatePostView.vue"),
+    meta: { showNavbar: true }
   },
 
   {
     path: "/nha-dat-ban",
     name: "sellPost",
-    component: () => import("../views/SellPostView.vue"),
+    component: () => import("../views/ManagePost/SellPostView.vue"),
     children: [
-      { path: 'can-ho-chung-cu', name: 'ban-can-ho-chung-cu', component: () => import('../views/SellPostView.vue') },
-      { path: 'nha-rieng', name: 'ban-nha-rieng', component: () => import('../views/SellPostView.vue') },
-      { path: 'nha-biet-thu-lien-ke', name: 'ban-nha-biet-thu-lien-ke', component: () => import('../views/SellPostView.vue') },
-      { path: 'nha-mat-pho', name: 'ban-nha-mat-pho', component: () => import('../views/SellPostView.vue') },
-      { path: 'nha-pho-thuong-mai', name: 'ban-nha-pho-thuong-mai', component: () => import('../views/SellPostView.vue') },
-      { path: 'dat-nen-du-an', name: 'ban-dat-nen-du-an', component: () => import('../views/SellPostView.vue') },
-      { path: 'dat', name: 'ban-dat', component: () => import('../views/SellPostView.vue') },
-      { path: 'trang-trai-khu-nghi-duong', name: 'ban-trang-trai-khu-nghi-duong', component: () => import('../views/SellPostView.vue') },
-      { path: 'condotel', name: 'ban-condotel', component: () => import('../views/SellPostView.vue') },
-      { path: 'kho-nha-xuong', name: 'ban-kho-nha-xuong', component: () => import('../views/SellPostView.vue') },
-      { path: 'loai-bat-dong-san-khac', name: 'ban-loai-bat-dong-san-khac', component: () => import('../views/SellPostView.vue') },
+      { path: 'can-ho-chung-cu', name: 'ban-can-ho-chung-cu', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'nha-rieng', name: 'ban-nha-rieng', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'nha-biet-thu-lien-ke', name: 'ban-nha-biet-thu-lien-ke', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'nha-mat-pho', name: 'ban-nha-mat-pho', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'nha-pho-thuong-mai', name: 'ban-nha-pho-thuong-mai', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'dat-nen-du-an', name: 'ban-dat-nen-du-an', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'dat', name: 'ban-dat', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'trang-trai-khu-nghi-duong', name: 'ban-trang-trai-khu-nghi-duong', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'condotel', name: 'ban-condotel', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'kho-nha-xuong', name: 'ban-kho-nha-xuong', component: () => import('../views/ManagePost/SellPostView.vue') },
+      { path: 'loai-bat-dong-san-khac', name: 'ban-loai-bat-dong-san-khac', component: () => import('../views/ManagePost/SellPostView.vue') },
     ],
   },
 
   {
     path: "/nha-dat-cho-thue",
     name: "rentPost",
-    component: () => import("../views/SellPostView.vue"),
+    component: () => import("../views/ManagePost/SellPostView.vue"),
     children: [
-      { path: 'can-ho-chung-cu', name: 'cho-thue-can-ho-chung-cu', component: () => import("../views/SellPostView.vue") },
-      { path: 'nha-rieng', name: 'cho-thue-nha-rieng', component: () => import("../views/SellPostView.vue") },
-      { path: 'nha-biet-thu-lien-ke', name: 'cho-thue-nha-biet-thu-lien-ke', component: () => import("../views/SellPostView.vue") },
-      { path: 'nha-mat-pho', name: 'cho-thue-nha-mat-pho', component: () => import("../views/SellPostView.vue") },
-      { path: 'nha-thuong-mai', name: 'cho-thue-nha-thuong-mai', component: () => import("../views/SellPostView.vue") },
-      { path: 'nha-tro-phong-tro', name: 'cho-thue-nha-tro-phong-tro', component: () => import("../views/SellPostView.vue") },
-      { path: 'van-phong', name: 'cho-thue-van-phong', component: () => import("../views/SellPostView.vue") },
-      { path: 'sang-nhuong-cua-hang-ki-ot', name: 'cho-thue-sang-nhuong-cua-hang-ki-ot', component: () => import("../views/SellPostView.vue") },
-      { path: 'kho-nha-xuong-dat', name: 'cho-thue-kho-nha-xuong-dat', component: () => import("../views/SellPostView.vue") },
-      { path: 'loai-bat-dong-san-khac', name: 'cho-thue-loai-bat-dong-san-khac', component: () => import("../views/SellPostView.vue") },
+      { path: 'can-ho-chung-cu', name: 'cho-thue-can-ho-chung-cu', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'nha-rieng', name: 'cho-thue-nha-rieng', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'nha-biet-thu-lien-ke', name: 'cho-thue-nha-biet-thu-lien-ke', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'nha-mat-pho', name: 'cho-thue-nha-mat-pho', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'nha-thuong-mai', name: 'cho-thue-nha-thuong-mai', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'nha-tro-phong-tro', name: 'cho-thue-nha-tro-phong-tro', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'van-phong', name: 'cho-thue-van-phong', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'sang-nhuong-cua-hang-ki-ot', name: 'cho-thue-sang-nhuong-cua-hang-ki-ot', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'kho-nha-xuong-dat', name: 'cho-thue-kho-nha-xuong-dat', component: () => import("../views/ManagePost/SellPostView.vue") },
+      { path: 'loai-bat-dong-san-khac', name: 'cho-thue-loai-bat-dong-san-khac', component: () => import("../views/ManagePost/SellPostView.vue") },
     ],
   },
 
@@ -173,16 +184,19 @@ const routes = [
   {
     path: '/tim-kiem-tu-van',
     component: () => import('../views/ManageAdviceRequest/CreateAdviceRequestView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
     path: '/quan-ly-yeu-cau',
     component: () => import('../views/ManageAdviceRequest/ListRequestView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
     path: '/thong-tin-chi-tiet-yeu-cau/:id',
     component: () => import('../views/ManageAdviceRequest/RequestDetailView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
@@ -193,22 +207,26 @@ const routes = [
   {
     path: '/danh-sach-yeu-cau-dang-ky',
     component: () => import('../views/Broker/AdviceRequest/AppliedAdviceRequestView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
     path: '/dang-du-an-moi',
     component: () => import('../views/Enterprise/ManageProject/CreateProjectView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
     path: '/quan-ly-du-an',
     component: () => import('../views/Enterprise/ManageProject/ListProjectView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
     path: '/quan-ly-tai-khoan',
     name: 'quan-ly-tai-khoan',
     component: () => import('../views/ManageInfor/ProfileView.vue'),
+    meta: { showNavbar: true }
   },
 
   {
@@ -224,21 +242,163 @@ const routes = [
   },
 
   {
-    path: '/admin',
-    name: 'dashboard',
+    path: "/admin",
+    name: "dashboard",
     component: () => import('../views/Admin/DashboardView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
   },
 
   {
     path: '/admin/danh-sach-tin-cho-duyet',
-    name: '/danh-sach-tin-cho-duyet',
+    name: 'danh-sach-tin-cho-duyet',
     component: () => import('../views/Admin/Post/ListRequestPostView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
   },
 
   {
-    path: '/admin/chi-tiet-bai-dang/:id',
-    name: '/chi-tiet-bai-dang-admin',
+    path: '/admin/tin-cho-duyet/:id',
+    name: 'tin-cho-duyet-admin',
+    component: () => import('../views/Admin/Post/RequestPostDetailView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '/admin/danh-sach-tin-dang',
+    name: 'danh-sach-tin-dang-admin',
+    component: () => import('../views/Admin/Post/ManagePostView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '/admin/danh-sach-tin-dang/:id',
+    name: 'chi-tiet-tin-dang-admin',
     component: () => import('../views/Admin/Post/PostDetailView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  // Route đăng nhập
+  {
+    path: "/admin/dang-nhap",
+    name: "adminLogin",
+    component: () => import("../views/Admin/AdminLoginView.vue"),
+    meta: { hideHeader: true, hiveAdminNavbar: true }
+  },
+
+  {
+    path: "/admin/quan-ly-nguoi-dung",
+    name: "quan-ly-nguoi-dung",
+    component: () => import("../views/Admin/ManageUser/ListUserView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-nguoi-dung/:id",
+    name: "quan-ly-chi-tiet-nguoi-dung",
+    component: () => import("../views/Admin/ManageUser/UserDetailView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-doanh-nghiep",
+    name: "quan-ly-doanh-nghiep-admin",
+    component: () => import("../views/Admin/ManageUser/ListEnterpriseView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  // {
+  //   path: "/admin/quan-ly-doanh-nghiep/:id",
+  //   name: "quan-ly-chi-tiet-doanh-nghiep",
+  //   component: () => import("../views/Admin/ManageUser/UserDetailView.vue"),
+  //   meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  // },
+
+  {
+    path: "/admin/quan-ly-nha-moi-gioi",
+    name: "quan-ly-moi-gioi-admin",
+    component: () => import("../views/Admin/ManageUser/ListBrokerView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-nhan-su",
+    name: "quan-ly-nhan-su",
+    component: () => import("../views/Admin/ManageSubAdmin/ListSubAdminView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-nhan-su/tao-tai-khoan-moi",
+    name: "tao-tai-khoan-subadmin",
+    component: () => import("../views/Admin/ManageSubAdmin/CreateSubAdminAccountView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-tai-khoan",
+    name: "quan-ly-tai-khoan-admin",
+    component: () => import("../views/Admin/ManageInfor/ProfileView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/dang-tin-tuc",
+    name: "dang-tin-tuc",
+    component: () => import("../views/Admin/ManageNews/CreateNewsView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-tin-tuc",
+    name: "quan-ly-tin-tuc",
+    component: () => import("../views/Admin/ManageNews/ManageNewsView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/quan-ly-tin-tuc/:id",
+    name: "thong-tin-chi-tiet-tin-tuc-admin",
+    component: () => import("../views/Admin/ManageNews/NewsDetailView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: "/admin/chinh-sua-thong-tin-tin-tuc/:id",
+    name: "chinh-sua-tin-tuc-admin",
+    component: () => import("../views/Admin/ManageNews/EditNewsView.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '/admin/danh-sach-du-an-cho-duyet',
+    name: 'danh-sach-du-an-cho-duyet',
+    component: () => import('../views/Admin/ManageProject/ListRequestProjectView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '/admin/danh-sach-du-an',
+    name: 'danh-sach-du-an-admin',
+    component: () => import('../views/Admin/ManageProject/ListProjectView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '/admin/thong-tin-du-an/:id',
+    name: 'chi-tiet-du-an-admin',
+    component: () => import('../views/Admin/ManageProject/ProjectDetailView'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '/admin/quan-ly-quyen',
+    name: 'quan-ly-quyen',
+    component: () => import('../views/Admin/ManageRole/ManageRoleView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
+    path: '*',
+    component: () => import("../views/NotFoundView.vue"),
   }
 ];
 
@@ -246,6 +406,39 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return {
+        ...savedPosition,
+        behavior: 'smooth'
+      };
+    } else {
+      return { x: 0, y: 0, behavior: 'smooth' };
+    }
+  },
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem("adminToken");
+  const isAdmin = localStorage.getItem("isAdmin");
+  
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next({
+        name: 'adminLogin',
+        query: { redirect: to.fullPath }
+      });
+    } else if (to.matched.some(record => record.meta.requiresAdmin) && !isAdmin) {
+      next({
+        name: 'adminLogin',
+        query: { redirect: to.fullPath }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

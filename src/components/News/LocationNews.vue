@@ -3,11 +3,11 @@
         <h6> Tin tức BĐS tại các tỉnh thành sôi động nhất </h6>
         <hr>
         <div class="top-news-by-location">
-            <div class="news-by-location">
+            <div @click="goto('hn')" class="news-by-location">
                 <img src="https://images.foody.vn/images/_MG_0475_copy_copy.JPG" alt=""/>
                 <span> Hà Nội </span>
             </div>
-            <div class="news-by-location">
+            <div @click="goto('hcm')" class="news-by-location">
                 <img src="https://hinhanhdephd.com/wp-content/uploads/2020/01/tong-hop-nhung-hinh-anh-thanh-pho-dep-nhat-21-min-741x486.jpg" alt=""/>
                 <span> Hồ Chí Minh </span>
             </div>
@@ -17,7 +17,19 @@
 
 <script>
 export default {
-
+    methods: {
+        goto(province) {
+            var queryParams = {}
+            if(province) {
+                queryParams.p = province
+            }
+            this.$router.replace({ query: queryParams }).catch(err => {
+                if (err.name !== 'NavigationDuplicated') {
+                    throw err;
+                }
+            })
+        },
+    },
 }
 </script>
 
@@ -36,6 +48,7 @@ export default {
 }
 
 .news-by-location {
+    cursor: pointer;
     position: relative;
     width: 45%;
     height: 80px;

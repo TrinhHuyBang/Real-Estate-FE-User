@@ -11,19 +11,19 @@
     </el-breadcrumb>
     <h2>{{ project.name }}</h2>
     <span class="label">{{ project.address }}</span>
-    <a class="link-to-detail" style="margin-left: 10px;" href="#project-loaction"
-      >Xem bản đồ <i class="el-icon-right"></i
-    ></a>
+    <span @click="scrollTo('#project-loaction')" style="margin-left: 10px; cursor: pointer; color: #0d6efd">
+      Xem bản đồ <i class="el-icon-right"></i
+    >
+    </span>
 
-    <el-row class="project-image-list" :gutter="20">
-      <el-col
-        v-for="(image, index) in project.images"
-        :key="index"
-        :span="24 / project.images.length"
-      >
-        <img class="project-image" :src="image" alt="" />
-      </el-col>
-    </el-row>
+    <el-carousel class="project-image-list" :interval="2000" type="card" height="400px">
+      <el-carousel-item v-for="item in project.images" :key="item">
+        <el-image
+          :src="item"
+          fit="contain">
+        </el-image>
+      </el-carousel-item>
+    </el-carousel>
 
     <div class="row project-info" style="min-width: 900px">
       <div class="col-8" style="min-width: 600px">
@@ -114,19 +114,7 @@
               <svg data-v-167ecec1="" width="16" height="18" viewBox="0 0 30 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path data-v-167ecec1="" d="M0 4.5C0 3.50544 0.395088 2.55161 1.09835 1.84835C1.80161 1.14509 2.75544 0.75 3.75 0.75H26.25C27.2446 0.75 28.1984 1.14509 28.9016 1.84835C29.6049 2.55161 30 3.50544 30 4.5V19.5C30 20.4946 29.6049 21.4484 28.9016 22.1516C28.1984 22.8549 27.2446 23.25 26.25 23.25H3.75C2.75544 23.25 1.80161 22.8549 1.09835 22.1516C0.395088 21.4484 0 20.4946 0 19.5V4.5ZM3.75 2.625C3.25272 2.625 2.77581 2.82254 2.42417 3.17417C2.07254 3.52581 1.875 4.00272 1.875 4.5V4.90688L15 12.7819L28.125 4.90688V4.5C28.125 4.00272 27.9275 3.52581 27.5758 3.17417C27.2242 2.82254 26.7473 2.625 26.25 2.625H3.75ZM28.125 7.09312L19.2975 12.39L28.125 17.8219V7.09312ZM28.0612 19.9856L17.4862 13.4775L15 14.9681L12.5138 13.4775L1.93875 19.9838C2.0453 20.3827 2.28059 20.7354 2.60811 20.987C2.93562 21.2385 3.33702 21.3749 3.75 21.375H26.25C26.6627 21.3751 27.0639 21.2389 27.3914 20.9877C27.7189 20.7365 27.9544 20.3843 28.0612 19.9856ZM1.875 17.8219L10.7025 12.39L1.875 7.09312V17.8219Z" fill="#ffffff"></path></svg>
               Yêu cầu liên hệ lại
             </el-button>
-            <el-dialog class="dialog-contact" title="Yêu cầu liên hệ lại" width="400px" :visible.sync="dialogContact">
-              <el-form >
-                <span>Chúng tôi sẽ kết nối bạn với những môi giới/ chủ đầu tư của dự án</span>
-                <el-form-item >
-                  <el-input class="input-contact" v-model="nameContact" autocomplete="off" placeholder="Họ tên*"></el-input>
-                  <el-input class="input-contact" v-model="phoneContact" autocomplete="off" placeholder="Số điện thoại*"></el-input>
-                  <el-input class="input-contact" type="textarea" :autosize="{ minRows: 4}" v-model="mailContent" autocomplete="off" placeholder="Lời nhắn"></el-input>
-                </el-form-item>
-              </el-form>
-              <span slot="footer" class="dialog-footer">
-                <el-button class="btn-investor-contact" type="primary">Gửi thông tin</el-button>
-              </span>
-            </el-dialog>
+            <ContactModal :isActive="dialogContact" :email="project?.investor?.email" :type="'enterprise'" @closeContactModal="dialogContact = !dialogContact" />
           </div>
         </div>
       </div>
@@ -138,6 +126,7 @@
 </template>
 
 <script>
+import ContactModal from '@/components/Global/ContactModal.vue'
 import ProjectApi from '@/api/project'
 import ListProjectInfor from "@/data/listProjectInfor"
 import ProjectForYou from "@/components/Home/ProjectForYou.vue"
@@ -145,6 +134,7 @@ import { mapState } from 'vuex'
 export default {
   components: {
     "project-for-you": ProjectForYou,
+    ContactModal,
   },
 
   computed: mapState({
@@ -214,9 +204,7 @@ export default {
     },
 
     handleOpenDialogContact() {
-      this.nameContact = this.user && this.user.name ? this.user.name : null
-      this.phoneContact = this.user && this.user.phone ? this.user.phone : null
-      this.dialogContact = true
+      this.dialogContact = !this.dialogContact
     },
 
     copyRefCodeToClipboard(data) {
@@ -235,11 +223,11 @@ export default {
 
 <style scoped>
 .project-detail {
-  margin: 7% 10% 0 10%;
+  padding-top: 3%;
 }
 
 .project-info {
-  width: 95%;
+  width: 90%;
   margin-top: 30px;
 }
 
@@ -275,6 +263,23 @@ export default {
 }
 
 .investor-information-single {
+  margin-top: 5px;
+}
+
+.el-carousel__item {
+  background-color: #686666;
+  display: flex;
+  justify-content: center;
+}
+
+.render-html >>> img {
+  width: -webkit-fill-available !important;
+  height: auto !important;
+}
+
+.render-html >>> figcaption {
+  display: flex;
+  justify-content: center;
   margin-top: 5px;
 }
 </style>

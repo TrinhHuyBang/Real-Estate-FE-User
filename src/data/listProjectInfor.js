@@ -1,7 +1,7 @@
 export default [
     {
         label: 'Giá',
-        name: 'price',
+        name: 'start_price',
     },
     {
         label: 'Diện tích',
@@ -13,7 +13,11 @@ export default [
     },
     {
         label: 'Số toà',
-        name: 'buiding',
+        name: 'building',
+    },
+    {
+        label: 'Quy mô',
+        name: 'scale',
     },
     {
         label: 'Pháp lý',
@@ -27,5 +31,8 @@ export default [
         label: 'Chủ thầu',
         name: 'builders',
     },
-
+    {
+        label: 'Thiết kế',
+        name: 'designer',
+    }
 ]

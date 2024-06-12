@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="margin-top: 20px">
         <div v-if="brokers && brokers.length">
             <div class="single-broker-card" v-for="broker in brokers" :key="broker.id">
                 <div>

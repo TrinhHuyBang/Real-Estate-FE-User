@@ -1,8 +1,4 @@
 <template>
-<div class="create-post-view">
-  <div class="manage-nav">
-    <manage-nav></manage-nav>
-  </div>
   <div class="create-post">
       <div class="container">
         <el-card class="post-infor card">
@@ -127,12 +123,10 @@
         </el-card>
       </div>
   </div>
-</div>
   
 </template>
 
 <script>
-import ManageNav from "@/layouts/ManageNav.vue"
 import postType from "@/data/postType"
 import axios from "axios"
 import ProjectApi from '@/api/project'
@@ -141,9 +135,6 @@ import { Notification } from 'element-ui'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
-  components: {
-    "manage-nav": ManageNav,
-  },
   data() {
     return {
         type_id: null,
@@ -350,19 +341,10 @@ export default {
 </script>
 
 <style scoped>
-.create-post-view{
-  display: flex;
-  flex-direction: row;
-}
-
 .card {
   width: 60%;
-  margin: 10px;
+  margin: 30px 10px 10px 10px;
   padding: 20px;
-}
-
-.create-post {
-  width: 80%;
 }
 
 .container {

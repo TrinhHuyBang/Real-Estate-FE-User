@@ -1,8 +1,4 @@
 <template>
-  <div class="manage-list-bookmark-post">
-    <div class="manage-post-nav">
-      <manage-nav></manage-nav>
-    </div>
     <div class="container">
         <h4>Quản lý tài khoản</h4>
         <el-tabs v-model="activeName" >
@@ -11,7 +7,7 @@
           <broker-profile-tab v-if="user.role == role.broker" />
           <enterprise-profile-tab v-if="user.role == role.enterprise" />
         </el-tab-pane>
-        <el-tab-pane label="Cài đặt tài khoản" name="password">
+        <el-tab-pane label="Thay đổi mật khẩu" name="password">
           <password-tab/>
         </el-tab-pane>
         <el-tab-pane v-if="user.role == role.user" label="Đăng ký tài khoản doanh nghiệp" name="enterpriseRegister">
@@ -25,11 +21,9 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-  </div>
 </template>
 
 <script>
-import ManageNav from "@/layouts/ManageNav.vue";
 import ProfileTab from '@/components/ManageInfor/ProfileTab.vue';
 import PasswordTab from '@/components/ManageInfor/PasswordTab.vue';
 import EnterpriseRegisterTab from '@/components/ManageInfor/EnterpriseRegisterTab.vue';
@@ -42,7 +36,6 @@ import EnterpriseProfileTab from '@/components/Enterprise/MangeProfile/Enterpris
 export default {
     
     components: {
-        ManageNav,
         ProfileTab,
         PasswordTab,
         EnterpriseRegisterTab,
@@ -68,12 +61,4 @@ export default {
 </script>
 
 <style scoped>
-.manage-list-bookmark-post {
-  display: flex;
-  flex-direction: row;
-}
-
-.container {
-  margin: 30px 0 0 30px;
-}
 </style>

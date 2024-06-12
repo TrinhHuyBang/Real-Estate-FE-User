@@ -11,7 +11,7 @@
                     <div class="el-upload__text avt-text">Tải ảnh</div>
                     <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
                 </label>
-                <label for="fileInput" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${imagePreview(avatar)}')` }">
+                <label for="fileInput" class="upload-icon" v-if="hasUploadedAvatar" :style="{ 'background-image': `url('${avatar}')` }">
                     <input type="file" id="fileInput" @change="handleFileChange" accept="image/*" ref="fileInput" style="display: none"/>
                 </label>
             </div>
@@ -68,7 +68,7 @@
           <span v-if="submitted && !$v.confirmPassword.required" class="p-error">Cần xác thực lại mật khẩu!</span>
           <span v-if="submitted && confirmPassword && !$v.confirmPassword.isEqPassword" class="p-error">Không trùng khớp với mật khẩu!</span>
         </el-form-item>
-        <el-button class="register-btn" type="primary" native-type="submit"
+        <el-button class="register-btn" type="primary" native-type="submit" :loading="loading"
           >Đăng ký</el-button
         >
         <div style="text-align: center; margin-top: 20px">
@@ -90,6 +90,7 @@ import { required, email } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
+      loading: false,
       hasUploadedAvatar: false,
       username: "",
       email: "",
@@ -131,27 +132,18 @@ export default {
       if(this.$v.$invalid) {
         return false
       }
-      if(this.avatar) {
-        var storageRef = ref(
-          storage,
-          `avatars/` +
-            Math.random().toString(36).slice(2, 8) +
-            `${this.avatar.name}`
-        );
-        await uploadBytes(storageRef, this.avatar);
-        var downloadURL = await getDownloadURL(storageRef);
-      }
-
+      this.loading = true
       var userData = {
         'username': this.username,
         'email': this.email,
         'phone': this.phone,
         'password': this.password,
-        'avatar': downloadURL,
+        'avatar': this.avatar,
       };
       AuthApi.regiter(
         userData,
         () => {
+          this.loading = false
           Notification.success({
             title: "Thành công",
             message: "Đăng ký tài khoản thành công! Xác thực email để tiếp tục!",
@@ -159,6 +151,7 @@ export default {
           this.$router.push('/dang-nhap');
         },
         (error) => {
+          this.loading = false
           Notification.error({
             title: "Thất bại",
             message: error.data.error,
@@ -167,16 +160,17 @@ export default {
       )
     },
 
-    handleFileChange(event) {
+    async handleFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        this.avatar = file;
+        this.avatar = URL.createObjectURL(file)
         this.hasUploadedAvatar = true; // Đánh dấu rằng đã có ảnh
+        const newImageName = this.generateUniqueName(file.name) // Tạo tên mới cho ảnh
+        const storageRef = ref(storage, `avatars/` + newImageName); // Sử dụng tên mới
+        await uploadBytes(storageRef, file);
+        this.avatar = await getDownloadURL(storageRef);
       }
       this.$refs.fileInput.value = '';
-    },
-    imagePreview(file) {
-      return URL.createObjectURL(file);
     },
   },
 };

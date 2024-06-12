@@ -1,11 +1,16 @@
 <template>
-  <div class="list-request-post">
-    <div class="manage-post-nav">
-      <admin-nav></admin-nav>
-    </div>
     <div class="container">
       <h4>Danh sách tin chờ duyệt</h4>
       <p>Hiện có {{ total }} bất động sản</p>
+      <el-input
+        placeholder="Tìm kiếm theo ID hoặc tên dự án"
+        class="search-field"
+        v-model="search"
+        clearable
+      >
+      </el-input>
+      <el-button type="success" style="margin-left: 10px" @click="listRequestPost(1)">Tìm kiếm</el-button>
+      <el-button type="primary" @click="handleReset()">Đặt lại</el-button>
       <div class="select-post-type">
         <el-select
           style="margin-bottom: 10px"
@@ -23,34 +28,36 @@
           <el-button :class="{ active_selected: type === 'rent' }" @click="type = 'rent'">Cho thuê</el-button>
         </div>
       </div>
-      <div class="content-page">
-        <div v-for="post in posts" :key="post.id">
-          <single-post :post="post"  @acceptRejectAction="listRequestPost(1)"/>
-        </div>
+      <div style="width: 100%;">
+        <list-post :posts="posts" @acceptRejectAction="updateRequestCount()"/>
         <div v-if="posts.length" class="paginate-page">
           <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
-import PostApi from '@/api/post'
-import SinglePost from '@/components/Admin/Post/SinglePost.vue';
-import AdminNav from "@/layouts/Admin/AdminNav.vue";
+import { mapActions, mapState } from "vuex"
+import { Notification } from 'element-ui'
+import AdminPostApi from '@/api/admin/adminPost'
+import ListPost from '@/components/Admin/Post/ListPost.vue';
 export default {
   components: {
-    SinglePost,
-    AdminNav,
+    ListPost,
   },
+  computed: mapState({
+    postRequestCount: (state) => state.postRequestCount,
+  }),
   mounted() {
     this.listRequestPost(1)
   },
   data() {
     return {
       selectedOrderBy: "Tin mới nhất",
+      requestNumber: 0,
       posts: [],
+      search: "",
       currentPage: 1,
       totalPage: 0,
       perPage: 0,
@@ -60,9 +67,10 @@ export default {
   },
   methods: {
     listRequestPost(page) {
-      PostApi.listRequestPost(
+      AdminPostApi.listRequestPost(
         page,
         {
+          'search' : this.search,
           'order_by': this.selectedOrderBy,
           'type': this.type,
         },
@@ -72,12 +80,33 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
-        },
+        }, (error) => {
+          if(error?.response?.data?.code) {
+            if(error.response.data.code === 403) {
+              Notification.error({
+                title: "Thất bại",
+                message: error.response.data.error,
+              });
+              this.goBack()
+            }
+          }
+        }
       )
     },
     handleChangPage(val) {
       this.listRequestPost(val)
     },
+    handleReset() {
+      this.search = ''
+      this.listRequestPost(1)
+    },
+    ...mapActions(['commitSetPostRequestCount']),
+    updateRequestCount() {
+      this.requestNumber = this.postRequestCount
+      this.requestNumber -= 1
+      this.commitSetPostRequestCount(this.requestNumber)
+      this.listRequestPost(1)
+    }
   },
   watch: {
     selectedOrderBy() {
@@ -96,11 +125,6 @@ export default {
   width: 70%;
 }
 
-.manage-post-nav {
-  width: 250px;
-  margin-right: 20px;
-}
-
 .list-request-post {
   display: flex;
   flex-direction: row;
@@ -114,9 +138,13 @@ export default {
 }
 
 .type-post {
-  /* position: absolute; */
-  /* right: 100px; */
-  margin-left: 50%;
+  position: absolute;
+  right: 20px;
+}
+
+.search-field {
+  width: 400px;
+  margin-bottom: 10px;
 }
 
 .active_selected {

@@ -10,7 +10,7 @@
                     <input type="file" id="fileInput1" @change="handleLogoChange" accept="image/*" ref="fileInput1" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedLogo" @click="handleDeleteLogo"></span>
-                <label for="fileInput1" class="upload-icon" v-if="hasUploadedLogo" :style="{ 'background-image': `url('${imagePreview(logo)}')` }">
+                <label for="fileInput1" class="upload-icon" v-if="hasUploadedLogo" :style="{ 'background-image': `url('${logo}')` }">
                     <input type="file" id="fileInput1" @change="handleLogoChange" accept="image/*" ref="fileInput1" style="display: none"/>
                 </label>
             </div>
@@ -23,7 +23,7 @@
                     <input type="file" id="fileInput2" @change="handleCertificateChange" accept="image/*" ref="fileInput2" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedCertificate" @click="handleDeleteCertificate"></span>
-                <label for="fileInput2" class="upload-icon" v-if="hasUploadedCertificate" :style="{ 'background-image': `url('${imagePreview(certificate)}')` }">
+                <label for="fileInput2" class="upload-icon" v-if="hasUploadedCertificate" :style="{ 'background-image': `url('${certificate}')` }">
                     <input type="file" id="fileInput2" @change="handleCertificateChange" accept="image/*" ref="fileInput2" style="display: none"/>
                 </label>
             </div>
@@ -77,7 +77,7 @@
             </el-select>
 
             <div class="btn-action">
-              <el-button type="primary" class="btn" icon="el-icon-check" @click="handleSubmit()">Lưu</el-button>
+              <el-button type="primary" class="btn" icon="el-icon-check" :loading="loading" @click="handleSubmit()">Lưu</el-button>
               <el-button type="danger" class="btn" icon="el-icon-close">Huỷ bỏ</el-button>
             </div>
         </div>
@@ -115,6 +115,7 @@ export default {
         },
         fields: fields,
         submitted: false,
+        loading: false,
       };
     },
     validations: {
@@ -162,34 +163,20 @@ export default {
         if(this.$v.$invalid) {
           return false
         }
-        var storageRef = null
-        storageRef = ref(
-          storage,
-          `enterprise/logo/` +
-            Math.random().toString(36).slice(2, 8) +
-            `${this.logo.name}`
-        );
-        await uploadBytes(storageRef, this.logo)
-        this.enterprise.logo = await getDownloadURL(storageRef)
-
-        storageRef = ref(
-          storage,
-          `enterprise/certificate/` +
-            Math.random().toString(36).slice(2, 8) +
-            `${this.certificate.name}`
-        );
-        await uploadBytes(storageRef, this.certificate)
-        this.enterprise.certificate_url = await getDownloadURL(storageRef)
-
+        this.loading = true
+        this.enterprise.logo = this.logo
+        this.enterprise.certificate_url = this.certificate
         AuthApi.enterpriseRegister(
           this.enterprise,
           () => {
+            this.loading = false
             Notification.success({
               title: "Thành công",
               message: "Bạn đã gửi yêu cầu đăng kí tài khoản doanh nghiệp thành công! Yêu cầu sẽ được kiểm duyệt sau!",
             });
           },
           () => {
+            this.loading = false
             Notification.error({
               title: "Thất bại",
               message: "Gửi yêu cầu đăng ký thất bại",
@@ -197,21 +184,28 @@ export default {
           }
         )
       },
-
-      handleCertificateChange(event) {
-        const certificate = event.target.files[0];
-          if (certificate) {
-          this.certificate = certificate;
-          this.hasUploadedCertificate = true;
-          }
+      async handleCertificateChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+          this.certificate = URL.createObjectURL(file)
+          this.hasUploadedCertificate = true; // Đánh dấu rằng đã có ảnh
+          const newImageName = this.generateUniqueName(file.name) // Tạo tên mới cho ảnh
+          const storageRef = ref(storage, `enterprise/certificate/` + newImageName); // Sử dụng tên mới
+          await uploadBytes(storageRef, file);
+          this.certificate = await getDownloadURL(storageRef);
+        }
         this.$refs.fileInput2.value = '';
       },
-      handleLogoChange(event) {
-        const logo = event.target.files[0];
-          if (logo) {
-            this.logo = logo;
-            this.hasUploadedLogo = true
-          }
+      async handleLogoChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+          this.logo = URL.createObjectURL(file)
+          this.hasUploadedLogo = true; // Đánh dấu rằng đã có ảnh
+          const newImageName = this.generateUniqueName(file.name) // Tạo tên mới cho ảnh
+          const storageRef = ref(storage, `enterprise/logo/` + newImageName); // Sử dụng tên mới
+          await uploadBytes(storageRef, file);
+          this.logo = await getDownloadURL(storageRef);
+        }
         this.$refs.fileInput1.value = '';
       },
       handleDeleteLogo() {
@@ -222,14 +216,11 @@ export default {
         this.hasUploadedCertificate = false
         this.certificate = null
       },
-      imagePreview(file) {
-          return URL.createObjectURL(file);
-      },
     },
 }
 </script>
 
-<style>
+<style scoped>
 .profile {
     display: flex;
     flex-direction: row;
@@ -298,6 +289,7 @@ export default {
 }
 
 .delete-avatar-icon {
+  cursor: pointer;
   position: absolute;
   right: -15px;
   top: -10px;

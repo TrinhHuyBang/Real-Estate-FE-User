@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="search">
-      <p>Website về bất động sản - Mua bán cho thuê nhà đất toàn quốc</p>
-      <el-form :model="searchForm" @submit.prevent="submitSearch">
+      <p>Hệ thống quản lý và quảng bá bất động sản</p>
+      <!-- <el-form :model="searchForm" @submit.prevent="submitSearch">
         <div class="input-form">
           <i class="el-icon-location-information" style="margin: 10px 10px 10px 20px; color: red; font-size:20px;"></i>
           <el-input placeholder="Tìm kiếm theo địa điểm, quận, tên đường, ..." v-model="searchForm.searchKey" class="input-with-select">
@@ -13,7 +13,7 @@
             <el-button slot="append" icon="el-icon-search" type="primary" native-type="submit"></el-button>
           </el-input>
         </div>
-      </el-form>
+      </el-form> -->
     </div>
     <div class="home">
       <div class="news">
@@ -32,10 +32,11 @@
 
 <script>
 // @ is an alias to /src
-import RealEstateForYou from "@/components/Home/RealEstateForYou.vue";
-import ProjectForYou from "@/components/Home/ProjectForYou.vue";
-import LocationRealEstateVue from '@/components/Home/LocationRealEstate.vue';
-import HeadlineNews from '@/components/Home/HeadlineNews.vue';
+import RealEstateForYou from "@/components/Home/RealEstateForYou.vue"
+import ProjectForYou from "@/components/Home/ProjectForYou.vue"
+import LocationRealEstateVue from '@/components/Home/LocationRealEstate.vue'
+import HeadlineNews from '@/components/Home/HeadlineNews.vue'
+import NewsApi from "@/api/news"
 
 export default {
   data() {
@@ -63,63 +64,44 @@ export default {
         },
       ],
       activeName: "headline",
-      newsList: [
-        {
-            id: 1,
-            title: "Dự Báo Thị Trường BĐS 2024: Những Chuyển Biến Đầy Khởi Sắc?",
-            image: "https://img.iproperty.com.my/angel/520x300-crop/wp-content/uploads/sites/7/2023/12/bds-1-1-2.jpg",
-            sub_title: "Khu vực cửa ngõ thành phố có nguồn cung giá hợp lí, điều kiện an cư tiện nghi, chi phí sinh hoạt hàng ngày rẻ… những điều này đang tác động tích cực đến tâm lí “thoát li trung tâm” của người mua nhà hiện nay. ",
-            author: "Nguyễn Nam",
-            created_at: "2023-12-17 14:27:10",
-        },
-        {
-            id: 2,
-            title: "Lãi Vay Ưu Đãi, Rước Ngay Nhà Đẹp Xế Sang Rộn Ràng Đón Tết Cùng BIDV",
-            image: "https://img.iproperty.com.my/angel/520x300-crop/wp-content/uploads/sites/7/2023/12/bds-2-1.jpg",
-            sub_title: "Khu vực cửa ngõ thành phố có nguồn cung giá hợp lí, điều kiện an cư tiện nghi, chi phí sinh hoạt hàng ngày rẻ… những điều này đang tác động tích cực đến tâm lí “thoát li trung tâm” của người mua nhà hiện nay. ",
-            author: "Trịnh Huy Bằng",
-            created_at: "2023-12-17 14:27:10",
-        },
-        {
-            id: 3,
-            title: "Loạt Chính Sách Bán Hàng Khủng Kích Cầu Người Mua Cuối Năm",
-            image: "https://img.iproperty.com.my/angel/750x1000-fit/wp-content/uploads/sites/7/2023/12/dong-nai-1.jpg",
-            sub_title: "Khu vực cửa ngõ thành phố có nguồn cung giá hợp lí, điều kiện an cư tiện nghi, chi phí sinh hoạt hàng ngày rẻ… những điều này đang tác động tích cực đến tâm lí “thoát li trung tâm” của người mua nhà hiện nay. ",
-            author: "Nguyễn Nam",
-            created_at: "2023-12-01 14:27:10",
-        },
-        {
-            id: 4,
-            title: "Sắp Diễn Ra Diễn Đàn “Thị Trường Bất Động Sản Năm 2024 - Nhận Diện Thách Thức Và Cơ Hội Phục Hồi”",
-            image: "https://img.iproperty.com.my/angel/520x300-crop/wp-content/uploads/sites/7/2023/12/quan-5-gan-quan-nao-ava.jpg",
-            sub_title: "Khu vực cửa ngõ thành phố có nguồn cung giá hợp lí, điều kiện an cư tiện nghi, chi phí sinh hoạt hàng ngày rẻ… những điều này đang tác động tích cực đến tâm lí “thoát li trung tâm” của người mua nhà hiện nay. ",
-            author: "Trịnh Huy Bằng",
-            created_at: "2023-12-17 14:27:10",
-        },
-        {
-            id: 5,
-            title: "Dự Báo Hướng Đi Của Thị Trường Đất Nền Năm 2024",
-            image: "https://img.iproperty.com.my/angel/520x300-crop/wp-content/uploads/sites/7/2023/12/chung-cu-mini-1.jpg",
-            sub_title: "Khu vực cửa ngõ thành phố có nguồn cung giá hợp lí, điều kiện an cư tiện nghi, chi phí sinh hoạt hàng ngày rẻ… những điều này đang tác động tích cực đến tâm lí “thoát li trung tâm” của người mua nhà hiện nay. ",
-            author: "Nguyễn Nam",
-            created_at: "2024-01-03 14:27:10",
-        },
-      ],
+      newsList: [],
     };
   },
   components: {
     RealEstateForYou,
     ProjectForYou,
     LocationRealEstateVue,
-    'headline-news' : HeadlineNews,
+    HeadlineNews,
   },
+
+  created() {
+    this.listNews()
+  },
+
+  methods: {
+    listNews() {
+      NewsApi.listHeadline(
+        {
+          'type': this.activeName,
+        },
+        (response) => {
+          this.newsList = response.data
+        },
+      )
+    },
+  },
+  watch: {
+    activeName() {
+      this.listNews()
+    },
+  }
 };
 </script>
 
 <style scoped>
 @media screen and (min-width:1260px){
   .home {
-    margin: 5% 10% 0 10%;
+    margin: 3% 10% 0 10%;
   }
 }
 
@@ -146,13 +128,21 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .search > p {
-  justify-items: center;
-  color: white;
-  font-weight: 500;
-  font-size: 2em;
+  display: flex;
+  justify-content: center;
+  background-color: #409EFF;
+  align-items: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 45px;
+  padding: 20px;
+  border-radius: 20px;
 }
 
 .input-form {

@@ -28,9 +28,11 @@
           <li>Các tin đăng đang hiển thị của quý khách sẽ tiếp tục được hiển thị tới hết thời gian đăng tin.</li>
           <li>Số điện thoại chính đăng ký tài khoản này và các số điện thoại đăng tin của quý khách sẽ không thể được sử dụng lại để đăng ký tài khoản mới.</li>
         </ul>
-        <el-button type="danger" class="action-btn" native-type="submit"
-          >Xoá tài khoản</el-button
-        >
+        <div class="action-btn">
+          <el-button type="danger" native-type="submit"
+            >Xoá tài khoản</el-button
+          >
+        </div>
       </el-form>
     </div>
     <el-dialog
@@ -91,7 +93,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .account-tab {
   width: 40%;
   margin-left: 20%;
@@ -108,7 +110,9 @@ a {
 }
 
 .action-btn {
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 35px;
 }
 .el-dialog {
   border-radius: 10px;
