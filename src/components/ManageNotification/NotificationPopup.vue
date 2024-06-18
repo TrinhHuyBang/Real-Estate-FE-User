@@ -79,7 +79,7 @@
         </template>
       </div>
       <div class="notification-footer">
-        <el-button @click="gotoPage('quan-ly-thong-bao')" type="text">Xem tất cả thông báo</el-button>
+        <el-button @click="gotoNotificationPage('quan-ly-thong-bao')" type="text">Xem tất cả thông báo</el-button>
       </div>
     </div>
   </div>
@@ -157,6 +157,14 @@ export default {
           }
         );
       }
+    },
+    gotoNotificationPage(page) {
+      this.$emit('close')
+      this.$router.push({ name: page }).catch((err) => {
+        if (err.name !== "NavigationDuplicated") {
+          throw err;
+        }
+      })
     },
     showNotificationDetail(notification) {
       this.selectedNotification = notification // Set selected notification

@@ -674,6 +674,10 @@ export default {
     },
     type() {
       this.listPost(this.currentPage)
+    },
+    '$route'() {
+      this.setPostType()
+      this.applyFilter()
     }
   },
 }
@@ -703,7 +707,7 @@ export default {
 .filter-post {
   margin: 30px 0 0 40px;
   min-width: 250px;
-  width: 60%;
+  width: 70%;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 25px;

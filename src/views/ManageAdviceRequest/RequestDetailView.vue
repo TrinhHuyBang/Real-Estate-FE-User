@@ -103,6 +103,8 @@ export default {
   data() {
     return {
       request: {
+        province: "-",
+        district: "-",
         data: {
           price: null,
         },

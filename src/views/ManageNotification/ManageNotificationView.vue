@@ -59,7 +59,8 @@
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column label="Thông báo">
           <template slot-scope="scope">
-            <div
+            <div @click="open(scope.row)"
+              style="cursor: pointer"
               :class="
                 scope.row.status === 0
                   ? 'unread-notification'
@@ -123,15 +124,21 @@
         </svg>
         <p>Hiện tại bạn không có thông báo nào</p>
       </div>
-      <div  v-if="notifications.length" class="paginate-page">
-        <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
+      <div v-if="notifications.length" class="paginate-page">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="perPage"
+          :page-count="totalPage"
+          @current-change="handleChangPage"
+        ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import NotificationApi from "@/api/notification";
 export default {
   mounted() {
@@ -139,6 +146,7 @@ export default {
   },
   data() {
     return {
+      numberNotification: 0,
       multipleSelection: [],
       status: false,
       checked: false,
@@ -149,6 +157,9 @@ export default {
       total: 0,
     };
   },
+  computed: mapState({
+    notificationCount: (state) => state.notificationCount,
+  }),
 
   methods: {
     ...mapActions(["commitSetNotificationCount"]),
@@ -156,6 +167,28 @@ export default {
       this.listNotification(val);
     },
 
+    open(notification) {
+      this.$alert(notification.message, notification.message, {
+        showCancelButton: false,
+        showConfirmButton: false,
+        customClass: 'my-custom-alert'
+      }).catch(() => {})
+      if(!notification.status) {
+        this.markAsRead(notification)
+      }
+    },
+
+    markAsRead(notification) {
+      NotificationApi.markAsRead(notification.id,
+        () => {
+          this.numberNotification = this.notificationCount ? this.notificationCount : 0
+          this.numberNotification = this.numberNotification - 1
+          this.commitSetNotificationCount(this.numberNotification)
+          notification.status = 1
+        },
+      )
+    },
+    
     listNotification(page) {
       NotificationApi.list(
         page,
@@ -189,6 +222,7 @@ export default {
           this.numberNotification = 0;
           this.commitSetNotificationCount(this.numberNotification);
           this.checked = false;
+          this.toggleSelection();
         }
       );
     },

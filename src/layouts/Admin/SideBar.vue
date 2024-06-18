@@ -67,12 +67,13 @@
 <script>
 import { mapState } from "vuex";
 import AdminAuthApi from "@/api/admin/adminAuth";
+
 export default {
   data() {
     return {
       countUserRequest: 0,
       activeMenu: null,
-      activeSubMenu: {}, // Lưu trạng thái active của submenu
+      activeSubMenu: {},
       menuItems: [
         {
           name: "Dashboard",
@@ -193,7 +194,7 @@ export default {
     postRequestCount: (state) => state.postRequestCount,
     projectRequestCount: (state) => state.projectRequestCount,
     enterpriseRequestCount: (state) => state.enterpriseRequestCount,
-    brokerRequestCount: (state) => state.brokerRequestCount,  
+    brokerRequestCount: (state) => state.brokerRequestCount,
   }),
   methods: {
     toggleSidebar() {
@@ -220,6 +221,8 @@ export default {
     toggleSubMenu(menu, subMenu) {
       this.activeSubMenu = {};
       this.$set(this.activeSubMenu, menu, subMenu);
+      // localStorage.setItem('activeSubMenu', JSON.stringify(this.activeSubMenu));
+
       this.$router.push(subMenu.page).catch((err) => {
         if (err.name !== "NavigationDuplicated") {
           throw err;
@@ -245,16 +248,49 @@ export default {
         window.location.assign("/admin/dang-nhap");
       });
     },
+    setActiveMenu() {
+      const routePath = this.$route.path;
+      let found = false;
+
+      this.menuItems.forEach((menu) => {
+        if (menu.page === routePath) {
+          this.activeMenu = menu.name;
+          found = true;
+        }
+        if (menu.subMenu) {
+          menu.subMenu.forEach((subMenu) => {
+            if (subMenu.page === routePath) {
+              this.activeMenu = menu.name;
+              this.activeSubMenu = { [menu.name]: subMenu };
+              found = true;
+            }
+          });
+        }
+      });
+
+      if (!found) {
+        this.activeMenu = "Dashboard";
+      }
+    },
   },
   watch: {
     enterpriseRequestCount(val) {
       this.countUserRequest = this.brokerRequestCount + val
     },
-
     brokerRequestCount(val) {
       this.countUserRequest = this.enterpriseRequestCount + val
     },
-  }
+    '$route'() {
+        this.setActiveMenu();
+    }
+  },
+  created() {
+    this.setActiveMenu();
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.setActiveMenu();
+    next();
+  },
 };
 </script>
 

@@ -270,6 +270,10 @@ export default {
     startFilterPrice() {
       this.updatePriceSelected()
     },
+    '$route'() {
+      this.setProjectType()
+      this.applyFilter()
+    }
   }
 }
 </script>

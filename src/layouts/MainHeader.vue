@@ -1,65 +1,69 @@
 <template>
   <el-header class="header shadow-sm" style="height: 90px">
-    <el-menu
-      class="el-menu-demo"
-      mode="horizontal"
-      menu-trigger="hover"
-      :router="true"
-    >
-      <el-menu-item index="/" class="logo">
-        <img class="logo" src="/web_logo.jpg"
-        alt="Logo"/>
-      </el-menu-item>
-      <el-submenu index="/nha-dat-ban" @click="handleChangPagehange('/nha-dat-ban')">
-        <template slot="title">Nhà đất bán</template>
-        <el-menu-item index="1" @click="handleChangPagehange('/nha-dat-ban/can-ho-chung-cu')">Bán căn hộ chung cư</el-menu-item>
-        <el-menu-item index="2" @click="handleChangPagehange('/nha-dat-ban/nha-rieng')">Bán nhà riêng</el-menu-item>
-        <el-menu-item index="3" @click="handleChangPagehange('/nha-dat-ban/nha-biet-thu-lien-ke')">Bán nhà biệt thự liền kề</el-menu-item>
-        <el-menu-item index="4" @click="handleChangPagehange('/nha-dat-ban/nha-mat-pho')">Bán nhà mặt phố</el-menu-item>
-        <el-menu-item index="5" @click="handleChangPagehange('/nha-dat-ban/nha-pho-thuong-mai')">Bán nhà phố thương mại</el-menu-item>
-        <el-menu-item index="6" @click="handleChangPagehange('/nha-dat-ban/dat-nen-du-an')">Bán đất nền dự án</el-menu-item>
-        <el-menu-item index="7" @click="handleChangPagehange('/nha-dat-ban/dat')">Bán đất</el-menu-item>
-        <el-menu-item index="8" @click="handleChangPagehange('/nha-dat-ban/trang-trai-khu-nghi-duong')">Bán trang trại, khu nghỉ dưỡng</el-menu-item>
-        <el-menu-item index="9" @click="handleChangPagehange('/nha-dat-ban/condotel')">Bán condotel</el-menu-item>
-        <el-menu-item index="10" @click="handleChangPagehange('/nha-dat-ban/kho-nha-xuong')">Bán kho, nhà xưởng</el-menu-item>
-        <el-menu-item index="11" @click="handleChangPagehange('/nha-dat-ban/loai-bat-dong-san-khac')">Bán loại bất động sản khác</el-menu-item>
-      </el-submenu>
-      <el-submenu index="/nha-dat-cho-thue">
-        <template slot="title">Cho thuê nhà đất</template>
-        <el-menu-item index="12" @click="handleChangPagehange('/nha-dat-cho-thue/can-ho-chung-cu')">Cho thuê căn hộ chung cư</el-menu-item>
-        <el-menu-item index="13" @click="handleChangPagehange('/nha-dat-cho-thue/nha-rieng')">Cho thuê nhà riêng</el-menu-item>
-        <el-menu-item index="14" @click="handleChangPagehange('/nha-dat-cho-thue/nha-biet-thu-lien-ke')">Cho thuê nhà biệt thự liền kề</el-menu-item>
-        <el-menu-item index="15" @click="handleChangPagehange('/nha-dat-cho-thue/nha-mat-pho')">Cho thuê nhà mặt phố</el-menu-item>
-        <el-menu-item index="16" @click="handleChangPagehange('/nha-dat-cho-thue/nha-thuong-mai')">Cho thuê nhà thương mại</el-menu-item>
-        <el-menu-item index="17" @click="handleChangPagehange('/nha-dat-cho-thue/nha-tro-phong-tro')">Cho thuê nhà trọ, phòng trọ</el-menu-item>
-        <el-menu-item index="18" @click="handleChangPagehange('/nha-dat-cho-thue/van-phong')">Cho thuê văn phòng</el-menu-item>
-        <el-menu-item index="19" @click="handleChangPagehange('/nha-dat-cho-thue/sang-nhuong-cua-hang-ki-ot')">Cho thuê, sang nhượng, cửa hàng, ki ốt</el-menu-item>
-        <el-menu-item index="20" @click="handleChangPagehange('/nha-dat-cho-thue/kho-nha-xuong-dat')" >Cho thuê kho, nhà xưởng, đất</el-menu-item>
-        <el-menu-item index="21" @click="handleChangPagehange('/nha-dat-cho-thue/loai-bat-dong-san-khac')">Cho thuê loại bất động sản khác</el-menu-item>
-      </el-submenu>
-      <el-submenu index="/du-an">
-        <template slot="title">Dự án</template>
-        <el-menu-item index="22"  @click="handleChangPagehange('/du-an/can-ho-chung-cu')">Căn hộ chung cư</el-menu-item>
-        <el-menu-item index="23"  @click="handleChangPagehange('/du-an/cao-oc-van-phong')">Cao ốc văn phòng</el-menu-item>
-        <el-menu-item index="24"  @click="handleChangPagehange('/du-an/trung-tam-thuong-mai')">Trung tâm thương mại</el-menu-item>
-        <el-menu-item index="25"  @click="handleChangPagehange('/du-an/khu-do-thi-moi')">Khu đô thị mới</el-menu-item>
-        <el-menu-item index="26"  @click="handleChangPagehange('/du-an/khu-phuc-hop')">Khu phức hợp</el-menu-item>
-        <el-menu-item index="27"  @click="handleChangPagehange('/du-an/nha-o-xa-hoi')">Nhà ở xã hội</el-menu-item>
-        <el-menu-item index="28"  @click="handleChangPagehange('/du-an/khu-nghi-duong-sinh-thai')">Khu nghỉ dưỡng, Sinh thái</el-menu-item>
-        <el-menu-item index="29"  @click="handleChangPagehange('/du-an/khu-cong-nghiep')">Khu công nghiệp</el-menu-item>
-        <el-menu-item index="30"  @click="handleChangPagehange('/du-an/biet-thu-lien-ke')">Biệt thự, liền kề</el-menu-item>
-        <el-menu-item index="31"  @click="handleChangPagehange('/du-an/shophouse')">Shophouse</el-menu-item>
-        <el-menu-item index="32"  @click="handleChangPagehange('/du-an/nha-mat-pho')">Nhà mặt phố</el-menu-item>
-        <el-menu-item index="33"  @click="handleChangPagehange('/du-an/du-an-khac')">Dự án khác</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="/tin-tuc" >Tin Tức</el-menu-item>
-      <el-menu-item v-if="user.role == role.broker" index="/danh-sach-yeu-cau-tu-van" >Yêu cầu tư vấn</el-menu-item>
-      <el-submenu index="/danh-ba">
-        <template slot="title">Danh bạ</template>
-        <el-menu-item index="/doanh-nghiep">Doanh nghiệp</el-menu-item>
-        <el-menu-item index="/nha-moi-gioi">Nhà môi giới</el-menu-item>
-      </el-submenu>
-    </el-menu>
+    <div style="display: flex; flex-direction: row; align-items: center;">
+      <div style="height: 90px">
+        <router-link to="/">
+          <img height="90" src="/web_logo.jpg" alt="Logo"/>
+        </router-link>
+      </div>
+      <el-menu
+        :default-active="activeMenu"
+        class="el-menu-demo"
+        mode="horizontal"
+        menu-trigger="hover"
+        :router="true"
+      >
+        <el-submenu index="/nha-dat-ban">
+          <template slot="title"> <span @click="gotoPage('sellPost')">Nhà đất bán</span></template>
+          <el-menu-item index="/nha-dat-ban/can-ho-chung-cu">Bán căn hộ chung cư</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/nha-rieng">Bán nhà riêng</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/nha-biet-thu-lien-ke">Bán nhà biệt thự liền kề</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/nha-mat-pho">Bán nhà mặt phố</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/nha-pho-thuong-mai">Bán nhà phố thương mại</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/dat-nen-du-an">Bán đất nền dự án</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/dat">Bán đất</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/trang-trai-khu-nghi-duong">Bán trang trại, khu nghỉ dưỡng</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/condotel">Bán condotel</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/kho-nha-xuong">Bán kho, nhà xưởng</el-menu-item>
+          <el-menu-item index="/nha-dat-ban/loai-bat-dong-san-khac">Bán loại bất động sản khác</el-menu-item>
+        </el-submenu>
+        <el-submenu index="/nha-dat-cho-thue">
+          <template slot="title"><span @click="gotoPage('rentPost')">Cho thuê nhà đất</span></template>
+          <el-menu-item index="/nha-dat-cho-thue/can-ho-chung-cu">Cho thuê căn hộ chung cư</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/nha-rieng">Cho thuê nhà riêng</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/nha-biet-thu-lien-ke">Cho thuê nhà biệt thự liền kề</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/nha-mat-pho">Cho thuê nhà mặt phố</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/nha-thuong-mai">Cho thuê nhà thương mại</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/nha-tro-phong-tro">Cho thuê nhà trọ, phòng trọ</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/van-phong">Cho thuê văn phòng</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/sang-nhuong-cua-hang-ki-ot">Cho thuê, sang nhượng, cửa hàng, ki ốt</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/kho-nha-xuong-dat" >Cho thuê kho, nhà xưởng, đất</el-menu-item>
+          <el-menu-item index="/nha-dat-cho-thue/loai-bat-dong-san-khac">Cho thuê loại bất động sản khác</el-menu-item>
+        </el-submenu>
+        <el-submenu index="/du-an">
+          <template slot="title"><span @click="gotoPage('project')">Dự án</span></template>
+          <el-menu-item index="/du-an/can-ho-chung-cu">Căn hộ chung cư</el-menu-item>
+          <el-menu-item index="/du-an/cao-oc-van-phong">Cao ốc văn phòng</el-menu-item>
+          <el-menu-item index="/du-an/trung-tam-thuong-mai">Trung tâm thương mại</el-menu-item>
+          <el-menu-item index="/du-an/khu-do-thi-moi">Khu đô thị mới</el-menu-item>
+          <el-menu-item index="/du-an/khu-phuc-hop">Khu phức hợp</el-menu-item>
+          <el-menu-item index="/du-an/nha-o-xa-hoi">Nhà ở xã hội</el-menu-item>
+          <el-menu-item index="/du-an/khu-nghi-duong-sinh-thai">Khu nghỉ dưỡng, Sinh thái</el-menu-item>
+          <el-menu-item index="/du-an/khu-cong-nghiep">Khu công nghiệp</el-menu-item>
+          <el-menu-item index="/du-an/biet-thu-lien-ke">Biệt thự, liền kề</el-menu-item>
+          <el-menu-item index="/du-an/shophouse">Shophouse</el-menu-item>
+          <el-menu-item index="/du-an/nha-mat-pho">Nhà mặt phố</el-menu-item>
+          <el-menu-item index="/du-an/du-an-khac">Dự án khác</el-menu-item>
+        </el-submenu>
+        <el-menu-item index="/tin-tuc" >Tin Tức</el-menu-item>
+        <el-menu-item v-if="user.role == role.broker" index="/danh-sach-yeu-cau-tu-van" >Yêu cầu tư vấn</el-menu-item>
+        <el-submenu index="/danh-ba">
+          <template slot="title">Danh bạ</template>
+          <el-menu-item index="/doanh-nghiep">Doanh nghiệp</el-menu-item>
+          <el-menu-item index="/nha-moi-gioi">Nhà môi giới</el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </div>
 
     <div class="auth">
       <template v-if="user && user.id">
@@ -73,15 +77,16 @@
             width="500"
             height="100"
             trigger="click"
+            v-model="openNotificationPopup"
             @show="handlePopoverShow"
           >
-            <NotificationPopup ref="notificationPopup"/>
+            <NotificationPopup ref="notificationPopup" @close="openNotificationPopup = false" />
             <el-badge slot="reference" :value="notificationCount ? notificationCount : null" :max="99" class="item" style="cursor: pointer;">
               <i class="far fa-bell"></i>
             </el-badge>
           </el-popover>
           <el-dropdown class="dropdown" trigger="hover">
-            <router-link to="/quan-ly-tin-dang" class="dropdown-trigger username-avt">
+            <router-link :to=" user.role == role.enterprise ? '/quan-ly-du-an' : '/quan-ly-tin-dang'" class="dropdown-trigger username-avt">
               <div style="margin-right: 10px;">
                 <el-image
                   class="avt"
@@ -130,7 +135,7 @@
               </span>
             </el-dropdown-menu>
           </el-dropdown>
-          <router-link v-if="user.role == role.user || user.role == role.user" to="/dang-tin">
+          <router-link v-if="user.role == role.user || user.role == role.broker" to="/dang-tin">
             <el-button type="primary"> Đăng tin </el-button>
           </router-link>
           <router-link v-if="user.role == role.user" to="/tim-kiem-tu-van">
@@ -163,7 +168,9 @@ import NotificationPopup from '@/components/ManageNotification/NotificationPopup
 export default {
   data() {
     return {
+      activeMenu: this.$route.fullPath,
       role: role,
+      openNotificationPopup: false,
     };
   },
   computed: mapState({
@@ -205,6 +212,11 @@ export default {
       }
     }
   },
+  watch: {
+    '$route'(val) {
+      this.activeMenu = val.fullPath
+    }
+  }
 };
 </script>
 
@@ -224,6 +236,7 @@ export default {
 
 .el-menu-demo {
   background-color: #f7f7f8;
+  border-bottom: none !important;
 }
 
 router-link {
@@ -234,10 +247,6 @@ router-link {
   width: auto;
   height: 100%;
   margin-bottom: 10px;
-}
-
-.el-menu-demo > :first-child {
-  padding: 0 !important;
 }
 
 .bell-icon {

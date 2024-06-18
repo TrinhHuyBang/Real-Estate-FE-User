@@ -22,7 +22,7 @@
         </el-main>
       </el-container>
     </el-container>
-        <main-footer v-if="!$route.meta.hideHeader" />
+        <main-footer v-if="!$route.meta.hideHeader && !$route.meta.showNavbar" />
     <!-- Các nội dung khác trong trang -->
   </div>
 </template>
