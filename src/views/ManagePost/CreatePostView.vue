@@ -278,33 +278,46 @@
         placeholder="Nhập diện tích VD:100"
         required
       ></el-input>
+      <p v-if="submitted && !$v.size.required" class="p-error">
+        Diện tích không được để trống!
+      </p>
       <table style="width: 100%">
-        <td>
-          <label class="label" for="title"
-            >Mức giá<span class="required-field"> *</span></label
-          >
-          <el-input
-            class="input"
-            type="number"
-            id="price"
-            v-model="price"
-            placeholder="Nhập giá VD:10000000"
-            required
-          ></el-input>
-        </td>
-        <td style="padding-left: 10px">
-          <label class="label" for="title"
-            >Đơn vị<span class="required-field"> *</span></label
-          >
-          <el-select class="select" id="unit" v-model="unitSelected">
-            <el-option
-              v-for="item in unit"
-              :key="item.value"
-              :label="item.text"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </td>
+        <tr>
+          <td>
+            <label class="label" for="title"
+              >Mức giá<span class="required-field"> *</span></label
+            >
+            <el-input
+              class="input"
+              type="number"
+              id="price"
+              v-model="price"
+              placeholder="Nhập giá VD:10000000"
+              required
+            ></el-input>
+          </td>
+          <td style="padding-left: 10px">
+            <label class="label" for="title"
+              >Đơn vị<span class="required-field"> *</span></label
+            >
+            <el-select class="select" id="unit" v-model="unitSelected">
+              <el-option
+                v-for="item in unit"
+                :key="item.value"
+                :label="item.text"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p v-if="submitted && !$v.price.required" class="p-error">
+              Giá không được để trống!
+            </p>
+          </td>
+          <td></td>
+        </tr>
       </table>
       <label for="legalDocument" class="label">Giấy tờ pháp lý</label>
       <div class="button-container" id="legalDocument">
@@ -450,7 +463,10 @@
         disabled
       ></el-input>
 
-      <el-button type="primary" @click="handelSubmit()">Tiếp tục</el-button>
+      <div class="btn-action-end">
+        <el-button v-if="$route.params.id" @click="getPostDetail()">Huỷ</el-button>
+        <el-button :loading="loading" type="primary" @click="handelSubmit()">Tiếp tục</el-button>
+      </div>
     </el-card>
   </div>
 </template>
@@ -512,6 +528,7 @@ export default {
       ],
       unitSelected: "VND",
       submitted: false,
+      loading : false,
     };
   },
   validations: {
@@ -551,8 +568,41 @@ export default {
   }),
   mounted() {
     this.getListProvince();
+    if(this.$route.params.id) {
+      this.getPostDetail()
+    }
   },
   methods: {
+    getPostDetail() {
+      PostApi.detail(
+        this.$route.params.id,
+        (response) => {
+            this.post = response.data
+            this.activeButton = this.post.type
+            this.title = this.post.title
+            this.description = this.post.description
+            this.project = this.post.project_id
+            this.province = this.post.province
+            this.street= this.post.street
+            this.address = this.post.address
+            this.legalSelected = this.post.legal_documents
+            this.furnitureSelected = this.post.furniture
+            this.bedroom = this.post.bedroom
+            this.toilet = this.post.toilet
+            this.floor = this.post.floor
+            this.size = this.post.size
+            this.price = this.post.price*1000000
+            this.unitSelected = this.post.unit
+            this.images = []
+            this.post.images.forEach( image => {
+              this.images.push({
+                url: image
+              })
+            })
+            this.value = this.post.type_id
+        },
+      )
+    },
     async handelSubmit() {
       this.submitted = true;
       if (this.$v.$invalid) {
@@ -562,6 +612,7 @@ export default {
       this.images.forEach((image) => {
         this.images_urls.push(image.url);
       });
+      this.loading = true
 
       var data = {
         title: this.title,
@@ -583,7 +634,33 @@ export default {
         unit: this.unitSelected,
         images: this.images_urls,
       };
-      this.createPost(data);
+      if(this.$route.params.id) {
+        this.updatePost(data)
+      } else {
+        this.createPost(data)
+      }
+      
+    },
+    updatePost(data) {
+      PostApi.update(
+        this.$route.params.id,
+        data,
+        () => {
+          Notification.success({
+            title: "Thành công",
+            message: "Tin của bạn đã được cập nhật thành công!",
+          });
+          this.getPostDetail()
+          this.loading = false
+        },
+        (error) => {
+          Notification.error({
+            title: "Thất bại",
+            message: error.data.error,
+          });
+          this.loading = false
+        }
+      );
     },
     createPost(data) {
       PostApi.create(
@@ -593,14 +670,15 @@ export default {
             title: "Thành công",
             message: "Tin của bạn đã được thêm thành công, đang chờ duyệt!",
           });
+          this.loading = false
           this.$router.push("/quan-ly-tin-dang");
         },
-        (error) => {
-          console.log(error);
+        () => {
           Notification.error({
             title: "Thất bại",
             message: "Đăng tin thất bại",
           });
+          this.loading = false
         }
       );
     },
@@ -646,6 +724,9 @@ export default {
         );
         if (response.status == 200) {
           this.districts = response.data.results;
+          if(this.$route.params.id) {
+            this.district = this.post.district
+          }
         }
       } catch (error) {
         console.error(error);
@@ -658,6 +739,9 @@ export default {
         );
         if (response.status == 200) {
           this.wards = response.data.results;
+          if(this.$route.params.id) {
+            this.ward = this.post.ward
+          }
         }
       } catch (error) {
         console.error(error);
@@ -815,6 +899,30 @@ export default {
         }
       }
     },
+    '$route'() {
+      if(this.$route.params.id) {
+        this.getPostDetail()
+      } else {
+        this.title = ""
+        this.description = ""
+        this.value = null
+        this.project = null
+        this.province = ""
+        this.district = ''
+        this.ward = ""
+        this.street = ''
+        this.address = ""
+        this.legalSelected = null
+        this.furnitureSelected = null
+        this.bedroom = null
+        this.toilet = null
+        this.floor = null
+        this.size = null
+        this.price = null
+        this.unitSelected = "m²"
+        this.images = []
+      }
+    }
   },
 };
 </script>

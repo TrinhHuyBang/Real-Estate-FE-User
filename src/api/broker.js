@@ -28,4 +28,30 @@ export default {
                 }
             })
     },
+
+    review(data, completion, error) {
+        axios
+            .post(`${root_uri}/review`, data)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err)
+                }
+            })
+    },
+
+    listReview(page, completion, error) {
+        axios
+            .get(`${root_uri}/list-review/?page=${page}`)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err)
+                }
+            })
+    },
 }

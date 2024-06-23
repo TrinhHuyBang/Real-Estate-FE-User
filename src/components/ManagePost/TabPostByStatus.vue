@@ -39,8 +39,8 @@
                 <el-tag class="state-post" v-else-if="post.status == 2" type="info">Hết hạn</el-tag>
               </div>
               <div class="action-post">
-                <el-button v-if="post.status == 0 || post.status == 1" icon="el-icon fa fa-pencil" @click="gotoUpdate(post.id)"> Sửa tin</el-button>
-                <el-button v-if="post.status != 3" type="danger" icon="el-icon fa fa-trash-alt" @click="handleDelete(post.id)"> Xoá tin </el-button>
+                <el-button v-if="post.status == 0 || post.status == 1" icon="el-icon fa fa-pencil" size="small" @click="gotoUpdate(post.id)"> Sửa tin</el-button>
+                <el-button v-if="post.status != 3" type="danger" icon="el-icon fa fa-trash-alt" size="small" @click="handleDelete(post.id)"> Xoá tin </el-button>
               </div>
             </div>
         </div>

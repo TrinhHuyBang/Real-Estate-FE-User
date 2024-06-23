@@ -123,9 +123,9 @@
         </el-select>
         <div class="btn-action">
           <el-button type="primary" :loading="loading" @click="handelSubmit()"
-            >Đăng tin tức</el-button
+            >Cập nhật</el-button
           >
-          <el-button type="danger" @click="handelReset()">Huỷ</el-button>
+          <el-button type="danger" @click="gotoPage('quan-ly-tin-tuc')">Huỷ</el-button>
         </div>
       </el-card>
     </div>
@@ -186,6 +186,7 @@ export default {
             this.news = response.data
             this.province =  response.data.province
             this.image = response.data.image
+            this.hasUploadedImage = true
             this.title =  response.data.title
             this.subtitle = response.data.subtitle
             this.content = response.data.content
@@ -218,10 +219,11 @@ export default {
         province: this.province,
         source: this.source,
       };
-      this.createProject(data);
+      this.updateNews(data);
     },
-    createProject(data) {
+    updateNews(data) {
       AdminNewsApi.update(
+        this.$route.params.id,
         data,
         () => {
           this.loading = false;
@@ -229,6 +231,7 @@ export default {
             title: "Thành công",
             message: "Tin tức đã cập nhật thành công",
           });
+          this.loading = false;
           this.$router.push("/admin/quan-ly-tin-tuc");
         },
         (error) => {
@@ -239,13 +242,14 @@ export default {
                 message: error.response.data.error,
               });
             }
+            this.loading = false;
           } else {
             Notification.error({
               title: "Thất bại",
               message: error.response.data.error,
             });
+            this.loading = false;
           }
-          this.loading = false;
         }
       );
     },

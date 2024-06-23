@@ -18,13 +18,12 @@ export default {
         }
     },
     watch: {
+        value(newValue) {
+            this.editorData = newValue;
+        },
         editorData(newValue) {
             this.$emit('input', newValue);
         }
     }
 }
 </script>
-
-<style>
-
-</style>

@@ -27,7 +27,7 @@
             label="Avatar"
             width="100">
             <template slot-scope="scope">
-                <el-avatar v-if="scope.row.avatar" shape="circle" :size="60" fit="fill" :src="scope.row.avatar"></el-avatar>
+                <el-image class="hover-pointer avt" v-if="scope.row.avatar" shape="circle" :size="60" @click="openPreviewImage(scope.row.avatar)" fit="fill" :src="scope.row.avatar"></el-image>
                 <el-avatar v-else shape="circle" :size="60" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
             </template>
         </el-table-column>
@@ -92,6 +92,11 @@
             </template>
         </el-table-column>
     </el-table>
+    <preview-image
+      :imageUrl="selectedImageUrl"
+      :isVisible="isModalVisible"
+      @close="closePreviewImage()"
+    />
     <div v-if="users.length" class="paginate-page">
       <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
     </div>
@@ -101,6 +106,7 @@
 <script>
 import AdminUserApi from '@/api/admin/adminUser'
 import { Notification } from "element-ui"
+import PreviewImage from "@/components/Global/PreviewImage.vue";
 export default {
     data() {
         return {
@@ -110,7 +116,12 @@ export default {
             totalPage: 0,
             perPage: 0,
             total: 0,
+            selectedImageUrl: null,
+            isModalVisible: false,
         }
+    },
+    components: {
+        PreviewImage
     },
     mounted() {
         this.listUser(1)
@@ -141,6 +152,15 @@ export default {
                     }
                 }
             )
+        },
+
+        openPreviewImage(imageUrl) {
+            this.selectedImageUrl = imageUrl;
+            this.isModalVisible = true;
+        },
+        closePreviewImage() {
+            this.selectedImageUrl = null
+            this.isModalVisible = false
         },
 
         goToUserDetails(id) {

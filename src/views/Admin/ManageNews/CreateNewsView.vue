@@ -241,7 +241,7 @@ input[type="file"] {
   font-size: 24px;
   color: #999;
   cursor: pointer;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 

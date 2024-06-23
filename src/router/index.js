@@ -73,7 +73,7 @@ const routes = [
     path: "/sua-tin/:id",
     name: "sua-tin",
     component: () =>
-      import("../views/ManagePost/UpdatePostView.vue"),
+      import("../views/ManagePost/CreatePostView.vue"),
     meta: { showNavbar: true }
   },
 
@@ -155,14 +155,14 @@ const routes = [
   {
     path: '/doanh-nghiep',
     name: 'doanh-nghiep',
-    component: () => import('../views/PhoneBook/Enterprise/EnterpriseView.vue'),
-  },
-
-  {
-    path: '/tim-kiem-doanh-nghiep',
-    name: 'tim-kiem-doanh-nghiep',
     component: () => import('../views/PhoneBook/Enterprise/EnterpriseSearchView.vue'),
   },
+
+  // {
+  //   path: '/tim-kiem-doanh-nghiep',
+  //   name: 'tim-kiem-doanh-nghiep',
+  //   component: () => import('../views/PhoneBook/Enterprise/EnterpriseSearchView.vue'),
+  // },
 
   {
     path: '/doanh-nghiep/:id',
@@ -211,7 +211,19 @@ const routes = [
   },
 
   {
+    path: '/danh-sach-danh-gia-tu-nguoi-dung',
+    component: () => import('../views/Broker/ManageReview.vue'),
+    meta: { showNavbar: true }
+  },
+
+  {
     path: '/dang-du-an-moi',
+    component: () => import('../views/Enterprise/ManageProject/CreateProjectView.vue'),
+    meta: { showNavbar: true }
+  },
+
+  {
+    path: '/chinh-sua-du-an/:id',
     component: () => import('../views/Enterprise/ManageProject/CreateProjectView.vue'),
     meta: { showNavbar: true }
   },

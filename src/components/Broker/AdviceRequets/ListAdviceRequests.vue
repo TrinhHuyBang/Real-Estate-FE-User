@@ -45,21 +45,38 @@
                 {{ showAddress(request) }}
               </div>
               <div
-                class="published_at rent-sell-post-published"
+                class="published_at"
               >
                 Đăng vào {{ showTime(request.created_at) }}
+                <div class="broker-request-status">
+                  <div style="display: flex; justify-content: end;">
+                    <el-tooltip content="Bạn đang tư vấn cho yêu cầu này" placement="top">
+                      <el-tag v-if="request.applied_status == brokerAdviceRequestStatus.accepted" type="success">Đang tư vấn</el-tag>
+                    </el-tooltip>
+                    <el-tooltip content="Bạn đã đăng ký thành công" placement="top">
+                      <el-tag v-if="request.applied_status == brokerAdviceRequestStatus.applied">Đã đăng ký</el-tag>
+                    </el-tooltip>
+                    <el-tooltip content="Bạn đã bị loại khỏi yêu cầu tư vấn này" placement="top">
+                      <el-tag v-if="request.applied_status == brokerAdviceRequestStatus.deleted" type="danger">Đã huỷ</el-tag>
+                    </el-tooltip>
+                  </div>
+                  <el-tooltip content="Đánh giá từ người dùng" placement="bottom">
+                    <el-rate style="margin-top: 10px;" v-if="request.rating" v-model="request.rating" disabled></el-rate>
+                  </el-tooltip>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <el-dialog
-          title="Thông tin yêu cầu tư vấn"
+          class="dialog-custom-title"
           width="600px"
           :visible.sync="openDialog"
           :before-close="closeDialog"
         >
-          <el-card class="post-infor card">
-            <h4 style="color: #0e58a0">{{ selectedRequest.title }}</h4>
+            <template #title>
+              <h4 style="color: #0e58a0">{{ selectedRequest.title }}</h4>
+            </template>
             <div>
               <span>Tài chính: </span>
               <span class="request-address">{{
@@ -134,8 +151,13 @@
               Thông tin mô tả thêm
             </h5>
             <p>{{ selectedRequest.description }}</p>
-          </el-card>
-          <span slot="footer" class="dialog-footer">
+          <!-- </el-card> -->
+          <span v-if="selectedRequest.applied_status == brokerAdviceRequestStatus.applied" slot="footer" class="dialog-footer">
+            <el-button @click="handleCancelRegistration(selectedRequest.id)" type="danger">Huỷ đăng ký</el-button>
+          </span>
+          <span v-else-if="selectedRequest.applied_status == brokerAdviceRequestStatus.accepted || selectedRequest.applied_status == brokerAdviceRequestStatus.deleted" slot="footer" class="dialog-footer">
+          </span>
+          <span v-else slot="footer" class="dialog-footer">
             <el-button @click="closeDialog">Huỷ</el-button>
             <el-button @click="handleApplyRequest(selectedRequest.id)" type="primary">Đăng ký</el-button>
           </span>
@@ -147,6 +169,7 @@
 </template>
 
 <script>
+import brokerAdviceRequestStatus from "@/data/brokerAdviceRequestStatus"
 import AdviceRequestApi from "@/api/adviceRequest";
 import { Notification } from "element-ui";
 import ListPostError from "@/components/NoneToDisplay/ListPostError.vue";
@@ -164,6 +187,7 @@ export default {
   },
   data() {
     return {
+      brokerAdviceRequestStatus: brokerAdviceRequestStatus,
       openDialog: false,
       selectedRequest: {
         created_at: null,
@@ -212,6 +236,27 @@ export default {
           this.openDialog = false
         }
       );
+    },
+    handleCancelRegistration(request_id) {
+      this.$confirm("Bạn muốn huỷ đăng ký tư vấn đối với yêu cầu này không?", "Xác nhận", {
+        confirmButtonText: "Xác nhận",
+        cancelButtonText: "Huỷ",
+        type: "warning",
+      })
+      .then(() => {
+        AdviceRequestApi.cancelRegistration(
+          request_id,
+          () => {
+            Notification.success({
+              title: "Thành công",
+              message: "Bạn đã huỷ đăng ký thành công!",
+            });
+            this.$emit('requestDeleted')
+            this.openDialog = false
+          }
+        )
+      })
+      .catch(() => {});
     },
     showPrice(price) {
       return price / 1000 >= 1

@@ -6,7 +6,7 @@
             <h2>Thông tin cơ bản</h2>
           </div>
           <label class="label" for="type">Loại dự án<span class="required-field"> *</span></label>
-          <el-select class="select" v-model="type" filterable placeholder="Chọn loại dự án" clearable>
+          <el-select class="select" v-model="project.type_id" filterable placeholder="Chọn loại dự án" clearable>
               <el-option v-for="item in projectType.textValue" :key="item.value" :label="item.text" :value="item.value"></el-option>
           </el-select>
           <span v-if="submitted && !$v.value.required" class="p-error">Loại bất động sản không được để trống!</span>
@@ -15,13 +15,13 @@
             <tr>
               <td style="width: 50%">
                 <label class="label" for="province">Tỉnh, thành phố<span class="required-field"> *</span></label>
-                <el-select class="select" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+                <el-select class="select" id="province" v-model="project.province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
                   <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
                 </el-select>
               </td>
               <td style="width: 50%">
                 <label class="label" for="district">Quận, huyện<span class="required-field"> *</span></label>
-                <el-select :disabled="!province" class="select" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+                <el-select :disabled="!project.province" class="select" id="district" v-model="project.district" placeholder="-----  Quận, huyện  -----" filterable clearable>
                   <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
                 </el-select>
               </td>
@@ -31,19 +31,19 @@
                 <span v-if="submitted && !$v.province.required" class="p-error">Tỉnh, thành phố không được để trống!</span>
               </td>
               <td style="width: 50%">
-                <span v-if="submitted && province && !$v.district.required" class="p-error">Quận, huyện không được để trống!</span>
+                <span v-if="submitted && project.province && !$v.district.required" class="p-error">Quận, huyện không được để trống!</span>
               </td>
             </tr>
             <tr>
               <td>
                 <label class="label" for="ward">Phường, xã<span class="required-field"> *</span></label>
-                <el-select :disabled="!district" class="select" id="ward" v-model="ward" placeholder="-----  Phường, xã  -----" filterable clearable>
+                <el-select :disabled="!project.district" class="select" id="ward" v-model="project.ward" placeholder="-----  Phường, xã  -----" filterable clearable>
                   <el-option v-for="item in wards" :key="item.ward_id" :label="item.ward_name" :value="item.ward_name + '-' + item.ward_id"></el-option>
                 </el-select>
               </td>
               <td>
                 <label class="label" for="street">Đường, phố</label>
-                <el-input :disabled="!ward" type="text" class="select" id="street" v-model="street" placeholder="-----  Đường, phố  -----"></el-input>
+                <el-input :disabled="!project.ward" type="text" class="select" id="street" v-model="project.street" placeholder="-----  Đường, phố  -----"></el-input>
               </td>
             </tr>
             <tr>
@@ -55,18 +55,18 @@
           </table>
 
           <label class="label" for="address">Địa chỉ hiển thị<span class="required-field"> *</span></label>
-          <el-input type="text" class="input" id="address" v-model="address" placeholder="Có thể bổ sung chi tiết về ngõ, hẻm" required></el-input>
+          <el-input type="text" class="input" id="address" v-model="project.address" placeholder="Có thể bổ sung chi tiết về ngõ, hẻm" required></el-input>
           <span v-if="submitted && !$v.address.required" class="p-error">Địa chỉ không được để trống!</span>
         </el-card>
 
         <el-card class="post-infor card">
           <h2>Thông tin dự án</h2>
           <label class="label" for="name">Tên dự án<span class="required-field"> *</span></label>
-          <el-input type="text" class="input" id="name" v-model="name" placeholder="VD: Vinhomes Grand Park" required minlength="30" maxlength="99" show-word-limit></el-input>
+          <el-input type="text" class="input" id="name" v-model="project.name" placeholder="VD: Vinhomes Grand Park" required minlength="30" maxlength="99" show-word-limit></el-input>
           <p v-if="submitted && !$v.name.required" class="p-error">Tên dự án không được để trống!</p>
 
           <label class="label" style="margin-bottom: 10px;" for="name">Mô tả về dự án<span class="required-field"> *</span></label>
-          <ckeditor-custom v-model="description" type="project"/>
+          <ckeditor-custom v-model="project.description" type="project"/>
           
           <label class="label" style="margin-top: 20px; margin-bottom: 15px;" for="image">Hình ảnh<span class="required-field"> *</span></label>
           <div class="imageLayout">
@@ -106,13 +106,13 @@
             <tr>
                 <td style="width: 50%;">
                   <label class="label" for="title">Trạng thái dự án</label>
-                  <el-select class="select" v-model="status" placeholder="Trạng thái dự án" clearable>
+                  <el-select class="select" v-model="project.project_status" placeholder="Trạng thái dự án" clearable>
                     <el-option v-for="item in projectStatus.listStatus" :key="item.value" :label="item.text" :value="item.value"></el-option>
                   </el-select>
                 </td>
                 <td style="padding: 5px 0px 0px 10px">
                   <label class="label" for="title">Chú thích về trạng thái</label>
-                  <el-input class="input" v-model="note" placeholder="VD: 25/2/2024: Khởi công"></el-input>
+                  <el-input class="input" v-model="project.note" placeholder="VD: 25/2/2024: Khởi công"></el-input>
                 </td>
             </tr>
           </table>
@@ -123,10 +123,10 @@
           <table style="width: 100%">
             <tr>
                 <td style="width: 50%;">
-                  <el-input class="input" style="width: 100%;" type="number" v-model="startPrice" placeholder="Giá dao động từ"></el-input>
+                  <el-input class="input" style="width: 100%;" type="number" v-model="project.start_price" placeholder="Giá dao động từ"></el-input>
                 </td>
                 <td style="padding-left: 10px">
-                  <el-input class="input" type="number" :disabled="!startPrice" v-model="endPrice" placeholder="Đến (bỏ trống nếu giá cố định)"></el-input>
+                  <el-input class="input" type="number" :disabled="!project.start_price" v-model="project.end_price" placeholder="Đến (bỏ trống nếu giá cố định)"></el-input>
                 </td>
             </tr>
           </table>
@@ -134,11 +134,11 @@
             <tr>
                 <td>
                     <label class="label" for="title">Diện tích</label>
-                    <el-input class="input" type="number" id="size" v-model="size" placeholder="Nhập diện tích VD:1000"></el-input>
+                    <el-input class="input" type="number" id="size" v-model="project.size" placeholder="Nhập diện tích VD:1000"></el-input>
                 </td>
                 <td style="padding-left: 10px">
                     <label class="label" for="title">Đơn vị</label>
-                    <el-select class="select" id="unit" v-model="unitSelected">
+                    <el-select class="select" id="unit" v-model="project.size_unit">
                         <el-option v-for="item in unit" :key="item.value" :label="item.text" :value="item.value"></el-option>
                     </el-select>
                 </td>
@@ -146,20 +146,20 @@
             <tr>
                 <td>
                     <label class="label" for="title">Số tòa nhà</label>
-                    <el-input-number style="width: 100%;" :controls="false" v-model="building" :min="0"></el-input-number>
+                    <el-input-number style="width: 100%;" :controls="false" v-model="project.building" :min="0"></el-input-number>
                 </td>
                 <td style="padding-left: 10px">
                     <label class="label" for="title">Số căn hộ</label>
-                    <el-input-number style="width: 100%;" :controls="false" v-model="apartment" :min="0"></el-input-number>
+                    <el-input-number style="width: 100%;" :controls="false" v-model="project.apartment" :min="0"></el-input-number>
                 </td>
             </tr>
           </table>
           <label class="label" for="title">Quy mô dự án</label>
-          <el-input class="input" v-model="scale" placeholder="VD: 18 tầng, 1 tầng hầm"></el-input>
+          <el-input class="input" v-model="project.scale" placeholder="VD: 18 tầng, 1 tầng hầm"></el-input>
           <label for="legalDocument" class="label">Thông tin pháp lý</label>
           <div class="button-container" id="legalDocument">
             <div v-for="legalDocument in legalDocuments" :key="legalDocument">
-              <el-button class="button-select" :class="{ active_selected: legalSelected === legalDocument }" @click="legalSelected = (legalSelected === legalDocument) ? '' : legalDocument">{{ legalDocument }}</el-button>
+              <el-button class="button-select" :class="{ active_selected: project.legal_documents === legalDocument }" @click="project.legal_documents = (project.legal_documents === legalDocument) ? '' : legalDocument">{{ legalDocument }}</el-button>
             </div>
             <el-button class="button-select" @click="dialogLegal = true">+</el-button>
             <el-dialog title="Thêm thông tin pháp lý" width="500px" :visible.sync="dialogLegal">
@@ -175,10 +175,13 @@
             </el-dialog>
           </div>
           <label class="label" for="title">Công ty xây dựng</label>
-          <el-input class="input" v-model="builders" placeholder="Tên công ty xây dựng dự án"></el-input>
+          <el-input class="input" v-model="project.builders" placeholder="Tên công ty xây dựng dự án"></el-input>
           <label class="label" for="title">Công ty thiết kế</label>
-          <el-input class="input" v-model="designer" placeholder="Tên công ty thiết kế dự án"></el-input>
-          <el-button type="primary" @click="handelSubmit()">Tiếp tục</el-button>
+          <el-input class="input" v-model="project.designer" placeholder="Tên công ty thiết kế dự án"></el-input>
+          <div class="btn-action-end">
+            <el-button v-if="$route.params.id" @click="getDetail()">Huỷ</el-button>
+            <el-button :loading="loading" type="primary" @click="handelSubmit()">Tiếp tục</el-button>
+          </div>
         </el-card>
       </div>
   </div>
@@ -208,34 +211,40 @@ export default {
       provinces: [],
       districts: [],
       wards: [],
-      province: "",
-      district: "",
-      ward: "",
-      street: "",
-      address: "",
-      name: "",
-      description: "",
-      status: "",
-      note: "",
+      loading: false,
+      project: {
+        name : "",
+        description : "",
+        type_id : null,
+        project_id : null,
+        province : "",
+        district : "",
+        project_status : null,
+        note: "",
+        ward : "",
+        street : "",
+        address : "",
+        legal_documents : null,
+        size : null,
+        start_price : null,
+        end_price : null,
+        size_unit : 'm²',
+        apartment : null,
+        building : null,
+        scale : "",
+        builders : "",
+        designer : "",
+      },
+      districtSelected: "",
+      wardSelected: "",
       images: [],
       images_urls: [],
-      apartment: null,
-      building: null,
-      scale: "",
       legalDocuments: ["Sở hữu lâu dài", "Sổ hồng lâu dài"],
       newLegal: "",
-      legalSelected: "",
-      size: null,
-      startPrice: null,
-      endPrice: null,
-      type: null,
       unit: [
         { value: "m²", text: "m²" },
         { value: "ha", text: "ha" },
       ],
-      designer: "",
-      builders: "",
-      unitSelected: "m²",
       submitted: false
     };
   },
@@ -267,6 +276,9 @@ export default {
   // },
   mounted() {
     this.getListProvince()
+    if(this.$route.params.id) {
+      this.getDetail()
+    }
   },
   methods: {
     async handelSubmit() {
@@ -274,37 +286,21 @@ export default {
       // if(this.$v.$invalid) {
       //   return false
       // }
-
+      this.loading =  true
       this.images_urls = []
       this.images.forEach(image => {
         this.images_urls.push(image.url)
       });
       
       var data = {
-        name : this.name,
-        description : this.description,
-        type_id : this.type,
-        project_id : this.project,
-        province : this.province,
-        district : this.district,
-        project_status : this.status,
-        note: this.note,
-        ward : this.ward,
-        street : this.street,
-        address : this.address,
-        legal_documents : this.legalSelected,
-        size : this.size,
-        start_price : this.startPrice,
-        end_price : this.endPrice,
-        size_unit : this.unitSelected,
-        apartment : this.apartment,
-        building : this.building,
-        scale : this.scale,
-        builders : this.builders,
-        designer : this.designer,
+        ...this.project,
         images : this.images_urls,
       }
-      this.createProject(data)
+      if(this.$route.params.id) {
+        this.updateProject(data)
+      } else {
+        this.createProject(data)
+      }
     },
     createProject(data) {
       ProjectApi.create(
@@ -314,14 +310,52 @@ export default {
             title: "Thành công",
             message: "Dự án của bạn đã được thêm thành công, đang chờ duyệt!",
           });
-          this.$router.push('/quan-ly-tin-dang')
+          this.loading = false
+          this.$router.push('/quan-ly-du-an')
         },
-        (error) => {
-          console.log(error)
+        () => {
           Notification.error({
             title: "Thất bại",
             message: "Đăng tin thất bại",
           });
+          this.loading = false
+        }
+      )
+    },
+    updateProject(data) {
+      ProjectApi.update(
+        this.$route.params.id,
+        data,
+        () => {
+          Notification.success({
+            title: "Thành công",
+            message: "Dự án của bạn đã cập nhật thành công",
+          });
+          this.loading = false
+          this.$router.push('/quan-ly-du-an')
+        },
+        () => {
+          Notification.error({
+            title: "Thất bại",
+            message: "Cập nhật thất bại",
+          });
+          this.loading = false
+        }
+      )
+    },
+    getDetail() {
+      ProjectApi.detail(
+        this.$route.params.id,
+        (response) => {
+          this.project = {...response.data}
+          this.provinceSelected = this.project.province
+          this.districtSelected = this.project.district
+          this.wardSelected = this.project.ward
+          this.project.images.forEach( image => {
+            this.images.push({
+              url: image
+            })
+          })
         }
       )
     },
@@ -346,6 +380,9 @@ export default {
         const response = await axios.get(`https://vapi.vnappmob.com/api/province/district/${province_id}`);
         if(response.status == 200) {
           this.districts = response.data.results;
+          if(this.$route.params.id) {
+            this.project.district = this.districtSelected
+          }
         }
       } catch (error) {
         console.error(error);
@@ -356,6 +393,9 @@ export default {
         const response = await axios.get(`https://vapi.vnappmob.com/api/province/ward/${district_id}`);
         if(response.status == 200) {
           this.wards = response.data.results;
+          if(this.$route.params.id) {
+            this.project.ward = this.wardSelected
+          }
         }
       } catch (error) {
         console.error(error);
@@ -407,49 +447,59 @@ export default {
   },
 
   watch: {
-    province(val){
+    'project.province'(val){
       if(val){
         var $result = val.split("-");
         this.getListDistrict($result[1]);
-        this.address = $result[0];
+        this.project.address = $result[0];
       } else {
         this.districts = [];
         this.wards = [];
-        this.address = "";
+        this.project.address = "";
       }
-      this.district = "";
+      this.project.district = "";
     },
-    district(val){
+    'project.district'(val){
       if(val){
         var $result = val.split("-");
         this.getListWard($result[1]);
-        this.address = $result[0] + ', ' + this.province.split("-")[0];
+        this.project.address = $result[0] + ', ' + this.project.province.split("-")[0];
       } else {
         this.wards = [];
-        this.address = this.province.split("-")[0];
+        this.project.address = this.project.province.split("-")[0];
       }
-      this.ward= "";
+      this.project.ward= "";
     },
-    ward(val){
+    'project.ward'(val){
       if (val) {
         var $result = val.split("-");
-        this.address = $result[0] + ', ' + this.district.split("-")[0] + ', ' + this.province.split("-")[0];
+        this.project.address = $result[0] + ', ' + this.project.district.split("-")[0] + ', ' + this.project.province.split("-")[0];
       } else {
-        if (this.district) {
-          this.address = this.district.split("-")[0] + ', ' + this.province.split("-")[0];
+        if (this.project.district) {
+          this.project.address = this.project.district.split("-")[0] + ', ' + this.project.province.split("-")[0];
         }
       }
       this.street = "";
     },
-    street(val) {
+    'project.street'(val) {
       if (val) {
-        this.address = val + ', ' + this.ward.split("-")[0] + ', ' + this.district.split("-")[0] + ', ' + this.province.split("-")[0];
+        this.project.address = val + ', ' + this.project.ward.split("-")[0] + ', ' + this.project.district.split("-")[0] + ', ' + this.project.province.split("-")[0];
       } else {
-        if (this.ward) {
-          this.address = this.ward.split("-")[0] + ', ' + this.district.split("-")[0] + ', ' + this.province.split("-")[0];
+        if (this.project.ward) {
+          this.project.address = this.project.ward.split("-")[0] + ', ' + this.project.district.split("-")[0] + ', ' + this.project.province.split("-")[0];
         }
       }
     },
+    '$route'() {
+      if(this.$route.params.id) {
+        this.getDetail()
+      } else {
+        this.project = {
+          size_unit: "m²"
+        }
+        this.images = []
+      }
+    }
   },
 };
 </script>

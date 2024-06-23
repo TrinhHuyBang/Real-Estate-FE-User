@@ -72,6 +72,11 @@ export default {
       this.getPosts(val)
     },
   },
+  watch: {
+    '$route.params.id'() {
+      this.getPosts(1);
+    }
+  }
 };
 </script>
 

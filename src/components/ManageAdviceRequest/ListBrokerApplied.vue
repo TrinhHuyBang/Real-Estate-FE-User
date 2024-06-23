@@ -45,32 +45,45 @@
                     </ul>
                 </div>
                 <div
-                    style="display: flex; flex-direction: column; margin: 10px"
+                    style="position: absolute; right: 15px;  display: flex; flex-direction: column"
                 >
-                    <el-button
-                        v-if="!brokerAccepted"
-                        :disabled="disabled "
-                        @click="openConfirm(broker.id)"
-                        type="primary"
-                        icon="el-icon-check"
-                        size="small"
-                    >
-                    </el-button>
-                    <el-button
-                        v-if="brokerAccepted"
-                        @click="openReviewDialog(broker)"
-                        type="danger"
-                        icon="el-icon fa fa-trash-alt"
-                        size="small"
-                    >
-                    </el-button>
+                    <el-tooltip v-if="!brokerAccepted" content="Chọn nhà môi giới" placement="top">
+                        <el-button
+                            :disabled="disabled "
+                            @click="openConfirm(broker.id)"
+                            type="primary"
+                            icon="el-icon-check"
+                            size="small"
+                        >
+                        </el-button>
+                    </el-tooltip>
+                    <el-tooltip v-else content="Bỏ chọn nhà môi giới" placement="top">
+                        <el-button
+                            @click="handleCheckDelete(broker)"
+                            type="danger"
+                            icon="el-icon fa fa-trash-alt"
+                            size="small"
+                        >
+                        </el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Đánh giá nhà môi giới" placement="bottom">
+                        <el-button
+                            v-if="brokerAccepted && !broker.isRating"
+                            :disabled="disabled "
+                            @click="openReviewDialog(broker)"
+                            type="primary"
+                            icon="el-icon-star-off"
+                            size="small"
+                        >
+                        </el-button>
+                    </el-tooltip>
                 </div>
             </div>
             <el-dialog class="dialog-review widget-review" :title="dialogTitle" width="400px" :visible.sync="openDialog" :before-close="closeDialog">
                 <el-form >
                     <span class="dialog-content-title">
                         Sau khi nhận được tư vấn từ nhà môi giới, bạn cảm thấy hài lòng về nhà tư vấn này không?
-                        Trước khi bỏ chọn nhà môi giới khỏi yêu cầu của bạn, bạn có thể để lại đánh giá cho nhà môi giới ở bên dưới.
+                        <span v-if="typeDialog=='delete'">Trước khi bỏ chọn nhà môi giới khỏi yêu cầu của bạn, bạn có thể để lại đánh giá cho nhà môi giới ở bên dưới.</span>
                     </span>
                     <el-form-item>
                         <el-rate class="rating-review" v-model="rating"></el-rate>
@@ -79,7 +92,7 @@
                 </el-form>
                 <span slot="footer">
                     <el-button @click="closeDialog" class="btn-investor-contact">Huỷ</el-button>
-                    <el-button @click="handleSubmit()" class="btn-investor-contact" type="primary">{{ rating ? 'Gửi đánh giá và bỏ chọn' : 'Bỏ chọn nhà môi giới' }}</el-button>
+                    <el-button @click="typeDialog=='delete' ? handleDelete() : handleReview()" class="btn-investor-contact" type="primary">{{ typeDialog=='rating' ? 'Gửi đánh giá' :  (rating ? 'Gửi đánh giá và bỏ chọn' : 'Bỏ chọn nhà môi giới') }}</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -90,6 +103,7 @@
 <script>
 import ListPostError from '@/components/NoneToDisplay/ListPostError.vue'
 import AdviceRequestApi from '@/api/adviceRequest'
+import BrokerApi from '@/api/broker'
 import { Notification } from "element-ui"
 export default {
     props: {
@@ -113,6 +127,7 @@ export default {
             review: null,
             dialogTitle: "",
             brokerId: null,
+            typeDialog: null,
         }
     },
     components: {
@@ -144,6 +159,7 @@ export default {
             this.dialogTitle = "Đánh giá nhà môi giới " + broker.info.name
             this.brokerId = broker.id
             this.brokerName = broker.broker
+            this.typeDialog = 'rating'
             this.openDialog = true
         },
         closeDialog() {
@@ -152,7 +168,23 @@ export default {
             this.brokerId = null
             this.openDialog = false
         },
-        handleSubmit() {
+        handleCheckDelete(broker) {
+            this.brokerId = broker.id
+            this.brokerName = broker.broker
+            if(broker.isRating) {
+                this.$confirm('Bạn muốn bỏ nhà môi giới này khỏi yêu cầu tư vấn?', 'Xác nhận', {
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Huỷ',
+                }).then(() => {
+                    this.handleDelete()
+                }).catch(() => {})
+            } else {
+                this.typeDialog = 'delete'
+                this.dialogTitle = "Đánh giá nhà môi giới " + broker.info.name
+                this.openDialog = true
+            }
+        },
+        handleDelete() {
             AdviceRequestApi.deleteBroker(
                 {
                     'request_id' : this.$route.params.id,
@@ -168,11 +200,25 @@ export default {
                     this.$emit("deleteBroker");
                 }
             )
-            this.rating = null
-            this.review = null
-            this.openDialog = false
-        }
-
+        },
+        handleReview() {
+            BrokerApi.review(
+                {
+                    'request_id' : this.$route.params.id,
+                    'broker_id' : this.brokerId,
+                    'rating' : this.rating,
+                    'review' : this.review
+                },
+                () => {
+                    Notification.success({
+                        title: "Thành công",
+                        message: "Đánh giá nhà môi giới thành công",
+                    });
+                    this.closeDialog()
+                    this.$emit("review");
+                }
+            )
+        },
     },
 }
 </script>

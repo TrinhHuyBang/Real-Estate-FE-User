@@ -137,6 +137,18 @@ export default {
                 }
             })
     },
+    cancelRegistration(id, completion, error) {
+        axios
+            .delete(`${root_uri}/cancle-registration/${id}`)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err)
+                }
+            })
+    },
     listAppliedRequests(page, query, completion, error) {
         axios
             .get(`${root_uri}/broker/applied-request-list/?page=${page}`, {

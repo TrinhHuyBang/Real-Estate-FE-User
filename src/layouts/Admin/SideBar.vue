@@ -1,13 +1,13 @@
 <template>
   <div class="sidebar">
     <header class="user-infor">
-      <el-avatar
-        v-if="admin.avatar"
-        shape="circle"
-        :size="60"
-        fill="cover"
+      <el-image
+        class="avt"
         :src="admin.avatar"
-      ></el-avatar>
+        fit="cover"
+        alt="Avatar"
+        v-if="admin.avatar"
+      ></el-image>
       <el-avatar
         v-else
         shape="circle"
@@ -317,9 +317,9 @@ export default {
   margin: 5px;
 }
 
-.user-avatar {
-  width: 50px;
-  height: 50px;
+.avt {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
 }
 button {

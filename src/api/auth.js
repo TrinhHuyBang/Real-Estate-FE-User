@@ -141,5 +141,18 @@ export default {
                     error(err.response)
                 }
             })
-    }
+    },
+
+    getDetailBrokerRegistration(completion, error) {
+        axios
+            .get(`${root_uri}/detail-registration`)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err.response)
+                }
+            })
+    },
 }

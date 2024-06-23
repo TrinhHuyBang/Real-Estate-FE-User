@@ -4,26 +4,26 @@
     <div class="profile">
         <div class="avatar">
             <div class="custom-file-input">
-                <label for="fileInput1" class="upload-icon" v-if="!hasUploadedLogo">
+                <label for="fileInput1" class="upload-icon-square" v-if="!hasUploadedLogo">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text avt-text">Tải ảnh</div>
                     <input type="file" id="fileInput1" @change="handleLogoChange" accept="image/*" ref="fileInput1" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedLogo" @click="handleDeleteLogo"></span>
-                <label for="fileInput1" class="upload-icon" v-if="hasUploadedLogo" :style="{ 'background-image': `url('${logo}')` }">
+                <label for="fileInput1" class="upload-icon-square" v-if="hasUploadedLogo" :style="{ 'background-image': `url('${logo}')` }">
                     <input type="file" id="fileInput1" @change="handleLogoChange" accept="image/*" ref="fileInput1" style="display: none"/>
                 </label>
             </div>
             <label class="label">Logo công ty<span class="required-field"> *</span></label>
             <span v-if="submitted && !$v.logo.required" class="p-error">Logo không được để trống!</span>
             <div class="custom-file-input">
-                <label for="fileInput2" class="upload-icon" v-if="!hasUploadedCertificate">
+                <label for="fileInput2" class="upload-icon-square" v-if="!hasUploadedCertificate">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text avt-text">Tải ảnh</div>
                     <input type="file" id="fileInput2" @change="handleCertificateChange" accept="image/*" ref="fileInput2" style="display: none"/>
                 </label>
                 <span class="el-icon-close delete-avatar-icon" v-if="hasUploadedCertificate" @click="handleDeleteCertificate"></span>
-                <label for="fileInput2" class="upload-icon" v-if="hasUploadedCertificate" :style="{ 'background-image': `url('${certificate}')` }">
+                <label for="fileInput2" class="upload-icon-square" v-if="hasUploadedCertificate" :style="{ 'background-image': `url('${certificate}')` }">
                     <input type="file" id="fileInput2" @change="handleCertificateChange" accept="image/*" ref="fileInput2" style="display: none"/>
                 </label>
             </div>
@@ -295,8 +295,8 @@ export default {
   top: -10px;
 }
 
-.upload-icon {
-  width: 100px;
+.upload-icon-square {
+  width: 150px;
   height: 100px;
   border: 1px dashed #ccc;
   display: flex;
@@ -306,7 +306,7 @@ export default {
   font-size: 24px;
   color: #999;
   cursor: pointer;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }

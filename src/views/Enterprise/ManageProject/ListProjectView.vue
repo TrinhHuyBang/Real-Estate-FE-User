@@ -23,7 +23,7 @@
       <el-tabs v-model="activeName">
         <el-tab-pane v-for="tabProject in tabProjects" :key="tabProject.name" :label="tabProject.label" :name="tabProject.name" >
           <div class="content-tab">
-            <tab-project-by-status :projects="projects"/>
+            <tab-project-by-status :projects="projects" @handle-delete-project="listProject(1)"/>
             <div class="paginate-page" v-if="projects.length">
               <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
             </div>

@@ -46,13 +46,20 @@
 }
 
 .content-project {
+  position: relative;
   color: #000;
-  margin: 10px 20px 0 20px;
+  margin: 0px 20px 0 20px;
+}
+
+.action-project {
+  position: absolute;
+  bottom: 10px;
+  right: 0px;
 }
 
 .image-project {
-  height: 246px;
-  width: 260px;
+  height: 260px;
+  width: 300px;
   border-radius: 5px;
 }
 
@@ -93,7 +100,7 @@
 }
 
 .project-description {
-  margin: 10px 0px;
+  margin: 5px 0px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -273,8 +280,25 @@
 }
 
 .published_at {
+  position: relative;
   margin-top: 10px;
   color: grey;
+}
+
+.broker-request-status {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 0px;
+  bottom: 5px;
+}
+
+.dialog-custom-title .el-dialog__header{
+  border-bottom: 1px #555 solid;
+}
+
+.dialog-custom-title .el-dialog__body{
+  padding: 10px 20px;
 }
 
 .input-contact {
@@ -298,6 +322,7 @@
   margin-bottom: 30px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   padding: 10px;
+  position: relative;
 }
 
 .broker-avatar-single-card {
@@ -326,6 +351,7 @@
 }
 
 .request-single-card-content {
+  height: 100%;
   position: relative;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -364,7 +390,7 @@
 }
 
 .sub-title {
-  margin: 20px 0px 20px 0px;
+  margin: 15px 0px 15px 0px;
 }
 
 .flex-row-content {
@@ -549,4 +575,19 @@ span {
 
 .count-request-badge {
   margin-left: -15px;
+}
+
+.hover-pointer {
+  cursor: pointer;
+}
+
+.avt {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.btn-action-end {
+  display: flex;
+  justify-content: end;
 }

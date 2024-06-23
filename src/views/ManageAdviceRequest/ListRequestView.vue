@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <div class="nav">
-        <h4>Danh sách tin đăng</h4>
+        <h4>Danh sách yêu cầu</h4>
         <div class="search-and-type">
           <el-input
             placeholder="Tìm kiếm theo tiêu đề, mô tả"

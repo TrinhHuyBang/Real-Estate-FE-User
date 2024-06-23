@@ -1,13 +1,13 @@
 <template>
   <div class="sidebar">
     <header class="user-infor">
-      <el-avatar
-        v-if="user.avatar"
-        shape="circle"
-        :size="60"
-        fill="cover"
+      <el-image
+        class="avt"
         :src="user.avatar"
-      ></el-avatar>
+        fit="cover"
+        alt="Avatar"
+        v-if="user.avatar"
+      ></el-image>
       <el-avatar
         v-else
         shape="circle"
@@ -132,6 +132,13 @@ export default {
           page: "/danh-sach-yeu-cau-dang-ky",
         },
         {
+          name: "ReviewList",
+          icon: "fa-solid fa-star",
+          label: "Danh sách đánh giá từ người dùng",
+          role: [role.broker],
+          page: "/danh-sach-danh-gia-tu-nguoi-dung",
+        },
+        {
           name: "SavedPosts",
           icon: "fas fa-heart",
           label: "Tin lưu",
@@ -225,12 +232,11 @@ export default {
       });
 
       if (!found) {
-        this.activeMenu = "ManagePost";
-        this.$router.push("/quan-ly-tin-dang").catch((err) => {
-          if (err.name !== "NavigationDuplicated") {
-            throw err;
-          }
-        });
+        if(this.user.role == this.role.enterprise) {
+          this.activeMenu = "ManageProject"
+        } else {
+          this.activeMenu = "ManagePost"
+        }
       }
     },
   },
@@ -272,9 +278,9 @@ export default {
   margin: 5px;
 }
 
-.user-avatar {
-  width: 50px;
-  height: 50px;
+.avt {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
 }
 button {

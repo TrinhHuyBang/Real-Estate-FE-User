@@ -29,6 +29,32 @@ export default {
             })
     },
 
+    update(id, data, completion, error) {
+        axios
+            .put(`${root_uri}/update/${id}`, data)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err)
+                }
+            })
+    },
+
+    delete(id, completion, error) {
+        axios
+            .delete(`${root_uri}/delete/${id}`)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err)
+                }
+            })
+    },
+
     detail(id,completion, error) {
         axios
             .get(`${root_uri}/detail/${id}`)

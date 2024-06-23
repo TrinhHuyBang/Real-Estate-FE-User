@@ -43,7 +43,7 @@
             </el-select>
 
           <label for="province">Dự án</label>
-          <el-select class="input-filter" id="province" v-model="project" placeholder="Dự án" filterable clearable>
+          <el-select no-data-text="No data" class="input-filter" id="province" v-model="project" placeholder="Dự án" filterable clearable>
             <el-option v-for="item in projects" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
 

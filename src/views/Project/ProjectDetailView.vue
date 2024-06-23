@@ -5,8 +5,8 @@
       style="margin-bottom: 10px"
     >
       <el-breadcrumb-item>Dự án</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ this.showProvince(project) }}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ this.showDistrict(project) }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ showProvince(project) }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ showDistrict(project) }}</el-breadcrumb-item>
       <el-breadcrumb-item>Căn hộ chung cư</el-breadcrumb-item>
     </el-breadcrumb>
     <h2>{{ project.name }}</h2>
@@ -25,7 +25,7 @@
       </el-carousel-item>
     </el-carousel>
 
-    <div class="row project-info" style="min-width: 900px">
+    <div class="row project-info" style="min-width: 900px; margin-bottom: 80px">
       <div class="col-8" style="min-width: 600px">
         <h4 class="list_titles">Tổng quan {{ project.name }}</h4>
         <div v-for="(item, index) in listProjectInfor" :key="index">
@@ -43,10 +43,10 @@
               <el-col v-else-if="item.name === 'apartment'" :span="20"
                 >{{ project[item.name] }} căn</el-col
               >
-              <el-col v-else-if="item.name === 'buiding'" :span="20"
+              <el-col v-else-if="item.name === 'building'" :span="20"
                 >{{ project[item.name] }} toà</el-col
               >
-              <el-col v-else-if="item.name === 'price'" :span="20"
+              <el-col v-else-if="item.name === 'start_price'" :span="20"
                 >{{ showProjectPrice(project) }}
               </el-col>
               <el-col v-else-if="item.name === 'size'" :span="20">{{
@@ -60,15 +60,6 @@
 
         <div>
           <div class="render-html" v-html="project.description" style="width: 95%"></div>
-          <!-- <div class="js__box-view-more re__box-view-more re__display-none" style="display: none;">
-                        <div class="re__gradient">&nbsp;</div>
-                        <div class="re__view-more">
-                            <button type="button" class="re__btn re__btn-pr-ghost--sm re__btn-icon-right--sm re__btn-view-more"><span>Xem thêm</span><i class="re__icon-chevron-down--sm"></i></button>
-                        </div>
-                    </div>
-                    <div class="js__box-view-less re__box-view-less re__display-none" style="display: block;">
-                        <button type="button" class="re__btn re__btn-pr-ghost--sm re__btn-icon-right--sm re__btn-view-more"><span>Thu gọn</span><i class="re__icon-chevron-up--sm"></i></button>
-                    </div> -->
         </div>
         <div id="project-loaction">
           <h4 class="list_titles">Vị trí dự án {{ project.name }}</h4>
@@ -141,7 +132,7 @@ export default {
     user: (state) => state.user,
   }),
 
-  mounted() {
+  created() {
     this.getDetail()
   },
 
@@ -150,33 +141,11 @@ export default {
       dialogContact: false,
       listProjectInfor: ListProjectInfor,
       project: {
-        name: "The Aurora Phú Mỹ Hưng",
-        address:
-          "Lô đất S13-2, khu Nam Viên, KĐT Phú Mỹ Hưng, đường Nguyễn Lương Bằng, phường Tân Phú, Quận 7, Hồ Chí Minh. ",
-        price: 130,
-        size: 20000,
-        buiding: 1,
-        size_unit: "ha",
-        apartment: 95,
-        status: "Sắp mở bán",
-        province: "Thành phố Hồ Chí Minh",
-        district: "Quận 7",
-        project_type: "",
-        images: [],
+        province: "",
+        district: "",
         investor: {
-          id: null,
-          name: "",
-          logo: "",
-          phone_number: "",
-          project: {
-            1: 2,
-            2: 4,
-            3: 5,
-          },
-        },
-        description: "",
-        legal_documents: "Sổ hồng lâu dài",
-        builders: "Cty TNHH một thành viên",
+          id: ""
+        }
       },
       nameContact: "",
       phoneContact: "",
@@ -194,9 +163,17 @@ export default {
       )
     },
     showProjectPrice(project) {
-      return project.price / 1000 >= 1
-        ? (project.price / 1000).toFixed(2) + " tỷ" + "/m²"
-        : project.price + " triệu" + "/m²";
+        if(project.end_price) {
+            if(project.start_price / 1000 >= 1) {
+                return (project.start_price / 1000).toFixed(2) + " - " + (project.end_price / 1000).toFixed(2) + " tỷ/m²"
+            } else if(project.end_price / 1000 < 1) {
+                return project.start_price + " - " + project.end_price + " triệu/m²"
+            } else {
+                return project.start_price + " triệu/m²" + " - " + (project.end_price / 1000).toFixed(2) + " tỷ/m²"
+            }
+        } else {
+            return project.start_price / 1000 >= 1 ? (project.start_price / 1000).toFixed(2) + " tỷ/m²" : project.start_price + " triệu/m²";
+        }
     },
 
     showProjectSize(project) {

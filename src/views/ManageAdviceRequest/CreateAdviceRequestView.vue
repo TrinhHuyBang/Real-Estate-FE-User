@@ -73,7 +73,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <span v-if="submitted && !$v.price.required" class="p-error">Tài chính không được để trống!</span>
+                      <span v-if="submitted && (!$v.price.required || !$v.price.isPositiveNumber)" class="p-error">Tài chính không được để trống!</span>
                     </td>
                     <td>
                     </td>
@@ -185,7 +185,10 @@ export default {
       required,
     },
     price: {
-      required
+      required,
+      isPositiveNumber(value) {
+        return value > 0
+      }
     },
     province: {
       required,
@@ -226,7 +229,7 @@ export default {
         () => {
           Notification.success({
             title: "Thành công",
-            message: "Tin của bạn đã được thêm thành công, đang chờ duyệt!",
+            message: "Thêm yêu cầu tư vấn thành công!",
           });
           this.$router.push('/quan-ly-yeu-cau')
         },
@@ -234,7 +237,7 @@ export default {
           console.log(error)
           Notification.error({
             title: "Thất bại",
-            message: "Đăng tin thất bại",
+            message: "Đăng yêu cầu thất bại",
           });
         }
       )

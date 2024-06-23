@@ -71,6 +71,7 @@
       :brokers="brokerAccepted"
       :brokerAccepted="true"
       @deleteBroker="brokerAccepted = []"
+      @review="getBrokerAccepted()"
     />
     <h3 class="page-title">Danh sách nhà môi giới đã đăng kí</h3>
     <list-broker-applied
@@ -186,5 +187,11 @@ export default {
 }
 .page-title {
   margin: 10px 0px 20px 0px;
+}
+.paginate-page {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
 }
 </style>

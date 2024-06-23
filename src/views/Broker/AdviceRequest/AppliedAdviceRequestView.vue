@@ -135,7 +135,9 @@ export default {
 </script>
 
 <style scoped>
-
+.container{
+  padding-top: 30px;
+}
 .nav {
   display: flex;
   flex-direction: column;

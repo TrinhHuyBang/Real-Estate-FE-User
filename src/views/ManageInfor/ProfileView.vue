@@ -10,13 +10,13 @@
         <el-tab-pane label="Thay đổi mật khẩu" name="password">
           <password-tab/>
         </el-tab-pane>
-        <el-tab-pane v-if="user.role == role.user" label="Đăng ký tài khoản doanh nghiệp" name="enterpriseRegister">
+        <el-tab-pane v-if="user.role == role.user && !user.registeredBroker" label="Đăng ký tài khoản doanh nghiệp" name="enterpriseRegister">
           <enterprise-register-tab/>
         </el-tab-pane>
         <el-tab-pane label="Xoá tài khoản" name="deleteAccount">
           <delete-account-tab />
         </el-tab-pane>
-        <el-tab-pane v-if="user.role == role.user" label="Đăng ký tài khoản môi giới" name="brokerRegister">
+        <el-tab-pane v-if="user.role == role.user && !user.registeredEnterprise" label="Đăng ký tài khoản môi giới" name="brokerRegister">
           <broker-register-tab />
         </el-tab-pane>
       </el-tabs>

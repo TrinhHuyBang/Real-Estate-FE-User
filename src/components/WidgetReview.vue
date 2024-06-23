@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="widget-review">
         <div class="info-panel" @mouseenter="expandInfo" @mouseleave="collapseInfo">
             <el-button v-if="user && user.id" @click="openDialog=true" type="warning" icon="el-icon-star-off" circle></el-button>
             <el-button v-else type="warning" icon="el-icon-star-off" circle></el-button>
@@ -14,7 +14,7 @@
                 <img class="tooltip_icon" width="12" height="12" style="margin-right: 10px" :src="`https://d31wum4217462x.cloudfront.net/img/question-circle.svg`" alt="tooltip_icon" />
             </el-tooltip>
         </div>
-        <el-dialog class="dialog-review widget-review" title="Đánh giá hệ thống gợi ý" width="400px" :visible.sync="openDialog" :before-close="closeDialog">
+        <el-dialog class="dialog-review" title="Đánh giá hệ thống gợi ý" width="400px" :visible.sync="openDialog" :before-close="closeDialog">
             <el-form >
                 <span class="dialog-content-title">Để hệ thống gợi ý trở nên chính xác và hữu ích hơn cho người dùng. Chúng tôi rất mong được nhận
                     những góp ý của mọi người. Vậy nên nếu cảm thấy hệ thống gợi ý còn chưa phù hợp, mọi người có thể
@@ -121,7 +121,6 @@ export default {
 </script>
 
 <style scoped>
-
 .info-panel {
     display: flex;
     flex-direction: row;
@@ -133,6 +132,7 @@ export default {
     background-color: #ffffff;
     border: 1px solid #ccc;
     transition: width 10s;
+    z-index: 99999;
 }
 
 button {

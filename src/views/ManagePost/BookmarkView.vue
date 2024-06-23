@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px 5%">
+  <div>
     <list-post :title="title"></list-post>
   </div>
 </template>

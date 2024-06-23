@@ -1,10 +1,8 @@
 <template>
     <div class="project-list-single">
-      <div v-for="project in projects" :key="project.id">
-          <router-link class="link-to-detail" :to="`/chi-tiet-du-an/${project.id}`">
-              <single-project :project="project"/>
-          </router-link>
-      </div>
+        <div v-for="project in projects" :key="project.id">
+            <single-project :project="project" :isOwner="true" @delete-project="handleDelete()"/>
+        </div>
     </div>
 </template>
 
@@ -50,6 +48,9 @@ export default {
                 this.title += " trên toàn quốc"
             }
         },
+        handleDelete() {
+            this.$emit('handle-delete-project')
+        }
     },
 
     watch: {
