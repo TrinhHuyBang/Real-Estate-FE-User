@@ -17,6 +17,7 @@
         style="width: 100%; margin-top: 20px"
     >
         <el-table-column
+            fixed
             align="center"
             prop="id"
             label="ID"
@@ -70,6 +71,7 @@
             </template>
         </el-table-column>
         <el-table-column
+            fixed="right"
             align="center"
             label="Hành động"
             width="180"

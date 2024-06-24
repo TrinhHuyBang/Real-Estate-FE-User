@@ -18,8 +18,9 @@
             <div class="col-xl-8 col-lg-8 col-md-12 col-12">
                 <p class="news-sub-title">{{ news.subtitle }}</p>
                 <div class="render-html" v-html="news.content" style="width: 95%"></div>
+                <div style="margin-top: 10px;" class="author-name">{{news.author?.name}}</div>
                 <div class="source-display">
-                    <span> Nguồn : {{ news.source }}</span>
+                    <span v-if="news.source"> Nguồn : {{ news.source }}</span>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-4 col-md-12 col-12">

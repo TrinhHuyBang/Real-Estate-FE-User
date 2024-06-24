@@ -464,7 +464,7 @@
       ></el-input>
 
       <div class="btn-action-end">
-        <el-button v-if="$route.params.id" @click="getPostDetail()">Huỷ</el-button>
+        <el-button @click="gotoPage('managePost')">Huỷ</el-button>
         <el-button :loading="loading" type="primary" @click="handelSubmit()">Tiếp tục</el-button>
       </div>
     </el-card>
@@ -741,6 +741,7 @@ export default {
           this.wards = response.data.results;
           if(this.$route.params.id) {
             this.ward = this.post.ward
+            this.street = this.post.street
           }
         }
       } catch (error) {

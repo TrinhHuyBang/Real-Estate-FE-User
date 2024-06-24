@@ -3,16 +3,18 @@
     <div class="container">
       <h4>Dự án bất động sản nổi bật</h4>
       <div class="row">
-        <div class="col-6 col-md-4 col-lg-3" v-for="project in displayedProjects" :key="project.id">
+        <div class="col-6 col-md-4 col-lg-3" v-for="project in projects" :key="project.id">
           <router-link :to="`/chi-tiet-du-an/${project.id}`" class="link-to-detail">
             <el-card class="project-card" :body-style="{ padding: '0px' }">
-              <img :src="project.imageUrl" class="image" />
+              <img :src="project.image" class="image" />
               <div style="padding: 14px">
-                <span v-if="project.status" :class="getStatusClass(project)">{{ project.status }}</span>
-                <span v-else class="status-in-progress">Đang cập nhật</span>
+                <div class="project-status">
+                  <span v-if="project.project_status" :class="getStatusClass(project)">{{ projectStatus[project.project_status] }} {{ project.note ? " - " + project.note : "" }}</span>
+                  <span v-else :class="getStatusClass(project)">Đang cập nhật {{ project.note ? " - " + project.note : "" }}</span>
+                </div>
                 <span class="project-name-show">{{ project.name }}</span>
                 <div class="project-size-location">
-                  <div class="project-size">
+                  <div v-if="project.size" class="project-size">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="25px" height="25px" viewBox="0 0 111.000000 93.000000" preserveAspectRatio="xMidYMid meet">
                         <g transform="translate(0.000000,93.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
                         <path d="M40 800 l0 -70 30 0 c23 0 30 4 30 20 0 20 7 20 320 20 313 0 320 0 320 -20 0 -16 7 -20 30 -20 l30 0 0 70 0 70 -30 0 c-23 0 -30 -4 -30 -20 0 -20 -7 -20 -320 -20 -313 0 -320 0 -320 20 0 16 -7 20 -30 20 l-30 0 0 -70z"/>
@@ -20,10 +22,10 @@
                         <path d="M920 626 c0 -18 6 -25 23 -28 22 -3 22 -3 25 -225 l2 -223 -25 0 c-20 0 -25 -5 -25 -25 0 -24 2 -25 75 -25 73 0 75 1 75 24 0 18 -6 25 -22 28 l-23 3 0 220 0 220 23 3 c16 3 22 10 22 28 0 23 -2 24 -75 24 -73 0 -75 -1 -75 -24z"/>
                         </g>
                     </svg>
-                    <span> {{ project.size + " m&sup2;"}}</span>
+                    <span> {{ project.size + " " + project.size_unit}}</span>
                   </div>
                   <div class="project-location">
-                      <i class="el-icon-location-outline"></i> {{ project.district + ", " + project.city }}
+                      <i class="el-icon-location-outline"></i> {{ showAddress(project) }}
                   </div>
                 </div>
               </div>
@@ -36,126 +38,26 @@
 </template>
 
 <script>
+import projectStatus from '@/data/projectStatus'
+import ProjectApi from '@/api/project'
 export default {
   data() {
     return {
-      projects: [
-        {
-          id: 1,
-          name: "Eurowindow Garden City Thanh Hóa",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2F20231026090858-7999_wm.jpg?alt=media&token=d64bea7a-1a85-47c3-be74-289086271a11&_gl=1*jwtivj*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcxNjYuMzkuMC4w",
-          size: 100,
-          city: "Ha Noi",
-          status: "Sắp mở bán",
-          district: "Hai Ba Trung",
-        },
-        {
-          id: 2,
-          name: "Meypearl Harmony Phú Quốc",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2F20231026113735-5218_wm.jpg?alt=media&token=1056c8fd-7a09-41fd-a41e-cbc942ff57bf&_gl=1*1160p0l*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcxOTUuMTAuMC4w",
-          size: 100,
-          city: "Ha Noi",
-          status: "Đang mở bán",
-          district: "Hai Ba Trung",
-        },
-        {
-          id: 3,
-          name: "Ikigai Onsen Village Đại Lải",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2FDanko_1.jpg?alt=media&token=facb0bd9-69e2-4a5e-be04-f0e4ec55c46d&_gl=1*thij4b*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcyMDkuNTguMC4w",
-          size: 100,
-          city: "Ha Noi",
-          status: "Đã bàn giao",
-          district: "Hai Ba Trung",
-          type: "ban",
-        },
-        {
-          id: 4,
-          name: "Chung cư Gia Phú",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/projects%2Fhoalac_1.jpg?alt=media&token=3d4d890a-d2be-4bde-9294-91843840f470&_gl=1*5ws1h*_ga*MTU4MTYxNzQ2MS4xNjg3OTI2Njcw*_ga_CW55HF8NVT*MTY5ODgxNTYxOC40MC4xLjE2OTg4MTcyMjQuNDMuMC4w",
-          size: 100,
-          city: "Ha Noi",
-          status: '',
-          district: "Hai Ba Trung",
-        },
-        {
-          id: 5,
-          name: "Card 1",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
-          size: 100,
-          city: "Ha Noi",
-          status: "Đang mở bán",
-          district: "Hai Ba Trung",
-        },
-        {
-          id: 6,
-          name: "Card 2",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
-          size: 100,
-          city: "Ha Noi",
-          status: "Đã bàn giao",
-          district: "Hai Ba Trung",
-        },
-        {
-          id: 7,
-          name: "Card 3",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
-          price: 2000,
-          unit: "VND/m2",
-          size: 100,
-          city: "Ha Noi",
-          status: null,
-          district: "Hai Ba Trung",
-        },
-        {
-          id: 8,
-          name: "Card 4",
-          imageUrl:
-            "https://firebasestorage.googleapis.com/v0/b/tensile-nebula-390307.appspot.com/o/Moc4.jpg?alt=media&token=332cfb56-5143-4049-a63a-dd9002b70edc",
-          size: 100,
-          city: "Ha Noi",
-          status: "Sắp mở bán",
-          district: "Hai Ba Trung",
-        },
-      ],
-      currentIndex: 0,
-      cardsPerSlide: 4,
+      projects: [],
+      projectStatus : projectStatus,
     };
   },
-  computed: {
-    totalSlides() {
-      return Math.ceil(this.projects.length / this.cardsPerSlide);
-    },
-    displayedProjects() {
-      const start = this.currentIndex * this.cardsPerSlide;
-      const end = start + this.cardsPerSlide;
-      return this.projects.slice(start, end);
-    },
+  mounted() {
+    this.listProject();
   },
   methods: {
-    slideLeft() {
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      }
+    listProject() {
+      ProjectApi.listFavorite(
+        (response) => {
+          this.projects = response.data
+        }
+      )
     },
-    slideRight() {
-      if (this.currentIndex < this.totalSlides - 1) {
-        this.currentIndex++;
-      }
-    },
-    getStatusClass(project) {
-      return {
-        'status-pending': project.status === 'Sắp mở bán',
-        'status-completed': project.status === 'Đang mở bán',
-        'status-handed': project.status === 'Đã bàn giao',
-      };
-    }
   },
 };
 </script>
@@ -173,6 +75,10 @@ h4 {
 .bottom {
   margin-top: 13px;
   line-height: 12px;
+}
+
+.project-card {
+  height: 100%;
 }
 
 .project-name-show {

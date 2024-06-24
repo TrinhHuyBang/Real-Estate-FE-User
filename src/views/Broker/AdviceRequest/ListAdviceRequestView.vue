@@ -101,6 +101,10 @@ export default {
         },
         (response) => {
           this.advice_requests = response.data.data
+          this.currentPage = page
+          this.perPage = response.data.per_page
+          this.totalPage = response.data.last_page
+          this.total = response.data.total
         }
       )
     },

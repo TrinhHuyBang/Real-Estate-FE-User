@@ -2,26 +2,16 @@
   <div>
     <div class="search">
       <p>Hệ thống quản lý và quảng bá bất động sản</p>
-      <!-- <el-form :model="searchForm" @submit.prevent="submitSearch">
-        <div class="input-form">
-          <i class="el-icon-location-information" style="margin: 10px 10px 10px 20px; color: red; font-size:20px;"></i>
-          <el-input placeholder="Tìm kiếm theo địa điểm, quận, tên đường, ..." v-model="searchForm.searchKey" class="input-with-select">
-            <el-select v-model="selectedType" slot="prepend" placeholder="Loại nhà đất"  clearable>
-              <el-option label="Nhà đất bán" value="Nhà đất bán"></el-option>
-              <el-option label="Nhà đất cho thuê" value="Nhà đất cho thuê"></el-option>
-            </el-select>
-            <el-button slot="append" icon="el-icon-search" type="primary" native-type="submit"></el-button>
-          </el-input>
-        </div>
-      </el-form> -->
     </div>
     <div class="home">
       <div class="news">
         <el-tabs v-model="activeName">
-          <el-tab-pane v-for="tab in tabNews" :key="tab.name" :label="tab.label" :name="tab.name">
+          <el-tab-pane v-for="tab in tabNews" :key="tab.name" :name="tab.name">
+            <span class="tabs-item-custom" slot="label"> {{ tab.label }}</span>
             <headline-news :newsList="newsList"/>
           </el-tab-pane>
         </el-tabs>
+        <el-button @click="gotoPage('tin-tuc')" class="btn-view-more" type="text">Xem thêm <i class="el-icon-right"></i></el-button>
       </div>
       <RealEstateForYou />
       <ProjectForYou />
@@ -112,14 +102,20 @@ export default {
 }
 
 .news {
+  position: relative;
   margin: 0px 20px 0 20px;
 }
 
-.el-tabs__item {
+.btn-view-more {
+  position: absolute;
+  right: 20px;
+  top: 0px;
+}
+
+.tabs-item-custom {
   height: 45px;
   font-size: 20px;
   font-weight: 500;
-  color: #000;
 }
 
 .search {

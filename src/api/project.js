@@ -16,6 +16,19 @@ export default {
             })
     },
 
+    listFavorite(completion, error) {
+        axios
+            .get(`${root_uri}/list-favorite`)
+            .then((response) => {
+                completion(response.data)
+            })
+            .catch((err) => {
+                if (error) {
+                    error(err)
+                }
+            })
+    },
+
     create(data, completion, error) {
         axios
             .post(`${root_uri}/create`, data)
