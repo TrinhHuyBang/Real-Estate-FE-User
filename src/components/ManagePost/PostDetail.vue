@@ -33,7 +33,7 @@
           </el-button>
         </td>
         <td style="width: 10%">
-          <el-button>
+          <el-button @click="handleOpenDialogReport()">
             <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
           </el-button>
         </td>
@@ -182,6 +182,7 @@
           <span class="owner-contact">Yêu cầu liên hệ lại</span>
         </el-button>
         <ContactModal :isActive="dialogContact" :email="ownerInfo?.email" :type="'user'" @closeContactModal="dialogContact = !dialogContact" />
+        <ReportModal :isActive="dialogReport" :email="ownerInfo?.email" :type="'user'" @closeReportModal="dialogReport = !dialogReport" />
       </div>
     </div>
     
@@ -197,6 +198,7 @@ import BookmarkApi from '@/api/bookmark'
 import ContactModal from '@/components/Global/ContactModal.vue'
 import MapBox from '@/components/Global/MapBox.vue'
 import { mapActions, mapState } from "vuex"
+import ReportModal from '../Global/ReportModal.vue'
 export default {
   data() {
     return {
@@ -213,6 +215,7 @@ export default {
       PostType: postType,
       href: window.location.href,
       dialogContact: false,
+      dialogReport: false,
       ownerInfo: {
         name: "",
         email: "",
@@ -225,6 +228,7 @@ export default {
   components: {
     ContactModal,
     MapBox,
+    ReportModal,
   },
   computed: mapState({
     user: (state) => state.user,
@@ -335,6 +339,9 @@ export default {
 
     handleOpenDialogContact() {
       this.dialogContact = true
+    },
+    handleOpenDialogReport() {
+      this.dialogReport = true
     }
   },
   watch: {

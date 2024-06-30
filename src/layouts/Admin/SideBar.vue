@@ -94,7 +94,7 @@ export default {
         {
           name: "ManagePost",
           icon: "fa-regular fa-file-lines",
-          label: "Quản lý tin đăng",
+          label: "Quản lý bài đăng",
           permission: "view_any_post",
           subMenu: [
             {
@@ -104,8 +104,13 @@ export default {
             },
             {
               name: "ListPost",
-              label: "Danh sách tin",
+              label: "Danh sách bài đăng",
               page: "/admin/danh-sach-tin-dang",
+            },
+            {
+              name: "Report",
+              label: "Danh sách báo cáo",
+              page: "/admin/danh-sach-bao-cao",
             },
           ],
         },

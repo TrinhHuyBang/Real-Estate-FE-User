@@ -268,6 +268,13 @@ const routes = [
   },
 
   {
+    path: '/admin/danh-sach-bao-cao',
+    name: 'danh-sach-bao-cao',
+    component: () => import('../views/Admin/Post/ReportView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, hideHeader: true }
+  },
+
+  {
     path: '/admin/tin-cho-duyet/:id',
     name: 'tin-cho-duyet-admin',
     component: () => import('../views/Admin/Post/RequestPostDetailView.vue'),
