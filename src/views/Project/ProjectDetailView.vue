@@ -61,17 +61,9 @@
         <div>
           <div class="render-html" v-html="project.description" style="width: 95%"></div>
         </div>
-        <div id="project-loaction">
+        <div v-if="project.map_iframe" id="project-loaction">
           <h4 class="list_titles">Vị trí dự án {{ project.name }}</h4>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.247274130735!2d106.72601367485603!3d10.715401189429684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175250035d50c45%3A0xb8ec6c61056ad0c7!2zVGhlIEF1cm9yYSBQaMO6IE3hu7kgSMawbmc!5e0!3m2!1svi!2s!4v1704270322667!5m2!1svi!2s"
-            width="100%"
-            height="450"
-            style="border: 0"
-            :allowfullscreen="true"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+          <div id="map" v-html="project.map_iframe"></div>
         </div>
       </div>
       <div class="col-4 project-contact-information-animation">
@@ -258,5 +250,10 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 5px;
+}
+
+#map >>> iframe {
+  width : 100%;
+  height : 450px;
 }
 </style>

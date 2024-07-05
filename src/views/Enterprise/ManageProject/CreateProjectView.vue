@@ -57,6 +57,11 @@
           <label class="label" for="address">Địa chỉ hiển thị<span class="required-field"> *</span></label>
           <el-input type="text" class="input" id="address" v-model="project.address" placeholder="Có thể bổ sung chi tiết về ngõ, hẻm" required></el-input>
           <span v-if="submitted && !$v.address.required" class="p-error">Địa chỉ không được để trống!</span>
+
+          <label class="label" for="address">Vị trí trên bản đồ<span class="required-field"></span></label>
+          <el-input type="text" class="input" id="address" v-model="project.map_iframe" placeholder="Iframe được copy từ google map" required></el-input>
+
+          <div v-if="project.map_iframe" id="map" v-html="project.map_iframe"></div>
         </el-card>
 
         <el-card class="post-infor card">
@@ -234,6 +239,7 @@ export default {
         scale : "",
         builders : "",
         designer : "",
+        map_iframe: '',
       },
       districtSelected: "",
       wardSelected: "",
@@ -626,5 +632,10 @@ input[type="file"] {
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25),
     0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#map >>> iframe {
+  width : 100%;
+  height : 400px;
 }
 </style>

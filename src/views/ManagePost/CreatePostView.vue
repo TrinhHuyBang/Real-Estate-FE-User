@@ -184,6 +184,10 @@
       <span v-if="submitted && !$v.address.required" class="p-error"
         >Địa chỉ không được để trống!</span
       >
+
+      <label class="label" for="address">Vị trí trên bản đồ<span class="required-field"></span></label>
+      <el-input type="text" class="input" id="address" v-model="map_iframe" placeholder="Iframe được copy từ google map" required></el-input>
+      <div v-if="map_iframe" id="map" v-html="map_iframe"></div>
     </el-card>
 
     <el-card class="post-infor card">
@@ -529,6 +533,7 @@ export default {
       unitSelected: "VND",
       submitted: false,
       loading : false,
+      map_iframe: '',
     };
   },
   validations: {
@@ -581,7 +586,6 @@ export default {
             this.activeButton = this.post.type
             this.title = this.post.title
             this.description = this.post.description
-            this.project = this.post.project_id
             this.province = this.post.province
             this.street= this.post.street
             this.address = this.post.address
@@ -593,6 +597,7 @@ export default {
             this.size = this.post.size
             this.price = this.post.price*1000000
             this.unitSelected = this.post.unit
+            this.map_iframe = this.post.map_iframe
             this.images = []
             this.post.images.forEach( image => {
               this.images.push({
@@ -600,6 +605,9 @@ export default {
               })
             })
             this.value = this.post.type_id
+            setTimeout(() => {
+              this.project = this.post.project_id
+            }, 1000);
         },
       )
     },
@@ -633,6 +641,7 @@ export default {
         price: this.price ? this.price / 1000000 : 0,
         unit: this.unitSelected,
         images: this.images_urls,
+        map_iframe: this.map_iframe,
       };
       if(this.$route.params.id) {
         this.updatePost(data)
@@ -835,7 +844,6 @@ export default {
             this.district.split("-")[0] + ", " + this.province.split("-")[0];
         }
       }
-      this.street = "";
     },
     street(val) {
       if (val) {
@@ -866,6 +874,10 @@ export default {
         var selectedProject = this.projects.find(function (project) {
           return project.id === val;
         });
+
+        if(selectedProject.map_iframe) {
+          this.map_iframe = selectedProject.map_iframe
+        }
 
         if (!this.district) {
           this.district = selectedProject.district;
@@ -1056,5 +1068,10 @@ input[type="file"] {
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25),
     0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#map >>> iframe {
+  width : 100%;
+  height : 400px;
 }
 </style>

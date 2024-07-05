@@ -186,8 +186,8 @@
       </div>
     </div>
     
-    <h5 class="sub-title">Xem trên bản đồ</h5>
-    <MapBox :address="post.address" />
+    <h5 v-if="post.map_iframe" class="sub-title">Xem trên bản đồ</h5>
+    <div v-if="post.map_iframe" id="map" v-html="post.map_iframe"></div>
   </div>
 </template>
 
@@ -196,7 +196,6 @@ import PostApi from "@/api/post"
 import postType from '@/data/postType'
 import BookmarkApi from '@/api/bookmark'
 import ContactModal from '@/components/Global/ContactModal.vue'
-import MapBox from '@/components/Global/MapBox.vue'
 import { mapActions, mapState } from "vuex"
 import ReportModal from '../Global/ReportModal.vue'
 export default {
@@ -227,7 +226,6 @@ export default {
   },
   components: {
     ContactModal,
-    MapBox,
     ReportModal,
   },
   computed: mapState({
@@ -464,5 +462,10 @@ export default {
 
 .label-infor{
   font-weight: 600;
+}
+
+#map >>> iframe {
+  width : 100%;
+  height : 450px;
 }
 </style>
