@@ -6,7 +6,7 @@
         <div class="filter-post">
           <h4>Bộ lọc tìm kiếm</h4>
           <label for="post-type">Loại nhà đất</label>
-          <el-select
+          <el-select no-data-text="Không có dữ liệu"
             class="input-filter"
             id="post-type"
             filterable
@@ -32,23 +32,23 @@
           </div>
           </el-select>
           <label for="province">Khu vực</label>
-            <el-select class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+            <el-select no-data-text="Không có dữ liệu" class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
               <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
             </el-select>
-            <el-select :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+            <el-select no-data-text="Không có dữ liệu" :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
               <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
             </el-select>
-            <el-select :disabled="!district" class="input-filter" id="ward" v-model="ward" placeholder="-----  Phường, xã  -----" filterable clearable>
+            <el-select no-data-text="Không có dữ liệu" :disabled="!district" class="input-filter" id="ward" v-model="ward" placeholder="-----  Phường, xã  -----" filterable clearable>
               <el-option v-for="item in wards" :key="item.ward_id" :label="item.ward_name" :value="item.ward_name + '-' + item.ward_id"></el-option>
             </el-select>
 
           <label for="province">Dự án</label>
-          <el-select no-data-text="No data" class="input-filter" id="province" v-model="project" placeholder="Dự án" filterable clearable>
+          <el-select no-data-text="Không có dữ liệu" class="input-filter" id="province" v-model="project" placeholder="Dự án" filterable clearable>
             <el-option v-for="item in projects" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
 
           <label for="post-price">Mức giá</label>
-          <el-select
+          <el-select no-data-text="Không có dữ liệu"
             class="input-filter"
             id="post-price"
             clearable
@@ -87,7 +87,7 @@
             </div>
           </el-select>
           <label for="post-size">Diện tích</label>
-          <el-select
+          <el-select no-data-text="Không có dữ liệu"
             class="input-filter"
             id="post-size"
             clearable
@@ -119,13 +119,6 @@
               >{{ size }}</el-option
             >
           </el-select>
-          <label for="post-type"></label>
-          <!-- <el-select
-            class="input-filter"
-            id="post-type"
-            clearable
-            placeholder="Tất cả"
-          ></el-select> -->
           <div class="action-filter">
             <el-button type="danger" icon="el-icon-refresh" @click="resetFilter">Đặt lại</el-button>
             <el-button type="primary" @click="applyFilter">Áp dụng</el-button>
@@ -137,7 +130,7 @@
           <h4>{{ title }}</h4>
           <p>Hiện có {{ total }} bất động sản</p>
           <div class="select-post-type">
-            <el-select
+            <el-select no-data-text="Không có dữ liệu"
               style="margin-bottom: 10px;"
               v-model="selectedOrderBy"
               placeholder="Tin mới nhất"
@@ -226,6 +219,7 @@ export default {
   },
   data(){
     return {
+      loading: null,
       numberBookmark: null,
       title: "",
       optionRentPrice: [
@@ -586,6 +580,7 @@ export default {
     },
     
     listPost(page) {
+      this.loading = this.pageLoading()
       var data = {
         ...this.filters,
         'type': this.type,
@@ -601,6 +596,10 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading.close()
+        },
+        () => {
+          this.loading.close()
         }
       )
     },

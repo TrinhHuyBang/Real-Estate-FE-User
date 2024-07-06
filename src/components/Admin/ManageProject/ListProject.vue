@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table border :data="projects" stripe style="width: 100%; margin-top: 20px">
+    <el-table v-loading="table_loading" empty-text="Không có dữ liệu" border :data="projects" stripe style="width: 100%; margin-top: 20px">
       <el-table-column align="center" prop="id" label="ID" width="80" fixed>
       </el-table-column>
       <el-table-column align="center" label="Loại dự án" width="100">
@@ -90,11 +90,16 @@ export default {
       type: Array,
       default: () => [],
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
       ProjectType: projectType,
       projectStatus : projectStatus,
+      table_loading: false,
     };
   },
   methods: {
@@ -111,6 +116,7 @@ export default {
         type: "warning",
       })
         .then(() => {
+          this.table_loading = true
           AdminProjectApi.delete(
             project.id,
             () => {
@@ -118,6 +124,7 @@ export default {
                 title: "Thành công",
                 message: "Đã xoá dự án thành công!",
               });
+              this.table_loading = false
               this.$emit("acceptRejectAction");
             },
             (error) => {
@@ -134,12 +141,14 @@ export default {
                   message: "Xoá dự án thất bại",
                 });
               }
+              this.table_loading = false
             }
           );
         })
         .catch(() => {});
     },
     acceptRequest(id) {
+      this.table_loading = true
       AdminProjectApi.acceptRequest(
         id,
         () => {
@@ -147,6 +156,7 @@ export default {
             title: "Thành công",
             message: "Đã duyệt dự án có id" + id + " thành công!",
           });
+          this.table_loading = false
           this.$emit("acceptRejectAction");
         },
         (error) => {
@@ -163,11 +173,13 @@ export default {
               message: "Duyệt dự án thất bại",
             });
           }
+          this.table_loading = false
         }
       );
     },
 
     rejectRequest(id) {
+      this.table_loading = true
       AdminProjectApi.rejectRequest(
         id,
         () => {
@@ -175,6 +187,7 @@ export default {
             title: "Thành công",
             message: "Đã huỷ yêu cầu duyệt tin!",
           });
+          this.table_loading = false
           this.$emit("acceptRejectAction");
         },
         (error) => {
@@ -191,12 +204,18 @@ export default {
               message: "Hành động thất bại!",
             });
           }
+          this.table_loading = false
         }
       );
     },
     showType(type_id) {
       return this.ProjectType[type_id];
     },
+  },
+  watch: {
+    loading(val) {
+      this.table_loading = val
+    }
   },
 };
 </script>

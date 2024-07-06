@@ -3,24 +3,24 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h5>About Us</h5>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse euismod lectus sit amet lacus lacinia, et fringilla libero aliquet. Vestibulum eget lectus vitae ex placerat aliquam. </p>
+          <h5>Hệ thống quản lý và quảng bá BĐS</h5>
+          <p>Với mục tiêu quảng bá thị trường BĐS đến rộng rãi toàn thể người dân trên toàn quốc </p>
         </div>
         <div class="col-md-3">
-          <h5>Quick Links</h5>
+          <h5>Truy cập nhanh</h5>
           <ul class="list-unstyled">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/nha-dat-ban">Nhà đất bán</a></li>
+            <li><a href="/nha-dat-cho-thue">Nhà đất thuê</a></li>
+            <li><a href="/du-an">Dự án</a></li>
           </ul>
         </div>
         <div class="col-md-3">
-          <h5>Contact</h5>
+          <h5>Liên hệ</h5>
           <ul class="list-unstyled">
-            <li>123 Street, City</li>
-            <li>contact@example.com</li>
-            <li>(123) 456-7890</li>
+            <li>Trịnh Huy Bằng</li>
+            <li>huybang.trinh@gmail.com</li>
+            <li>0973733651</li>
           </ul>
         </div>
       </div>

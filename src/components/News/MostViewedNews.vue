@@ -1,6 +1,20 @@
 <template>
     <div class="most-viewed-news">
         <h6>Tin tức được xem nhiều nhất </h6>
+        <div v-if="loading">
+            <div v-for="index in 5" :key="index">
+                <hr>
+                <div class="single-most-viewed-news">
+                    <el-skeleton style="width: 100%" animated>
+                        <template slot="template">
+                            <div>
+                                <el-skeleton-item variant="h3" style="width: 90%;" />
+                            </div>
+                        </template>
+                    </el-skeleton>
+                </div>
+            </div>
+        </div>
         <div v-for="(item, index) in newsList" :key="item.id">
             <hr>
             <div class="single-most-viewed-news">
@@ -27,6 +41,7 @@ export default {
     data() {
         return {
             newsList: [],
+            loading: false,
         }
     },
     created() {
@@ -34,13 +49,18 @@ export default {
     },
     methods: {
         listNews() {
+            this.loading = true
             NewsApi.listHeadline(
                 {
                     'type': 'headline',
                 },
                 (response) => {
                     this.newsList = response.data
+                    this.loading = false
                 },
+                () => {
+                    this.loading = false
+                }
             )
         },
     },

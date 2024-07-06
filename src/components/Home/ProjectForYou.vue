@@ -2,7 +2,8 @@
   <div>
     <div class="container">
       <h4>Dự án bất động sản nổi bật</h4>
-      <div class="row">
+      <ListPostRowSkeleton v-if="!projects.length"/>
+      <div v-else class="row">
         <div class="col-6 col-md-4 col-lg-3" v-for="project in projects" :key="project.id">
           <router-link :to="`/chi-tiet-du-an/${project.id}`" class="link-to-detail">
             <el-card class="project-card" :body-style="{ padding: '0px' }">
@@ -40,6 +41,7 @@
 <script>
 import projectStatus from '@/data/projectStatus'
 import ProjectApi from '@/api/project'
+import ListPostRowSkeleton from '../Global/ListPostRowSkeleton.vue'
 export default {
   data() {
     return {
@@ -49,6 +51,9 @@ export default {
   },
   mounted() {
     this.listProject();
+  },
+  components: {
+    ListPostRowSkeleton,
   },
   methods: {
     listProject() {

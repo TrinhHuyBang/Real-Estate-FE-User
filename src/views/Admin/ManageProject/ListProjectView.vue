@@ -12,7 +12,7 @@
       <el-button type="success" style="margin-left: 10px" @click="listRequest(1)">Tìm kiếm</el-button>
       <el-button type="primary" @click="handleReset()">Đặt lại</el-button>
       <div style="width: 100%;">
-        <list-project :projects="projects" @acceptRejectAction="listRequest(1)"/>
+        <list-project :loading="loading" :projects="projects" @acceptRejectAction="listRequest(1)"/>
         <div v-if="projects.length" class="paginate-page">
           <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
         </div>
@@ -40,10 +40,12 @@ export default {
       perPage: 0,
       total: 0,
       type: "sell",
+      loading: false,
     };
   },
   methods: {
     listRequest(page) {
+      this.loading = true
       AdminProjectApi.list(
         page,
         {
@@ -55,6 +57,7 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading = false
         }, (error) => {
           if(error?.response?.data?.code) {
             if(error.response.data.code === 403) {
@@ -65,6 +68,7 @@ export default {
               this.goBack()
             }
           }
+          this.loading = false
         }
       )
     },

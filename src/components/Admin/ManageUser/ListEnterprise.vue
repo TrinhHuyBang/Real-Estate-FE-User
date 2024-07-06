@@ -1,6 +1,8 @@
 <template>
   <div>
     <el-table
+      v-loading="table_loading"
+      empty-text="Không có dữ liệu"
       border
       :data="enterprises"
       stripe
@@ -131,12 +133,17 @@ export default {
       type: Array,
       default: () => [],
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
       fields: fields,
       selectedImageUrl: null,
       isModalVisible: false,
+      table_loading: false,
     };
   },
   components: {
@@ -168,6 +175,7 @@ export default {
         .catch(() => {});
     },
     handleBlock(id) {
+      this.table_loading = true
       AdminEnterpriseApi.blockAccount(
         id,
         (response) => {
@@ -175,6 +183,7 @@ export default {
             title: "Thành công",
             message: response.data,
           });
+          this.table_loading = false
           this.$emit("acceptRejectAction");
         },
         (error) => {
@@ -191,6 +200,7 @@ export default {
               message: error.response.data.error,
             });
           }
+          this.table_loading = false
         }
       );
     },
@@ -203,6 +213,7 @@ export default {
       this.isModalVisible = false
     },
     acceptRequest(id) {
+      this.table_loading = true
       AdminEnterpriseApi.acceptRequest(
         id,
         () => {
@@ -210,6 +221,7 @@ export default {
             title: "Thành công",
             message: "Đã duyệt yêu cầu đăng ký có id " + id + " thành công!",
           });
+          this.table_loading = false
           this.$emit("acceptRejectAction");
         },
         (error) => {
@@ -226,6 +238,7 @@ export default {
               message: error.response.data.error,
             });
           }
+          this.table_loading = false
         }
       );
     },
@@ -249,6 +262,7 @@ export default {
     },
 
     rejectRequest(id) {
+      this.table_loading = true
       AdminEnterpriseApi.rejectRequest(
         id,
         () => {
@@ -256,6 +270,7 @@ export default {
             title: "Thành công",
             message: "Đã từ chối yêu cầu đăng ký!",
           });
+          this.table_loading = false
           this.$emit("acceptRejectAction");
         },
         (error) => {
@@ -272,9 +287,15 @@ export default {
               message: error.response.data.error,
             });
           }
+          this.table_loading = false
         }
       );
     },
+  },
+  watch: {
+    loading(val) {
+      this.table_loading = val
+    }
   },
 };
 </script>

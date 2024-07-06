@@ -15,13 +15,13 @@
         <span slot="label">
           Tất cả tin tức
         </span>
-        <ListNews :news="news" @deleteNews="listNews(1)"/>
+        <ListNews :news="news" :loading="loading" @deleteNews="listNews(1)"/>
       </el-tab-pane>
       <el-tab-pane name="listOwner">
         <span slot="label">
           Tin tức của bản thân
         </span>
-        <ListNews :news="news" @deleteNews="listNews(1)"/>
+        <ListNews :news="news" :loading="loading" @deleteNews="listNews(1)"/>
       </el-tab-pane>
     </el-tabs>
     <div v-if="news.length" class="paginate-page">
@@ -44,6 +44,7 @@ export default {
             totalPage: 0,
             perPage: 0,
             total: 0,
+            loading: false,
         }
     },
     components: {
@@ -54,6 +55,7 @@ export default {
     },
     methods: {
         listNews(page) {
+            this.loading = true
             AdminNewsApi.list(
                 page,
                 {
@@ -66,6 +68,7 @@ export default {
                     this.perPage = response.data.per_page
                     this.totalPage = response.data.last_page
                     this.total = response.data.total
+                    this.loading = false
                 },
                 (error) => {
                     if(error?.response?.data?.code) {
@@ -77,6 +80,7 @@ export default {
                             this.goBack()
                         }
                     }
+                    this.loading = true
                 }
             )
         },

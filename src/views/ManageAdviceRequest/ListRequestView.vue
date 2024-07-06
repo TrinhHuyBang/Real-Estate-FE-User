@@ -137,4 +137,8 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+.container {
+  margin-top: 30px;
+}
 </style>

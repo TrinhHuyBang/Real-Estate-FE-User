@@ -231,7 +231,7 @@
             <label class="label"
               >Lĩnh vực chính <span class="required-field"> *</span></label
             >
-            <el-select
+            <el-select no-data-text="Không có dữ liệu"
               disabled
               class="select"
               v-model="user.enterprise_infor.main_field"
@@ -255,7 +255,7 @@
           </el-col>
           <el-col :span="12">
             <label class="label">Lĩnh vực phụ</label>
-            <el-select
+            <el-select no-data-text="Không có dữ liệu"
               class="select sub-fields"
               v-model="user.enterprise_infor.sub_field"
               multiple

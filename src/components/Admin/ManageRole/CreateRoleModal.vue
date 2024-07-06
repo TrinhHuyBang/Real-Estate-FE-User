@@ -8,7 +8,7 @@
             </el-form-item>
             <el-form-item>
                 <label class="label">Chức năng có thể thực hiện:<span class="required-field"> *</span></label>
-                <el-select class="select-input" v-model="selected" filterable multiple placeholder="Select">
+                <el-select no-data-text="Không có dữ liệu" class="select-input" v-model="selected" filterable multiple placeholder="Select">
                     <el-option
                         v-for="(item, index) in permissions"
                         :key="index"

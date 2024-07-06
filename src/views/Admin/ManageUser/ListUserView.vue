@@ -11,6 +11,8 @@
     <el-button type="success" style="margin-left: 10px" @click="listUser(1)">Tìm kiếm</el-button>
     <el-button type="primary" @click="handleReset()">Đặt lại</el-button>
     <el-table
+        v-loading="loading"
+        empty-text="Không có dữ liệu"
         border
         :data="users"
         stripe
@@ -120,6 +122,7 @@ export default {
             total: 0,
             selectedImageUrl: null,
             isModalVisible: false,
+            loading: false,
         }
     },
     components: {
@@ -130,6 +133,7 @@ export default {
     },
     methods: {
         listUser(page) {
+            this.loading = true
             AdminUserApi.list(
                 page,
                 {
@@ -141,6 +145,7 @@ export default {
                     this.perPage = response.data.per_page
                     this.totalPage = response.data.last_page
                     this.total = response.data.total
+                    this.loading = false
                 },
                 (error) => {
                     if(error?.response?.data?.code) {
@@ -152,6 +157,7 @@ export default {
                             this.goBack()
                         }
                     }
+                    this.loading = false
                 }
             )
         },
@@ -187,6 +193,7 @@ export default {
         },
 
         handleBlock(id) {
+            this.loading = true
             AdminUserApi.blockAccount(
                 id,
                 (response) => {
@@ -195,6 +202,7 @@ export default {
                         message: response.data,
                     });
                     this.listUser(this.currentPage)
+                    this.loading = false
                 },
                 (error) => {
                     if(error?.response?.data?.code) {
@@ -210,6 +218,7 @@ export default {
                             message: error.response.data.error,
                         });
                     }
+                    this.loading = false
                 }
             )
         },

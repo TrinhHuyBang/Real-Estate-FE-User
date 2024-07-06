@@ -49,7 +49,9 @@
         </div>
       </div>
       <el-table
-        v-if="notifications.length"
+        v-loading="loading"
+        empty-text="Không có dữ liệu"
+        v-if="notifications.length || loading"
         ref="multipleTable"
         :show-header="false"
         :data="notifications"
@@ -155,6 +157,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     };
   },
   computed: mapState({
@@ -190,6 +193,7 @@ export default {
     },
     
     listNotification(page) {
+      this.loading = true
       NotificationApi.list(
         page,
         {
@@ -201,10 +205,15 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading = false
+        },
+        () => {
+          this.loading = false
         }
       );
     },
     markAsReadAll() {
+      this.loading = true
       const unreadNotificationIds = this.multipleSelection
         .filter((notification) => notification.status === 0)
         .map((notification) => notification.id);
@@ -223,6 +232,10 @@ export default {
           this.commitSetNotificationCount(this.numberNotification);
           this.checked = false;
           this.toggleSelection();
+          this.loading = false
+        },
+        () => {
+          this.loading = false
         }
       );
     },
@@ -290,5 +303,8 @@ export default {
 
 .unread-notification {
   font-weight: bold;
+}
+.container {
+  margin-top: 30px;
 }
 </style>

@@ -66,13 +66,13 @@
             <p v-if="submitted && !$v.enterprise.business_number.required" class="p-error">Số đăng ký kinh doanh không được để trống!</p>
 
             <label class="label">Lĩnh vực chính <span class="required-field"> *</span></label>
-            <el-select class="select" v-model="enterprise.main_field" placeholder="Lĩnh vực chính" clearable filterable>
+            <el-select no-data-text="Không có dữ liệu" class="select" v-model="enterprise.main_field" placeholder="Lĩnh vực chính" clearable filterable>
               <el-option v-for="item in fields" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <p v-if="submitted && !$v.enterprise.main_field.required" class="p-error">Lĩnh vực chính không được để trống!</p>
 
             <label class="label">Lĩnh vực phụ</label>
-            <el-select class="select sub-fields" v-model="enterprise.sub_field" multiple placeholder="Lĩnh vực phụ" clearable filterable>
+            <el-select no-data-text="Không có dữ liệu" class="select sub-fields" v-model="enterprise.sub_field" multiple placeholder="Lĩnh vực phụ" clearable filterable>
               <el-option v-for="item in fields" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
 

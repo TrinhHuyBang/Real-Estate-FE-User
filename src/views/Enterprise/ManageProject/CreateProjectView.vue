@@ -6,7 +6,7 @@
             <h2>Thông tin cơ bản</h2>
           </div>
           <label class="label" for="type">Loại dự án<span class="required-field"> *</span></label>
-          <el-select class="select" v-model="project.type_id" filterable placeholder="Chọn loại dự án" clearable>
+          <el-select no-data-text="Không có dữ liệu" class="select" v-model="project.type_id" filterable placeholder="Chọn loại dự án" clearable>
               <el-option v-for="item in projectType.textValue" :key="item.value" :label="item.text" :value="item.value"></el-option>
           </el-select>
           <span v-if="submitted && !$v.value.required" class="p-error">Loại bất động sản không được để trống!</span>
@@ -15,13 +15,13 @@
             <tr>
               <td style="width: 50%">
                 <label class="label" for="province">Tỉnh, thành phố<span class="required-field"> *</span></label>
-                <el-select class="select" id="province" v-model="project.province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+                <el-select no-data-text="Không có dữ liệu" class="select" id="province" v-model="project.province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
                   <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
                 </el-select>
               </td>
               <td style="width: 50%">
                 <label class="label" for="district">Quận, huyện<span class="required-field"> *</span></label>
-                <el-select :disabled="!project.province" class="select" id="district" v-model="project.district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+                <el-select no-data-text="Không có dữ liệu" :disabled="!project.province" class="select" id="district" v-model="project.district" placeholder="-----  Quận, huyện  -----" filterable clearable>
                   <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
                 </el-select>
               </td>
@@ -37,7 +37,7 @@
             <tr>
               <td>
                 <label class="label" for="ward">Phường, xã<span class="required-field"> *</span></label>
-                <el-select :disabled="!project.district" class="select" id="ward" v-model="project.ward" placeholder="-----  Phường, xã  -----" filterable clearable>
+                <el-select no-data-text="Không có dữ liệu" :disabled="!project.district" class="select" id="ward" v-model="project.ward" placeholder="-----  Phường, xã  -----" filterable clearable>
                   <el-option v-for="item in wards" :key="item.ward_id" :label="item.ward_name" :value="item.ward_name + '-' + item.ward_id"></el-option>
                 </el-select>
               </td>
@@ -111,7 +111,7 @@
             <tr>
                 <td style="width: 50%;">
                   <label class="label" for="title">Trạng thái dự án</label>
-                  <el-select class="select" v-model="project.project_status" placeholder="Trạng thái dự án" clearable>
+                  <el-select no-data-text="Không có dữ liệu" class="select" v-model="project.project_status" placeholder="Trạng thái dự án" clearable>
                     <el-option v-for="item in projectStatus.listStatus" :key="item.value" :label="item.text" :value="item.value"></el-option>
                   </el-select>
                 </td>
@@ -143,7 +143,7 @@
                 </td>
                 <td style="padding-left: 10px">
                     <label class="label" for="title">Đơn vị</label>
-                    <el-select class="select" id="unit" v-model="project.size_unit">
+                    <el-select no-data-text="Không có dữ liệu" class="select" id="unit" v-model="project.size_unit">
                         <el-option v-for="item in unit" :key="item.value" :label="item.text" :value="item.value"></el-option>
                     </el-select>
                 </td>

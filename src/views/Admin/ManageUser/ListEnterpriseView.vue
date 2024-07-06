@@ -21,14 +21,14 @@
         <span slot="label">
           Danh sách doanh nghiệp
         </span>
-        <ListEnterprise :enterprises="enterprises" @acceptRejectAction="listEnterprise(currentPage)"/>
+        <ListEnterprise :loading="loading" :enterprises="enterprises" @acceptRejectAction="listEnterprise(currentPage)"/>
       </el-tab-pane>
       <el-tab-pane name="listRequest">
         <span slot="label">
           Danh sách chờ duyệt
           <el-badge :max="99" v-if="enterpriseRequestCount" :value="enterpriseRequestCount"/>
         </span>
-        <ListEnterprise :enterprises="enterprises" @acceptRejectAction="updateRequestCount()"/>
+        <ListEnterprise :loading="loading" :enterprises="enterprises" @acceptRejectAction="updateRequestCount()"/>
       </el-tab-pane>
     </el-tabs>
     <div v-if="enterprises.length" class="paginate-page">
@@ -59,6 +59,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     };
   },
   components: {
@@ -72,6 +73,7 @@ export default {
   },
   methods: {
     listEnterprise(page) {
+      this.loading = true
       AdminEnterpriseApi.list(
         page,
         {
@@ -84,6 +86,7 @@ export default {
           this.perPage = response.data.per_page
           this.totalPage = response.data.last_page
           this.total = response.data.total
+          this.loading = false
         },
         (error) => {
           if(error?.response?.data?.code) {
@@ -95,6 +98,7 @@ export default {
               this.goBack()
             }
           }
+          this.loading = false
         }
       );
     },

@@ -1,8 +1,9 @@
 <template>
-  <div v-if="total">
+  <div>
     <div class="container">
       <h4>Bất động sản dành cho bạn</h4>
-      <div class="row">
+      <ListPostRowSkeleton v-if="!posts.length || loading"/>
+      <div v-else class="row">
         <div
           class="col-6 col-md-4 col-lg-3 post-card"
           v-for="post in posts"
@@ -45,6 +46,7 @@
 import BookmarkApi from "@/api/bookmark"
 import PostApi from "@/api/post"
 import { mapActions, mapState } from 'vuex'
+import ListPostRowSkeleton from '../Global/ListPostRowSkeleton.vue'
 export default {
   data() {
     return {
@@ -54,7 +56,11 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     }
+  },
+  components: {
+    ListPostRowSkeleton,
   },
   computed: mapState({
     user: (state) => state.user,
@@ -65,6 +71,7 @@ export default {
   },
   methods: {
     getPosts(page) {
+      this.loading = true
       PostApi.listSuggestPost(
         page,
         {
@@ -76,6 +83,10 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading = false
+        },
+        () => {
+          this.loading = false
         }
       )
     },

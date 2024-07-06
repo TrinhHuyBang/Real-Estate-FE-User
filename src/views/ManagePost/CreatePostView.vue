@@ -21,7 +21,7 @@
       <label class="label" for="type"
         >Loại bất động sản<span class="required-field"> *</span></label
       >
-      <el-select
+      <el-select no-data-text="Không có dữ liệu"
         class="select"
         v-model="value"
         filterable
@@ -55,7 +55,7 @@
             <label class="label" for="province"
               >Tỉnh, thành phố<span class="required-field"> *</span></label
             >
-            <el-select
+            <el-select no-data-text="Không có dữ liệu"
               class="select"
               id="province"
               v-model="province"
@@ -75,7 +75,7 @@
             <label class="label" for="district"
               >Quận, huyện<span class="required-field"> *</span></label
             >
-            <el-select
+            <el-select no-data-text="Không có dữ liệu"
               :disabled="!province"
               class="select"
               id="district"
@@ -112,7 +112,7 @@
             <label class="label" for="ward"
               >Phường, xã<span class="required-field"> *</span></label
             >
-            <el-select
+            <el-select no-data-text="Không có dữ liệu"
               :disabled="!district"
               class="select"
               id="ward"
@@ -154,7 +154,7 @@
       </table>
 
       <label class="label" for="project">Dự án</label>
-      <el-select
+      <el-select no-data-text="Không có dữ liệu"
         class="select"
         id="project"
         v-model="project"
@@ -304,7 +304,7 @@
             <label class="label" for="title"
               >Đơn vị<span class="required-field"> *</span></label
             >
-            <el-select class="select" id="unit" v-model="unitSelected">
+            <el-select no-data-text="Không có dữ liệu" class="select" id="unit" v-model="unitSelected">
               <el-option
                 v-for="item in unit"
                 :key="item.value"

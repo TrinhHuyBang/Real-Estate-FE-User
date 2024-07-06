@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h4>Đánh giá từ người dùng</h4>
-    <el-table border :data="reviews" stripe style="width: 100%; margin-top: 20px;">
+    <el-table v-loading="loading" empty-text="Không có dữ liệu" border :data="reviews" stripe style="width: 100%; margin-top: 20px;">
       <el-table-column align="center" label="Người dùng" width="260">
         <template slot-scope="scope">
           <router-link :to="`/chi-tiet-nguoi-dung/${scope.row.user_id}`" class="username-avt">
@@ -165,6 +165,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     };
   },
   mounted() {
@@ -172,6 +173,7 @@ export default {
   },
   methods: {
     listReview(page) {
+      this.loading = true
       BrokerApi.listReview(
         page,
         (response) => {
@@ -180,7 +182,11 @@ export default {
           this.perPage = response.data.per_page
           this.totalPage = response.data.last_page
           this.total = response.data.total
+          this.loading = false
         },
+        () => {
+          this.loading = false
+        }
       );
     },
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <list-post :title="title"></list-post>
   </div>
 </template>
@@ -19,5 +19,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.container {
+  margin-top: 30px;
+}
 </style>

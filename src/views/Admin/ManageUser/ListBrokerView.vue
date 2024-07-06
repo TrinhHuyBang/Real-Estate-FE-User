@@ -21,14 +21,14 @@
         <span slot="label">
           Danh sách nhà môi giới
         </span>
-        <ListBroker :brokers="brokers" @acceptRejectAction="listBroker(currentPage)"/>
+        <ListBroker :loading="loading" :brokers="brokers" @acceptRejectAction="listBroker(currentPage)"/>
       </el-tab-pane>
       <el-tab-pane name="listRequest">
         <span slot="label">
           Danh sách chờ duyệt
           <el-badge :max="99" v-if="brokerRequestCount" :value="brokerRequestCount"/>
         </span>
-        <ListBroker :brokers="brokers" @acceptRejectAction="updateRequestCount()"/>
+        <ListBroker :loading="loading" :brokers="brokers" @acceptRejectAction="updateRequestCount()"/>
       </el-tab-pane>
     </el-tabs>
 
@@ -60,6 +60,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     };
   },
   components: {
@@ -73,6 +74,7 @@ export default {
   },
   methods: {
     listBroker(page) {
+      this.loading = true
       AdminBrokerApi.list(
         page,
         {
@@ -85,6 +87,7 @@ export default {
           this.perPage = response.data.per_page
           this.totalPage = response.data.last_page
           this.total = response.data.total
+          this.loading = false
         },
         (error) => {
           if(error?.response?.data?.code) {
@@ -96,6 +99,7 @@ export default {
               this.goBack()
             }
           }
+          this.loading = false
         }
       );
     },

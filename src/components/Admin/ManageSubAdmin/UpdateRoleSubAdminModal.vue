@@ -3,7 +3,7 @@
         <el-form>
             <el-form-item>
                 <label class="label">Quyền:</label>
-                <el-select class="select-input" v-model="selected" clearable filterable multiple placeholder="Select">
+                <el-select no-data-text="Không có dữ liệu" class="select-input" v-model="selected" clearable filterable multiple placeholder="Select">
                     <el-option
                         v-for="(item, index) in roles"
                         :key="index"

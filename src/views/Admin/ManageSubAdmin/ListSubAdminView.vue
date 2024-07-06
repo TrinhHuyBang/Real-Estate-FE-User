@@ -11,6 +11,8 @@
     <el-button type="success" style="margin-left: 10px" @click="listAdmin(1)">Tìm kiếm</el-button>
     <el-button type="primary" @click="handleReset()">Đặt lại</el-button>
     <el-table
+        v-loading="loading"
+        empty-text="Không có dữ liệu"
         border
         :data="admins"
         stripe
@@ -132,6 +134,7 @@ export default {
             totalPage: 0,
             perPage: 0,
             total: 0,
+            loading: false,
         }
     },
     mounted() {
@@ -150,6 +153,7 @@ export default {
             )
         },
         listAdmin(page) {
+            this.loading = true
             SubAminApi.list(
                 page,
                 {
@@ -161,6 +165,7 @@ export default {
                     this.perPage = response.data.per_page
                     this.totalPage = response.data.last_page
                     this.total = response.data.total
+                    this.loading = false
                 },
                 (error) => {
                     if(error?.response?.data?.code) {
@@ -172,6 +177,7 @@ export default {
                         this.goBack()
                         }
                     }
+                    this.loading = false
                 }
             )
         },
@@ -199,6 +205,7 @@ export default {
         },
 
         handleBlock(id) {
+            this.loading = true
             SubAminApi.blockAccount(
                 id,
                 (response) => {
@@ -207,7 +214,11 @@ export default {
                         message: response.data,
                     });
                     this.listAdmin(this.currentPage)
+                    this.loading = false
                 },
+                () => {
+                    this.loading = false
+                }
             )
         },
 

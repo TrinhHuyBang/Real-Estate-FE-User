@@ -6,23 +6,23 @@
         <el-input class="input-filter" placeholder="Nhập từ khoá tìm kiếm" v-model="search"> <i class="el-icon-search el-input__icon" slot="suffix"></i> </el-input>
         
         <label>Loại giao dịch</label>
-        <el-select class="input-filter" id="sell-rent" v-model="typeSelected" placeholder="-----  Loại giao dịch  -----" clearable>
+        <el-select no-data-text="Không có dữ liệu" class="input-filter" id="sell-rent" v-model="typeSelected" placeholder="-----  Loại giao dịch  -----" clearable>
           <el-option v-for="item in choicesType" :key="item.value" :label="item.text" :value="item.value"></el-option>
         </el-select>
 
         <label>Loại nhà đất</label>
-        <el-select :disabled="!typeSelected" class="input-filter" id="post-type" v-model="type_id" placeholder="--- Loại hình bất động sản ---" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" :disabled="!typeSelected" class="input-filter" id="post-type" v-model="type_id" placeholder="--- Loại hình bất động sản ---" filterable clearable>
           <el-option v-for="item in listPostType" :key="item.value" :label="item.text" :value="item.value"></el-option>
         </el-select>
 
         <label for="province">Khu vực</label>
-        <el-select class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
           <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
         </el-select>
-        <el-select :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
           <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
         </el-select>
-        <el-select :disabled="!province" class="input-filter" id="project" v-model="project" placeholder="----- Dự án  -----" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" :disabled="!province" class="input-filter" id="project" v-model="project" placeholder="----- Dự án  -----" filterable clearable>
           <el-option v-for="item in projects" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
         <div class="action-filter">

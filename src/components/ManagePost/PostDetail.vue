@@ -222,6 +222,7 @@ export default {
         avatar: "",
         id: ""
       },
+      loading: false,
     };
   },
   components: {
@@ -238,13 +239,18 @@ export default {
   },
   methods: {
     getDetail($id) {
+      this.loading = this.pageLoading()
       PostApi.detail(
         $id,
         (response) => {
           this.post = response.data
           this.ownerInfo = response.data.user
           this.bookmarked = this.post.bookmark
+          this.loading.close()
         },
+        () => {
+          this.loading.close()
+        }
       )
     },
 

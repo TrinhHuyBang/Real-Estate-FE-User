@@ -1,6 +1,8 @@
 <template>
   <div>
     <el-table
+      v-loading="table_loading"
+      empty-text="Không có dữ liệu"
       border
       :data="reports"
       stripe
@@ -80,11 +82,16 @@ export default {
       type: Array,
       default: () => [],
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
       selectedImageUrl: null,
       isModalVisible: false,
+      table_loading: false,
     };
   },
   methods: {
@@ -104,6 +111,7 @@ export default {
         .catch(() => {});
     },
     handleProcessed(id) {
+      this.table_loading = true
       AdminReportApi.processed(
         id,
         () => {
@@ -111,6 +119,7 @@ export default {
             title: "Thành công",
             message: "Đánh dấu đã xử lý thành công",
           });
+          this.table_loading = false
           this.$emit("handleChange");
         },
         (error) => {
@@ -127,6 +136,7 @@ export default {
               message: error.response.data.error,
             });
           }
+          this.table_loading = false
         }
       );
     },
@@ -146,6 +156,7 @@ export default {
         .catch(() => {});
     },
     handleDelete(id) {
+      this.table_loading = true
       AdminReportApi.delete(
         id,
         () => {
@@ -153,6 +164,7 @@ export default {
             title: "Thành công",
             message: "Đã xóa báo cáo thành công!",
           });
+          this.table_loading = false
           this.$emit("handleChange");
         },
         (error) => {
@@ -169,9 +181,15 @@ export default {
               message: error.response.data.error,
             });
           }
+          this.table_loading = false
         }
       );
     },
+  },
+  watch: {
+    loading(val) {
+      this.table_loading = val
+    }
   },
 };
 </script>

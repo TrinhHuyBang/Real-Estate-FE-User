@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="showNews.id" class="row show-row">
+    <div v-if="showNews.id && !loading" class="row show-row">
       <div class="col-xl-6 col-lg-6 col-md-12 col-12">
         <router-link class="link-to-detail" :to="`/tin-tuc/${showNews.id}`">
           <div class="news-item">
@@ -20,6 +20,42 @@
             <hr>
           </li>
         </ul>
+      </div>
+    </div>
+
+    <div v-else class="row show-row">
+      <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+        <el-skeleton style="width: 100%" animated>
+          <template slot="template">
+            <el-skeleton-item
+              variant="image"
+              style="width: 100%; height: 300px;"
+            />
+            <div style="padding: 14px;">
+              <el-skeleton-item variant="h3" style="width: 100%;" />
+              <el-skeleton-item variant="h3" style="width: 70%;" />
+              <el-skeleton-item variant="text" style="width: 40%;" />
+            </div>
+          </template>
+        </el-skeleton>
+      </div>
+      <!-- Hiển thị danh sách các title -->
+      <div class="col-xl-6 col-lg-6 col-md-12 col-12 title-list">
+        <ul>
+          <li v-for="index in 5" :key="index">
+            <div class="news-title">
+              <el-skeleton style="width: 100%" animated>
+                <template slot="template">
+                  <div>
+                    <el-skeleton-item variant="h3" style="width: 90%;" />
+                  </div>
+                </template>
+              </el-skeleton>
+            </div>
+            <hr>
+          </li>
+        </ul>
+        
       </div>
     </div>
 
@@ -49,6 +85,10 @@ export default {
       type: Array,
       required: true,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {

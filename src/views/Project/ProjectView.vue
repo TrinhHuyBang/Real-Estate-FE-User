@@ -5,7 +5,7 @@
         <h4>Tìm kiếm dự án</h4>
         <el-input class="input-filter" placeholder="Nhập từ khoá tìm kiếm" v-model="search" clearable> <i class="el-icon-search el-input__icon" slot="suffix"></i> </el-input>
         <label for="field">Loại hình</label>
-        <el-select
+        <el-select no-data-text="Không có dữ liệu"
           class="input-filter"
           id="field"
           filterable
@@ -16,15 +16,15 @@
           <el-option v-for="item in projectType.textValue" :key="item.value" :label="item.text" :value="item.value"></el-option>
         </el-select>
         <label for="province">Khu vực</label>
-        <el-select class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" class="input-filter" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
           <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
         </el-select>
-        <el-select :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" :disabled="!province" class="input-filter" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
           <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
         </el-select>
 
         <label for="province">Giá</label>
-        <el-select
+        <el-select no-data-text="Không có dữ liệu"
           class="input-filter"
           id="post-price"
           clearable
@@ -56,7 +56,7 @@
         </el-select>
 
         <label for="status">Trạng thái</label>
-        <el-select class="input-filter" id="status" v-model="statusSelected" placeholder="Trạng thái" filterable clearable>
+        <el-select no-data-text="Không có dữ liệu" class="input-filter" id="status" v-model="statusSelected" placeholder="Trạng thái" filterable clearable>
           <el-option v-for="item in status" :key="item.value" :label="item.text" :value="item.value"></el-option>
         </el-select>
         <div class="action-filter">
@@ -68,7 +68,7 @@
     <div class="project-list">
       <project-list :projects="projects" :filters="filters"/>
       <div class="paginate-page">
-        <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
+        <el-pagination v-if="projects.length" background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
       </div>
     </div>
   </div>
@@ -128,6 +128,7 @@ export default {
       currentPage: 1,
       totalPage: 0,
       perPage: 0,
+      loading: null,
     }
   },
 
@@ -141,6 +142,7 @@ export default {
       }
     },
     listProject(page) {
+      this.loading = this.pageLoading()
       var data = {
         ...this.filters
       }
@@ -152,6 +154,10 @@ export default {
           this.currentPage = page;
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
+          this.loading.close()
+        },
+        () => {
+          this.loading.close()
         }
       )
     },

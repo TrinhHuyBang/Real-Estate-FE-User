@@ -35,7 +35,7 @@
           <el-input type="text" class="input" id="name" v-model="source" placeholder="VD: https://thanhnienviet.vn/2024/05/14/"></el-input>
 
           <label class="label" for="province">Tin tức về BĐS thuộc tỉnh/thành phố</label>
-            <el-select class="select" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+            <el-select no-data-text="Không có dữ liệu" class="select" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
               <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
             </el-select>
             <div class="btn-action">

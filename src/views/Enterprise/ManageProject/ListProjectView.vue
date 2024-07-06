@@ -15,7 +15,7 @@
               @click="listProject(1)"
             ></el-button>
           </el-input>
-          <el-select class="select" style="margin-left: 20px;" v-model="status" placeholder="Trạng thái dự án" clearable>
+          <el-select no-data-text="Không có dữ liệu" class="select" style="margin-left: 20px;" v-model="status" placeholder="Trạng thái dự án" clearable>
             <el-option v-for="item in projectStatus" :key="item.value" :label="item.text" :value="item.value"></el-option>
           </el-select>
         </div>
@@ -148,5 +148,8 @@ export default {
   margin-bottom: 30px;
   display: flex;
   justify-content: center;
+}
+.container {
+  margin-top: 30px;
 }
 </style>

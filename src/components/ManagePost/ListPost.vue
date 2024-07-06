@@ -3,7 +3,7 @@
     <h4>{{ title }}</h4>
     <p>Hiện có {{ total }} bất động sản</p>
     <div class="select-post-type">
-      <el-select
+      <el-select no-data-text="Không có dữ liệu"
         style="margin-bottom: 10px"
         v-model="selectedOrderBy"
         placeholder="Tin mới nhất"

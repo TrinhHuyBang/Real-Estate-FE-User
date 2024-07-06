@@ -11,13 +11,13 @@
                 <tr>
                     <td style="width: 50%">
                         <label class="label">Loại giao dịch<span class="required-field"> *</span></label>
-                        <el-select class="select" id="sell-rent" v-model="typeSelected" placeholder="-----  Loại giao dịch  -----">
+                        <el-select no-data-text="Không có dữ liệu" class="select" id="sell-rent" v-model="typeSelected" placeholder="-----  Loại giao dịch  -----">
                         <el-option v-for="item in choicesType" :key="item.value" :label="item.text" :value="item.value"></el-option>
                         </el-select>
                     </td>
                     <td style="width: 50%">
                         <label class="label">Loại bất động sản<span class="required-field"> *</span></label>
-                        <el-select class="select" id="post-type" v-model="type_id" placeholder="--- Loại hình bất động sản ---" filterable clearable>
+                        <el-select no-data-text="Không có dữ liệu" class="select" id="post-type" v-model="type_id" placeholder="--- Loại hình bất động sản ---" filterable clearable>
                         <el-option v-for="item in listPostType" :key="item.value" :label="item.text" :value="item.value"></el-option>
                         </el-select>
                     </td>
@@ -32,13 +32,13 @@
                 <tr>
                     <td style="width: 50%">
                         <label class="label" for="province">Tỉnh, thành phố<span class="required-field"> *</span></label>
-                        <el-select class="select" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
+                        <el-select no-data-text="Không có dữ liệu" class="select" id="province" v-model="province" placeholder="-----  Tỉnh, thành phố  -----" filterable clearable>
                         <el-option v-for="item in provinces" :key="item.province_id" :label="item.province_name" :value="item.province_name + '-' + item.province_id"></el-option>
                         </el-select>
                     </td>
                     <td style="width: 50%">
                         <label class="label" for="district">Quận, huyện<span class="required-field"> *</span></label>
-                        <el-select :disabled="!province" class="select" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
+                        <el-select no-data-text="Không có dữ liệu" :disabled="!province" class="select" id="district" v-model="district" placeholder="-----  Quận, huyện  -----" filterable clearable>
                         <el-option v-for="item in districts" :key="item.district_id" :label="item.district_name" :value="item.district_name + '-' + item.district_id"></el-option>
                         </el-select>
                     </td>
@@ -54,7 +54,7 @@
             </table>
 
             <label class="label" for="project">Dự án</label>
-            <el-select class="select" id="project" v-model="project" placeholder="Chọn dự án" clearable filterable>
+            <el-select no-data-text="Không có dữ liệu" class="select" id="project" v-model="project" placeholder="Chọn dự án" clearable filterable>
                 <el-option v-for="item in projects" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
 
@@ -66,7 +66,7 @@
                     </td>
                     <td style="padding-left: 10px">
                         <label class="label" for="title">Đơn vị<span class="required-field"> *</span></label>
-                        <el-select class="select" id="unit" v-model="unitSelected">
+                        <el-select no-data-text="Không có dữ liệu" class="select" id="unit" v-model="unitSelected">
                             <el-option v-for="item in unit" :key="item.value" :label="item.text" :value="item.value"></el-option>
                         </el-select>
                     </td>

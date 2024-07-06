@@ -4,7 +4,7 @@
     <el-tabs style="margin-top: 30px;" v-model="activeName">
         <el-tab-pane v-for="tabPost in tabs" :key="tabPost.name" :label="tabPost.label" :name="tabPost.name" >
           <div class="content-tab">
-            <ListReport class="content-tab-post" :reports="reports" @handleChange="listReport(1)"/>
+            <ListReport class="content-tab-post" :loading="loading" :reports="reports" @handleChange="listReport(1)"/>
             <div class="paginate-page" v-if="reports.length">
               <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
             </div>
@@ -43,6 +43,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     };
   },
   components: {
@@ -56,6 +57,7 @@ export default {
   },
   methods: {
     listReport(page) {
+      this.loading = true
       AdminReportApi.list(
         page,
         {
@@ -67,6 +69,7 @@ export default {
           this.perPage = response.data.per_page
           this.totalPage = response.data.last_page
           this.total = response.data.total
+          this.loading = false
         },
         (error) => {
           if(error?.response?.data?.code) {
@@ -78,6 +81,7 @@ export default {
               this.goBack()
             }
           }
+          this.loading = false
         }
       );
     },

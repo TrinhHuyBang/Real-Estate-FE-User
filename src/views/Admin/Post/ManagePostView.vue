@@ -12,7 +12,7 @@
       <el-button type="success" style="margin-left: 10px" @click="listRequestPost(1)">Tìm kiếm</el-button>
       <el-button type="primary" @click="handleReset()">Đặt lại</el-button>
       <div class="select-post-type">
-        <el-select
+        <el-select no-data-text="Không có dữ liệu"
           style="margin-bottom: 10px"
           v-model="selectedOrderBy"
           placeholder="Tin mới nhất"
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div style="width: 100%;">
-        <list-post :posts="posts" @acceptRejectAction="listRequestPost(1)"/>
+        <list-post :loading="loading" :posts="posts" @acceptRejectAction="listRequestPost(1)"/>
         <div v-if="posts.length" class="paginate-page">
           <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
         </div>
@@ -58,10 +58,12 @@ export default {
       perPage: 0,
       total: 0,
       type: "sell",
+      loading: false,
     };
   },
   methods: {
     listRequestPost(page) {
+      this.loading = true
       AdminPostApi.list(
         page,
         {
@@ -75,6 +77,7 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading = false
         }, (error) => {
           if(error?.response?.data?.code) {
             if(error.response.data.code === 403) {
@@ -85,6 +88,7 @@ export default {
               this.goBack()
             }
           }
+          this.loading = false
         }
       )
     },

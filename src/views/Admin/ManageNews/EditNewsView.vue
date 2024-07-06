@@ -106,7 +106,7 @@
         <label class="label" for="province"
           >Tin tức về BĐS thuộc tỉnh/thành phố</label
         >
-        <el-select
+        <el-select no-data-text="Không có dữ liệu"
           class="select"
           id="province"
           v-model="province"

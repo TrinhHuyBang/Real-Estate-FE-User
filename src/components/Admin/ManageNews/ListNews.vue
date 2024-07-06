@@ -1,5 +1,7 @@
 <template>
-  <el-table
+    <el-table
+        v-loading="table_loading"
+        empty-text="Không có dữ liệu"
         border
         :data="news"
         stripe
@@ -107,6 +109,15 @@ export default {
         news: {
             type: Array,
             default: () => []
+        },
+        loading: {
+            type: Boolean,
+            default: false,
+        }
+    },
+    data() {
+        return {
+            table_loading: false,
         }
     },
     computed: mapState({
@@ -133,6 +144,7 @@ export default {
         },
 
         handleBlock(id) {
+            this.table_loading = true
             AdminNewsApi.delete(
                 id,
                 () => {
@@ -140,7 +152,8 @@ export default {
                         title: "Thành công",
                         message: "Xoá tin tức thành công!",
                     });
-
+                    this.table_loading = false
+                    this.$emit('deleteNews')
                 },
                 (error) => {
                     if(error?.response?.data?.code) {
@@ -156,6 +169,7 @@ export default {
                             message: error.response.data.error,
                         });
                     }
+                    this.table_loading = false
                 }
             )
         },
@@ -169,6 +183,11 @@ export default {
 
         showProvince(province) {
             return province.split("-")[0]
+        }
+    },
+    watch: {
+        loading(val) {
+            this.table_loading = val
         }
     },
 }

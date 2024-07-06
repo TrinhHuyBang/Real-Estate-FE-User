@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <ListPostColumnSkeleton v-if="loading"/>
     <div class="single-news" v-for="item in news" :key="item.id">
       <div>
         <router-link :to="`/tin-tuc/${item.id}`">
@@ -22,13 +23,14 @@
       </div>
     </div>
     <div class="paginate-page">
-      <el-pagination background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
+      <el-pagination v-if="news.length" background layout="prev, pager, next" :page-size="perPage" :page-count="totalPage" @current-change="handleChangPage"></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import NewsApi from "@/api/news"
+import ListPostColumnSkeleton from '../Global/ListPostColumnSkeleton.vue';
 export default {
   data() {
     return {
@@ -37,13 +39,18 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: false,
     }
   },
   created() {
     this.listNews(1)
   },
+  components: {
+    ListPostColumnSkeleton
+  },
   methods: {
     listNews(page, type = '') {
+      this.loading = true
       const queryParams = this.$route.query
       if(queryParams.p) {
         type = queryParams.p
@@ -59,7 +66,11 @@ export default {
           this.perPage = response.data.per_page
           this.totalPage = response.data.last_page
           this.total = response.data.total
+          this.loading = false
         },
+        () => {
+          this.loading = false
+        }
       )
     },
     handleChangPage(val) {

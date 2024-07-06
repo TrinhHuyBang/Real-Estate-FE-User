@@ -8,7 +8,7 @@
         <el-tabs v-model="activeName">
           <el-tab-pane v-for="tab in tabNews" :key="tab.name" :name="tab.name">
             <span class="tabs-item-custom" slot="label"> {{ tab.label }}</span>
-            <headline-news :newsList="newsList"/>
+            <headline-news :newsList="newsList" :loading="loading"/>
           </el-tab-pane>
         </el-tabs>
         <el-button @click="gotoPage('tin-tuc')" class="btn-view-more" type="text">Xem thêm <i class="el-icon-right"></i></el-button>
@@ -55,6 +55,7 @@ export default {
       ],
       activeName: "headline",
       newsList: [],
+      loading: false,
     };
   },
   components: {
@@ -70,13 +71,18 @@ export default {
 
   methods: {
     listNews() {
+      this.loading = true
       NewsApi.listHeadline(
         {
           'type': this.activeName,
         },
         (response) => {
           this.newsList = response.data
+          this.loading = false
         },
+        () => {
+          this.loading = false
+        }
       )
     },
   },
