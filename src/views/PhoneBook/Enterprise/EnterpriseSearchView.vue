@@ -71,6 +71,7 @@ export default {
             currentPage: 1,
             totalPage: 0,
             perPage: 0,
+            loading: null,
         }
     },
 
@@ -107,6 +108,7 @@ export default {
         },
 
         listEnterprise(page) {
+            this.loading = this.pageLoading()
             EnterpriseApi.list(page, {
                 'province': this.showProvince({ province : this.province }),
                 'district': this.showDistrict({ province: this.province , district : this.district }),
@@ -119,6 +121,10 @@ export default {
                 this.perPage = response.data.per_page
                 this.totalPage = response.data.last_page
                 this.total = response.data.total
+                this.loading.close()
+            },
+            () => {
+                this.loading.close()
             })
         },
 

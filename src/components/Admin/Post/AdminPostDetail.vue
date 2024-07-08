@@ -190,6 +190,7 @@ export default {
         avatar: "",
         id: ""
       },
+      loading: null,
     };
   },
   mounted() {
@@ -197,13 +198,16 @@ export default {
   },
   methods: {
     getDetail($id) {
+      this.loading = this.pageLoading()
       AdminPostApi.detail(
         $id,
         (response) => {
           this.post = response.data
           this.ownerInfo = response.data.user
+          this.loading.close()
         },
         (error) => {
+          this.loading.close()
           if(error?.response?.data?.code) {
             if(error.response.data.code === 403) {
               Notification.error({

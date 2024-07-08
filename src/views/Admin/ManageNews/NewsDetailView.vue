@@ -23,7 +23,7 @@
             <div class="col-xl-8 col-lg-8 col-md-12 col-12">
                 <p class="news-sub-title">{{ news.subtitle }}</p>
                 <div class="render-html" v-html="news.content" style="width: 95%"></div>
-                <div class="source-display">
+                <div v-if="news.source" class="source-display">
                     <span> Nguồn : {{ news.source }}</span>
                 </div>
             </div>
@@ -41,7 +41,8 @@ import MostViewedNews from '@/components/News/MostViewedNews.vue';
 export default {
     data() {
         return {
-            news: {}
+            news: {},
+            loading: null,
         }
     },
 
@@ -55,12 +56,15 @@ export default {
 
     methods: {
         getNewsDetail() {
+            this.loading = this.pageLoading()
             AdminNewsApi.detail(
                 this.$route.params.id,
                 (response) => {
                     this.news = response.data
+                    this.loading.close()
                 },
                 (error) => {
+                    this.loading.close()
                     if(error?.response?.data?.code) {
                         if(error.response.data.code === 403) {
                             Notification.error({

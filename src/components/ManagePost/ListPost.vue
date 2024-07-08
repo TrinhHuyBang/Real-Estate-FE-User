@@ -93,10 +93,12 @@ export default {
       perPage: 0,
       total: 0,
       type: "sell",
+      loading: null,
     };
   },
   methods: {
     listPost(page) {
+      this.loading = this.pageLoading()
       BookmarkApi.list(
         page,
         {
@@ -109,7 +111,11 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading.close()
         },
+        () => {
+          this.loading.close()
+        }
       )
     },
     handleChangPage(val) {

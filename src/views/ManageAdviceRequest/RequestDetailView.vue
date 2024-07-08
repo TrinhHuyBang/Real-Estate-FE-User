@@ -118,6 +118,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: null,
     };
   },
   created() {
@@ -130,9 +131,11 @@ export default {
       this.listBrokerApplied(val);
     },
     getRequestDetail() {
+      this.loading = this.pageLoading()
       AdviceRequestApi.getDetail(this.$route.params.id, (response) => {
         this.request = response.data;
-      });
+        this.loading.close()
+      }, () => {this.loading.close()});
     },
     changeListen() {
       this.getBrokerAccepted();

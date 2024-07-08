@@ -2,69 +2,72 @@
     <div class="container">
       <h4 class="list_titles" v-if="total"> {{ showTitle() + '(' + total + ')' }} </h4>
       <h4 class="list_titles" v-else> {{ showTitle() }} </h4>
-      <div v-if="total" class="row">
-        <div
-          class="col-6 col-md-4 col-lg-3 post-card"
-          v-for="post in posts"
-          :key="post.id"
-        >
-          <el-card :body-style="{ padding: '0px' }">
-            <router-link
-              style="text-decoration: none"
-              :to="`/chi-tiet-bai-dang/${post.id}`"
-            >
-              <div class="show-post-image">
-                <img
-                  :src="post.image"
-                  alt="Post image"
-                  class="el-card-cover"
-                  style="height: 200px"
-                />
-                <div class="number-image">
-                  <i class="el-icon-picture-outline">
-                    {{ post.number_image }}</i
-                  >
-                </div>
-              </div>
-            </router-link>
-            <div style="padding: 14px">
+      <ListPostRowSkeleton v-if="loading"/>
+      <div v-else>
+        <div v-if="total" class="row">
+          <div
+            class="col-6 col-md-4 col-lg-3 post-card"
+            v-for="post in posts"
+            :key="post.id"
+          >
+            <el-card :body-style="{ padding: '0px' }">
               <router-link
-                style="text-decoration: none; color: black"
+                style="text-decoration: none"
                 :to="`/chi-tiet-bai-dang/${post.id}`"
               >
-                <div class="card-title">{{ post.title }}</div>
-                <div class="post-subtitle">
-                  {{ showPrice(post) }} ・ {{ post.size }}m²
-                </div>
-                <div class="post-location">
-                  <i class="el-icon-location-outline"></i>
-                  {{ showAddress(post) }}
+                <div class="show-post-image">
+                  <img
+                    :src="post.image"
+                    alt="Post image"
+                    class="el-card-cover"
+                    style="height: 200px"
+                  />
+                  <div class="number-image">
+                    <i class="el-icon-picture-outline">
+                      {{ post.number_image }}</i
+                    >
+                  </div>
                 </div>
               </router-link>
-              <div class="post-published-bookmark">
-                <div>{{ showTime(post.published_at) }}</div>
-                <el-button v-if="user && user.email" class="post-heart" @click="bookmark(post)">
-                  <i
-                    v-if="post.bookmark == 1"
-                    class="fa-solid fa-heart fa-lg"
-                    style="color: red"
-                  ></i>
-                  <i v-else class="fa-regular fa-heart fa-lg"></i>
-                </el-button>
+              <div style="padding: 14px">
+                <router-link
+                  style="text-decoration: none; color: black"
+                  :to="`/chi-tiet-bai-dang/${post.id}`"
+                >
+                  <div class="card-title">{{ post.title }}</div>
+                  <div class="post-subtitle">
+                    {{ showPrice(post) }} ・ {{ post.size }}m²
+                  </div>
+                  <div class="post-location">
+                    <i class="el-icon-location-outline"></i>
+                    {{ showAddress(post) }}
+                  </div>
+                </router-link>
+                <div class="post-published-bookmark">
+                  <div>{{ showTime(post.published_at) }}</div>
+                  <el-button v-if="user && user.email" class="post-heart" @click="bookmark(post)">
+                    <i
+                      v-if="post.bookmark == 1"
+                      class="fa-solid fa-heart fa-lg"
+                      style="color: red"
+                    ></i>
+                    <i v-else class="fa-regular fa-heart fa-lg"></i>
+                  </el-button>
+                </div>
               </div>
-            </div>
-          </el-card>
+            </el-card>
+          </div>
         </div>
-      </div>
-      <list-post-error v-else />
-      <div v-if="total && total > 4" class="paginate-page">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :page-size="perPage"
-          :page-count="totalPage"
-          @current-change="handleChangPage"
-        ></el-pagination>
+        <list-post-error v-else />
+        <div v-if="total && total > 4" class="paginate-page">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="perPage"
+            :page-count="totalPage"
+            @current-change="handleChangPage"
+          ></el-pagination>
+        </div>
       </div>
     </div>
 </template>
@@ -74,6 +77,7 @@ import PostApi from "@/api/post"
 import ListPostError from './NoneToDisplay/ListPostError.vue'
 import BookmarkApi from "@/api/bookmark"
 import { mapActions, mapState } from 'vuex';
+import ListPostRowSkeleton from './Global/ListPostRowSkeleton.vue';
 export default {
   props: {
     type: {
@@ -86,7 +90,8 @@ export default {
     }
   },
   components: {
-    ListPostError
+    ListPostError,
+    ListPostRowSkeleton
   },
   computed: mapState({
     user: (state) => state.user,
@@ -97,8 +102,9 @@ export default {
       posts: [],
       currentPage: 1,
       totalPage: 0,
-      perPage: 0,
+      perPage: 0, 
       total: 0,
+      loading: false,
     };
   },
   mounted() {
@@ -107,6 +113,7 @@ export default {
   },
   methods: {
     listPost(page) {
+      this.loading = true
       PostApi.listByUser(
         page,
         {
@@ -119,7 +126,11 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading = false
         },
+        () => {
+          this.loading = false
+        }
       );
     },
     handleChangPage(val) {

@@ -82,6 +82,7 @@ export default {
       totalPage: 0,
       perPage: 0,
       total: 0,
+      loading: null,
     }
   },
   components: {
@@ -89,6 +90,7 @@ export default {
   },
   methods: {
     listAdviceRequest(page) {
+      this.loading = this.pageLoading()
       AdviceRequestApi.listRequest(
         page,
         {
@@ -105,6 +107,10 @@ export default {
           this.perPage = response.data.per_page
           this.totalPage = response.data.last_page
           this.total = response.data.total
+          this.loading.close()
+        },
+        () => {
+          this.loading.close()
         }
       )
     },

@@ -97,6 +97,7 @@ export default {
           name: "DELETED",
         },
       ],
+      loading: null,
     };
   },
 
@@ -106,6 +107,7 @@ export default {
     },
 
     listRequest(page) {
+      this.loading = this.pageLoading()
       AdviceRequestApi.listAppliedRequests(
         page,
         {
@@ -119,6 +121,10 @@ export default {
           this.perPage = response.data.per_page;
           this.totalPage = response.data.last_page;
           this.total = response.data.total;
+          this.loading.close()
+        },
+        () => {
+          this.loading.close()
         }
       );
     },

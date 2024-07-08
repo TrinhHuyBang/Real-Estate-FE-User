@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-6">
           <h5>Hệ thống quản lý và quảng bá BĐS</h5>
-          <p>Với mục tiêu quảng bá thị trường BĐS đến rộng rãi toàn thể người dân trên toàn quốc </p>
+          <p>Dữ liệu trên toàn bộ hệ thống có thể gồm các thông tin không đúng sự thật chỉ nhằm để thử nghiệm và phục vụ cho đồ án, ngoài ra không có mục đích nào khác. Một số dữ liệu được tham khảo từ <a style="color: red;" href="https://batdongsan.com.vn/">batdongsan.com.vn</a></p>
         </div>
         <div class="col-md-3">
           <h5>Truy cập nhanh</h5>

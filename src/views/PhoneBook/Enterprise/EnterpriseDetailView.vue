@@ -57,7 +57,7 @@
                             <hr>
                         </div>
                     </div>
-                    <h6>{{ enterprise.name }}</h6>
+                    <h6 v-if="enterprise.description">{{ enterprise.name }}</h6>
                     <p>{{ enterprise.description }}</p>
                     <project-list v-if="enterprise.projects && enterprise.projects.length" :enterprise_name="showEnterpriseName(enterprise)" :projects="enterprise.projects"/>
                 </div>
@@ -95,6 +95,7 @@ export default {
         return {
             enterprise: {},
             dialogContact: false,
+            loading: null,
         }
     },
     components: {
@@ -104,11 +105,16 @@ export default {
     },
     methods: {
         getDetail() {
+            this.loading = this.pageLoading()
             EnterpriseApi.detail(
                 this.$route.params.id,
                 (response) => {
                     this.enterprise = response.data
+                    this.loading.close()
                 },
+                () => {
+                    this.loading.close()
+                }
             )
         },
 

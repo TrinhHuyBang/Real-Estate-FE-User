@@ -1,63 +1,72 @@
 <template>
-    <div style="margin: 20px 0px 20px 0px;" class="row" v-if="data">
-        <div class="col-lg-4 col-6" v-for="item in data" :key="item.id">
-            <div
-              class="small-box"
-              :class="{
-                'bg-success': item['name'].includes('projects'),
-                'bg-warning': item['name'].includes('rating'),
-                'bg-danger': item['name'].includes('posts'),
-                'bg-info': item['name'].includes('account'),
-              }"
-            >
-              <div class="inner">
-                <div class="inline-content">
-                    <h3>{{ item['count'] ? item['count'] : 0 }}</h3>
-                    <p style="margin-left: 10px;">{{ item['label'] }}</p>
+    <div>
+        <DashboardSkeleton v-if="loading" style="margin: 20px 20px 20px 0px;" />
+        <div v-else style="margin: 20px 0px 20px 0px;" class="row">
+            <div class="col-lg-4 col-6" v-for="item in data" :key="item.id">
+                <div
+                class="small-box"
+                :class="{
+                    'bg-success': item['name'].includes('projects'),
+                    'bg-warning': item['name'].includes('rating'),
+                    'bg-danger': item['name'].includes('posts'),
+                    'bg-info': item['name'].includes('account'),
+                }"
+                >
+                <div class="inner">
+                    <div class="inline-content">
+                        <h3>{{ item['count'] ? item['count'] : 0 }}</h3>
+                        <p style="margin-left: 10px;">{{ item['label'] }}</p>
+                    </div>
+                    <div v-if="dataRequest.includes(item['name'])" class="inline-content">
+                        <h4>{{ item['request'] ? item['request'] : 0 }}</h4>
+                        <p style="margin-left: 10px;">Chờ duyệt</p>
+                    </div>
+                    <div v-if="item['name'] == 'user_accounts'" class="inline-content">
+                        <h4>{{ item['active'] ? item['active'] : 0 }}</h4>
+                        <p style="margin-left: 10px;">Hoạt động</p>
+                    </div>
+                    <div v-if="item['name'] == 'rating'" class="inline-content">
+                        <h4>{{ item['avg_rating'] ? item['avg_rating'] : 0 }}</h4>
+                        <p style="margin-left: 5px;"><i class="fa-solid fa-star"></i></p>
+                    </div>
                 </div>
-                <div v-if="dataRequest.includes(item['name'])" class="inline-content">
-                    <h4>{{ item['request'] ? item['request'] : 0 }}</h4>
-                    <p style="margin-left: 10px;">Chờ duyệt</p>
+                <div class="icon">
+                    <i v-if="item['name'] == 'posts'" class="fa-regular fa-file-lines"></i>
+                    <i v-if="item['name'] == 'projects'" class="fa-solid fa-building"></i>
+                    <i v-if="item['name'] == 'user_accounts'" class="fa-solid fa-users"></i>
+                    <i v-if="item['name'] == 'enterprise_accounts'" class="fa-solid fa-building-user"></i>
+                    <i v-if="item['name'] == 'broker_accounts'" class="fa-solid fa-user-tie"></i>
+                    <i v-if="item['name'] == 'rating'" class="fa-solid fa-star"></i>
                 </div>
-                <div v-if="item['name'] == 'user_accounts'" class="inline-content">
-                    <h4>{{ item['active'] ? item['active'] : 0 }}</h4>
-                    <p style="margin-left: 10px;">Hoạt động</p>
+                <a @click="gotoPage(item)" class="small-box-footer">Xem chi tiết  <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-                <div v-if="item['name'] == 'rating'" class="inline-content">
-                    <h4>{{ item['avg_rating'] ? item['avg_rating'] : 0 }}</h4>
-                    <p style="margin-left: 5px;"><i class="fa-solid fa-star"></i></p>
-                </div>
-              </div>
-              <div class="icon">
-                <i v-if="item['name'] == 'posts'" class="fa-regular fa-file-lines"></i>
-                <i v-if="item['name'] == 'projects'" class="fa-solid fa-building"></i>
-                <i v-if="item['name'] == 'user_accounts'" class="fa-solid fa-users"></i>
-                <i v-if="item['name'] == 'enterprise_accounts'" class="fa-solid fa-building-user"></i>
-                <i v-if="item['name'] == 'broker_accounts'" class="fa-solid fa-user-tie"></i>
-                <i v-if="item['name'] == 'rating'" class="fa-solid fa-star"></i>
-              </div>
-              <a @click="gotoPage(item)" class="small-box-footer">Xem chi tiết  <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-        </div>
-    </div>  
+        </div>  
+    </div>
 </template>
 
 <script>
 import AdminDashboardApi from "@/api/admin/adminDashboard"
 import { mapActions } from 'vuex'
+import DashboardSkeleton from '@/components/Global/DashboardSkeleton.vue'
 export default {
     data() {
         return {
             dataRequest: ['posts', 'projects', 'enterprise_accounts', 'broker_accounts'],
             data: [],
+            loading: false
         }
     },
     created() {
         this.getData()
     },
+    components: {
+        DashboardSkeleton
+    },
     methods: {
         ...mapActions(['commitSetPostRequestCount', 'commitSetProjectRequestCount', 'commitSetEnterpriseRequestCount', 'commitSetBrokerRequestCount']),
         getData() {
+            this.loading = true
             AdminDashboardApi.overview(
                 (reponse) => {
                     this.data = reponse.data
@@ -76,6 +85,10 @@ export default {
                     object = this.data.find(item => item.name === "broker_accounts");
                     requestValue = object ? object.request : 0;
                     this.commitSetBrokerRequestCount(requestValue)
+                    this.loading = false
+                },
+                () => {
+                    this.loading = false
                 }
             ) 
         },

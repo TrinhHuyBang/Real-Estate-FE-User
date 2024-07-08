@@ -135,15 +135,18 @@ export default {
             id: ""
         }
       },
+      loading: null,
     };
   },
 
   methods: {
     getDetail() {
+      this.loading = this.pageLoading()
       AdminProjectApi.detail(
         this.$route.params.id,
         (response) => {
           this.project = response.data
+          this.loading.close()
         },
         (error) => {
           if(error?.response?.data?.code) {
@@ -155,6 +158,7 @@ export default {
               this.goBack()
             }
           }
+          this.loading.close()
         }
       )
     },

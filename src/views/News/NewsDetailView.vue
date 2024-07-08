@@ -19,8 +19,8 @@
                 <p class="news-sub-title">{{ news.subtitle }}</p>
                 <div class="render-html" v-html="news.content" style="width: 95%"></div>
                 <div style="margin-top: 10px;" class="author-name">{{news.author?.name}}</div>
-                <div class="source-display">
-                    <span v-if="news.source"> Nguồn : {{ news.source }}</span>
+                <div v-if="news.source" class="source-display">
+                    <span> Nguồn : {{ news.source }}</span>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-4 col-md-12 col-12">
@@ -37,6 +37,7 @@ export default {
     data() {
         return {
             news: {},
+            loading: null,
         }
     },
 
@@ -50,11 +51,16 @@ export default {
 
     methods: {
         getNewsDetail() {
+            this.loading = this.pageLoading()
             NewsApi.detail(
                 this.$route.params.id,
                 (response) => {
                     this.news = response.data
+                    this.loading.close()
                 },
+                () => {
+                    this.loading.close()
+                }
             )
         },
         showName() {

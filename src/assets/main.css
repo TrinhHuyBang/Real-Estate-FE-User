@@ -416,16 +416,18 @@
 }
 
 .enterprise-logo-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
-  width: auto;
-  width: 200px;
+  min-width: 200px;
   height: 150px;
 }
 
 .enterprise-logo-search img {
   height: 100px;
   width: auto;
-  max-width: 200px;
+  max-width: 150px;
 }
 
 .dialog-contact {

@@ -56,6 +56,7 @@ export default {
       copied: false,
       link: window.location.href,
       user: {},
+      loading: null,
     }
   },
 
@@ -69,10 +70,15 @@ export default {
 
   methods: {
     getInfor() {
+      this.loading = this.pageLoading()
       UserApi.detail(
         this.$route.params.id,
         (response) => {
           this.user = response.data
+          this.loading.close()
+        },
+        () => {
+          this.loading.close()
         }
       )
     }

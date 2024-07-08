@@ -142,15 +142,21 @@ export default {
       nameContact: "",
       phoneContact: "",
       mailContent: "",
+      loading: null,
     };
   },
 
   methods: {
     getDetail() {
+      this.loading = this.pageLoading()
       ProjectApi.detail(
         this.$route.params.id,
         (response) => {
           this.project = response.data
+          this.loading.close()
+        },
+        () => {
+          this.loading.close()
         }
       )
     },

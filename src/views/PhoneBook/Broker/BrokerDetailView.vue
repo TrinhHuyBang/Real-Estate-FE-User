@@ -97,6 +97,7 @@ export default {
       link: window.location.href,
       broker: {},
       activeContactModal: false,
+      loading: null,
     };
   },
 
@@ -112,8 +113,13 @@ export default {
 
   methods: {
     getInfor() {
+      this.loading = this.pageLoading()
       BrokerApi.detail(this.$route.params.id, (response) => {
         this.broker = response.data;
+        this.loading.close()
+      },
+      () => {
+        this.loading.close()
       });
     },
   },
