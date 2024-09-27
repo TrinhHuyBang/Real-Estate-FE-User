@@ -1,6 +1,6 @@
 <template>
     <el-dialog class="report-dialog"  title="Báo cáo bài đăng không đúng thông tin" width="400px" :visible.sync="dialogContact">
-      <el-form>
+      <el-form style="max-height: 400px; overflow: hidden; overflow-y: scroll;">
         <el-form-item>
             <span style="font-weight: 550">Nội dung báo cáo</span>
             <el-checkbox-group class="report-dialog-options" v-model="content">

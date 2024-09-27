@@ -7,13 +7,13 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAvLikKnAD3Fcxr_XC-br8Dm_K5aOmeE-g",
-  authDomain: "tensile-nebula-390307.firebaseapp.com",
-  projectId: "tensile-nebula-390307",
-  storageBucket: "tensile-nebula-390307.appspot.com",
-  messagingSenderId: "287389806280",
-  appId: "1:287389806280:web:b8ddddaa1afaaedbff7ffd",
-  measurementId: "G-K50FQ2VXFJ"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 // Initialize Firebase

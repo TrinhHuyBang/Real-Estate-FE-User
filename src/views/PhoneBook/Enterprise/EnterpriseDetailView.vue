@@ -77,14 +77,12 @@
                     <ContactModal :isActive="dialogContact" :email="enterprise?.email" :type="'enterprise'" @closeContactModal="dialogContact = !dialogContact" />
                 </div>
             </div>
-            <similar-enterprise/>
         </div>
     </div>
 </template>
 
 <script>
 import ContactModal from '@/components/Global/ContactModal.vue'
-import SimilarEnterprise from '@/components/PhoneBook/Enterprise/SimilarEnterprise.vue'
 import ProjectList from '@/components/PhoneBook/Enterprise/ProjectList.vue'
 import EnterpriseApi from '@/api/enterprise'
 export default {
@@ -99,7 +97,6 @@ export default {
         }
     },
     components: {
-        'similar-enterprise': SimilarEnterprise,
         'project-list': ProjectList,
         ContactModal,
     },

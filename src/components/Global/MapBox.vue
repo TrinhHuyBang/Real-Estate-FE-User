@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     initializeMapbox() {
-      mapboxgl.accessToken = 'pk.eyJ1IjoiaHViYW5nMTI0MjAxIiwiYSI6ImNseDZiaTF5cDFxcHcyaXExN2pwZHd5OXIifQ.Hc2t-jFbDI3O3Gxy82_zmw';
+      mapboxgl.accessToken = 'token';
       this.mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
       const geocodingClient = mapboxGeocoding(this.mapboxClient);
 
